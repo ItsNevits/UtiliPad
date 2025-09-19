@@ -1,0 +1,72 @@
+---
+
+---
+
+<nav
+  class="flex justify-between gap-4 text-lg sticky top-0 border-b border-white/10 py-2"
+>
+  <a class="px-2" href="#">Icon</a>
+  <div>
+    <div class="hidden md:flex gap-4 px-2">
+      <ul class="flex gap-4">
+        <li class="list-none">
+          <a
+            class="cursor-pointer hover:border-b border-b-amber-400 transition-all"
+            href="#">Inicio</a
+          >
+        </li>
+        <li class="list-none">
+          <a
+            class="cursor-pointer hover:border-b border-b-amber-400 transition-all"
+            href="#">Textos</a>
+        </li>
+        <li class="list-none">
+          <a
+            class="cursor-pointer hover:border-b border-b-amber-400 transition-all"
+            href="#">Documentos</a
+          >
+        </li>
+        <li class="list-none">
+          <a
+            class="cursor-pointer hover:border-b border-b-amber-400 transition-all"
+            href="#">Enlaces</a
+          >
+        </li>
+        <li class="list-none">
+          <a
+            class="cursor-pointer hover:border-b border-b-amber-400 transition-all"
+            href="#">Sobre nosotros</a
+          >
+        </li>
+      </ul>
+    </div>
+    <div class="md:hidden relative">
+      <button onclick="menu.hidden^=1" class="px-2">menu</button>
+      <ul
+        id="menu"
+        hidden
+        class="absolute top-full right-0 z-10 w-dvw border-b border-white/10 background-blur-md py-2"
+      >
+        <li class="list-none text-end">
+          <a class="cursor-pointer block py-2 px-2 rounded" href="#">Inicio</a>
+        </li>
+        <li class="list-none text-end">
+          <a class="cursor-pointer block py-2 px-2 rounded" href="#">Textos</a>
+        </li>
+        <li class="list-none text-end">
+          <a class="cursor-pointer block py-2 px-2 rounded" href="#"
+            >Documentos</a
+          >
+        </li>
+        <li class="list-none text-end">
+          <a class="cursor-pointer block py-2 px-2 rounded" href="#">Enlaces</a>
+        </li>
+        <li class="list-none text-end">
+          <a class="cursor-pointer block py-2 px-2 rounded" href="#"
+            >Sobre nosotros</a
+          >
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
