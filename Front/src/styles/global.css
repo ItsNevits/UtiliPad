@@ -1,22 +1,11 @@
 @import "tailwindcss";
 
-@theme {
-  /* Colors Palette */
-  --sea-buckthorn-50: 26 100% 94%;
-  --sea-buckthorn-100: 27 100% 85%;
-  --sea-buckthorn-200: 36 100% 58%;
-  --sea-buckthorn-300: 39 100% 46%;
-  --sea-buckthorn-400: 40 100% 41%;
-  --sea-buckthorn-500: 39 100% 35%;
-  --sea-buckthorn-600: 39 100% 28%;
-  --sea-buckthorn-700: 38 100% 22%;
-  --sea-buckthorn-800: 37 100% 15%;
-  --sea-buckthorn-900: 34 100% 9%;
-  --sea-buckthorn-950: 31 100% 5%;
+:root {
+  --text-base: 16px;
 }
 
-:root {
-  font-size: 16px;
+body {
+  font-size: var(--text-base, 1rem);
 }
 
 /* 36px */
@@ -56,14 +45,7 @@ p {
   line-height: 1.1;
 }
 
-/* BG PAGE */
-.radial-glow {
-  position: absolute;
-  inset: 0;
-  z-index: -10;
-  background-image: radial-gradient(
-    circle 500px at 50% 300px,
-    rgba(16, 185, 129, 0.35),
-    transparent
-  );
+/* ICONS */
+.icon-white {
+  filter: invert(1) sepia(1) saturate(5) hue-rotate(180deg) brightness(2);
 }

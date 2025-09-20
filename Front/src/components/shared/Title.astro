@@ -1,9 +1,10 @@
 ---
 interface Props {
   styles?: string;
+  id?: string;
 }
 
-const { styles } = Astro.props;
+const { styles, id } = Astro.props;
 ---
 
-<h1 class:list={["text-white", styles]}><slot /></h1>
+<h1 id={id} class:list={["text-white select-none", styles]}><slot /></h1>

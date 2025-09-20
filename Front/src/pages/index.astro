@@ -4,5 +4,21 @@ import MainLayout from "../Layout/MainLayout.astro";
 ---
 
 <MainLayout>
-  <Title styles="super-title">Tu caja de herramientas en la web.</Title>
+  <Title id="hero-title" styles="super-title my-4 md:my-10"
+    >Tu caja de herramientas<br /> en la web.</Title
+  >
 </MainLayout>
+
+<script>
+  import { animateCharacters } from "../animate/timeline";
+
+  // Ejecutar la animación completa cuando la página cargue
+  document.addEventListener("DOMContentLoaded", () => {
+    animateCharacters("#hero-title");
+  });
+
+  // Para navegación SPA de Astro
+  document.addEventListener("astro:page-load", () => {
+    animateCharacters("#hero-title");
+  });
+</script>
