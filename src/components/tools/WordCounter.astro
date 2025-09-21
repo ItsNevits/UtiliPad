@@ -1,0 +1,108 @@
+---
+
+---
+
+<div class="bg-neutral-800/50 rounded-xl p-6 select-none">
+  <div class="space-y-4">
+    <!-- Área de texto -->
+    <div>
+      <label class="block text-sm font-medium text-neutral-300 mb-2">
+        Texto a analizar
+      </label>
+      <textarea
+        id="text-input"
+        placeholder="Escribe o pega tu texto aquí..."
+        class="w-full h-48 p-4 bg-neutral-900/60 border border-neutral-700 rounded-lg text-sm resize-none focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
+      ></textarea>
+    </div>
+
+    <!-- Estadísticas -->
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+      <div class="bg-neutral-900/60 rounded-lg p-4 text-center">
+        <div class="text-2xl font-bold text-neutral-300" id="word-count">0</div>
+        <div class="text-xs text-neutral-400">Palabras</div>
+      </div>
+      <div class="bg-neutral-900/60 rounded-lg p-4 text-center">
+        <div class="text-2xl font-bold text-neutral-300" id="char-count">0</div>
+        <div class="text-xs text-neutral-400">Caracteres</div>
+      </div>
+      <div class="bg-neutral-900/60 rounded-lg p-4 text-center">
+        <div class="text-2xl font-bold text-neutral-300" id="char-no-spaces">
+          0
+        </div>
+        <div class="text-xs text-neutral-400">Sin espacios</div>
+      </div>
+      <div class="bg-neutral-900/60 rounded-lg p-4 text-center">
+        <div class="text-2xl font-bold text-neutral-300" id="paragraph-count">
+          0
+        </div>
+        <div class="text-xs text-neutral-400">Párrafos</div>
+      </div>
+    </div>
+
+    <!-- Información adicional -->
+    <div class="bg-neutral-900/60 rounded-lg p-4">
+      <h4 class="font-medium mb-2">Información adicional</h4>
+      <div
+        class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm text-neutral-400"
+      >
+        <div>
+          Palabras únicas: <span id="unique-words" class="text-neutral-200"
+            >0</span
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const textInput = document.getElementById(
+    "text-input"
+  ) as HTMLTextAreaElement;
+  const wordCount = document.getElementById("word-count") as HTMLElement;
+  const charCount = document.getElementById("char-count") as HTMLElement;
+  const charNoSpaces = document.getElementById("char-no-spaces") as HTMLElement;
+  const paragraphCount = document.getElementById(
+    "paragraph-count"
+  ) as HTMLElement;
+  const readingTime = document.getElementById("reading-time") as HTMLElement;
+  const uniqueWords = document.getElementById("unique-words") as HTMLElement;
+
+  function updateStats() {
+    const text = textInput.value;
+
+    // Contar palabras
+    const words = text.trim() === "" ? 0 : text.trim().split(/\s+/).length;
+    wordCount.textContent = words.toString();
+
+    // Contar caracteres
+    charCount.textContent = text.length.toString();
+
+    // Caracteres sin espacios
+    charNoSpaces.textContent = text.replace(/\s/g, "").length.toString();
+
+    // Párrafos
+    const paragraphs =
+      text.trim() === ""
+        ? 0
+        : text.split(/\n\s*\n/).filter((p) => p.trim() !== "").length;
+    paragraphCount.textContent = paragraphs.toString();
+
+    // Palabras únicas
+    const uniqueWordsSet = new Set(
+      text
+        .toLowerCase()
+        .replace(/[^\w\s]/g, "")
+        .split(/\s+/)
+        .filter((word) => word.length > 0)
+    );
+    uniqueWords.textContent = uniqueWordsSet.size.toString();
+  }
+
+  // Actualizar estadísticas en tiempo real
+  textInput.addEventListener("input", updateStats);
+
+  // Inicializar
+  updateStats();
+</script>

@@ -1,0 +1,29 @@
+---
+import "../styles/global.css";
+import SideBar from "@components/SideBar.astro";
+import Aside from "@components/Aside.astro";
+import Header from "@components/Header.astro";
+import Footer from "@components/Footer.astro";
+import Modal from "@components/shared/Modal.astro";
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>UtiliPad</title>
+  </head>
+  <body class="bg-primary text-priamry-text">
+    <Header />
+    <main class="mx-auto max-w-7xl px-4 py-3 xl:py-6 grid grid-cols-12 gap-6">
+      <SideBar />
+      <section class="col-span-12 xl:col-span-7">
+        <slot />
+      </section>
+      <Aside />
+    </main>
+    <Footer />
+    <Modal />
+  </body>
+</html>

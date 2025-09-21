@@ -1,0 +1,201 @@
+---
+import { searchTools } from "@constants/tools";
+---
+
+<div class="relative">
+  <label class="relative block">
+    <input
+      id="search-input"
+      placeholder="Busca una herramienta…"
+      class="w-full rounded-xl bg-neutral-800/80 border border-neutral-700 px-4 py-2 text-sm placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
+      autocomplete="off"
+    />
+    <span
+      class="absolute right-2 top-1/2 -translate-y-1/2 text-xs text-neutral-400"
+      >/</span
+    >
+  </label>
+
+  <!-- Resultados de búsqueda -->
+  <div
+    id="search-results"
+    class="absolute top-full left-0 right-0 mt-2 bg-neutral-900/95 backdrop-blur-sm border border-neutral-700 rounded-xl shadow-2xl z-50 max-h-96 overflow-y-auto hidden"
+  >
+    <div class="p-3">
+      <div class="text-xs text-neutral-400 mb-2">Resultados de búsqueda</div>
+      <div id="results-container">
+        <!-- Los resultados se insertan aquí -->
+      </div>
+      <div
+        id="no-results"
+        class="text-sm text-neutral-500 text-center py-8 hidden"
+      >
+        No se encontraron herramientas
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  import { searchTools, type Tool } from "../../constants/tools";
+
+  const searchInput = document.getElementById(
+    "search-input"
+  ) as HTMLInputElement;
+  const searchResults = document.getElementById(
+    "search-results"
+  ) as HTMLElement;
+  const resultsContainer = document.getElementById(
+    "results-container"
+  ) as HTMLElement;
+  const noResults = document.getElementById("no-results") as HTMLElement;
+
+  let currentIndex = -1; // Índice del resultado seleccionado
+  let currentResults: Tool[] = []; // Resultados actuales
+
+  // Función para renderizar los resultados
+  function renderResults(tools: Tool[]) {
+    currentResults = tools;
+    currentIndex = -1; // Reset del índice
+
+    if (tools.length === 0) {
+      resultsContainer.innerHTML = "";
+      noResults.classList.remove("hidden");
+      return;
+    }
+
+    noResults.classList.add("hidden");
+    resultsContainer.innerHTML = tools
+      .map(
+        (tool, index) => `
+      <a
+        href="${tool.href}"
+        data-index="${index}"
+        class="result-item block p-3 rounded-lg hover:bg-neutral-800/60 transition-colors border-b border-neutral-800/50 last:border-b-0 focus:outline-none focus:bg-neutral-800/60"
+        tabindex="-1"
+      >
+        <div class="font-medium text-sm text-neutral-200">${tool.name}</div>
+        <div class="text-xs text-neutral-400 mt-1 line-clamp-2">${tool.description}</div>
+      </a>
+    `
+      )
+      .join("");
+  }
+
+  // Función para actualizar la selección visual
+  function updateSelection() {
+    const items = resultsContainer.querySelectorAll(".result-item");
+    items.forEach((item, index) => {
+      if (index === currentIndex) {
+        item.classList.add("bg-neutral-800/60");
+        item.classList.remove("hover:bg-neutral-800/60");
+      } else {
+        item.classList.remove("bg-neutral-800/60");
+        item.classList.add("hover:bg-neutral-800/60");
+      }
+    });
+  }
+
+  // Función para navegar a la opción seleccionada
+  function navigateToSelected() {
+    if (currentIndex >= 0 && currentIndex < currentResults.length) {
+      const selectedTool = currentResults[currentIndex];
+      window.location.href = selectedTool.href;
+    }
+  }
+
+  // Función para realizar la búsqueda
+  function performSearch(query: string) {
+    if (query.trim().length === 0) {
+      searchResults.classList.add("hidden");
+      return;
+    }
+
+    const results = searchTools(query);
+    renderResults(results);
+    searchResults.classList.remove("hidden");
+  }
+
+  // Event listeners
+  searchInput.addEventListener("input", (e) => {
+    const query = (e.target as HTMLInputElement).value;
+    performSearch(query);
+  });
+
+  // Cerrar resultados al hacer clic fuera
+  document.addEventListener("click", (e) => {
+    if (!searchResults.contains(e.target as Node) && e.target !== searchInput) {
+      searchResults.classList.add("hidden");
+    }
+  });
+
+  // Mostrar resultados al hacer focus si hay contenido
+  searchInput.addEventListener("focus", () => {
+    if (searchInput.value.trim().length > 0) {
+      searchResults.classList.remove("hidden");
+    }
+  });
+
+  // Navegación con teclado en el input de búsqueda
+  searchInput.addEventListener("keydown", (e) => {
+    const isResultsVisible = !searchResults.classList.contains("hidden");
+
+    if (!isResultsVisible) return;
+
+    switch (e.key) {
+      case "ArrowDown":
+      case "Tab":
+        e.preventDefault();
+        currentIndex =
+          currentIndex < currentResults.length - 1 ? currentIndex + 1 : 0;
+        updateSelection();
+        break;
+
+      case "ArrowUp":
+        e.preventDefault();
+        currentIndex =
+          currentIndex > 0 ? currentIndex - 1 : currentResults.length - 1;
+        updateSelection();
+        break;
+
+      case "Enter":
+        e.preventDefault();
+        navigateToSelected();
+        break;
+
+      case "Escape":
+        searchResults.classList.add("hidden");
+        currentIndex = -1;
+        break;
+    }
+  });
+
+  // Atajo de teclado (/) para enfocar la búsqueda
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "/" && !searchInput.matches(":focus")) {
+      e.preventDefault();
+      searchInput.focus();
+    }
+
+    // ESC para cerrar resultados (global)
+    if (e.key === "Escape") {
+      searchResults.classList.add("hidden");
+      searchInput.blur();
+      currentIndex = -1;
+    }
+  });
+
+  // Click en los resultados para seleccionar con mouse
+  resultsContainer.addEventListener("mouseover", (e) => {
+    const target = e.target as HTMLElement;
+    const resultItem = target.closest(".result-item") as HTMLElement;
+
+    if (resultItem) {
+      const index = parseInt(resultItem.dataset.index || "-1");
+      if (index >= 0) {
+        currentIndex = index;
+        updateSelection();
+      }
+    }
+  });
+</script>

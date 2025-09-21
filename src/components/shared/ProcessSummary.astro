@@ -1,0 +1,43 @@
+---
+const processes = [
+  { name: "Archivos procesados", count: 62 },
+  { name: "Textos analizados", count: 35 },
+  { name: "Descargas por URL", count: 28 },
+];
+---
+
+<div
+  class="rounded-2xl border border-neutral-800 bg-neutral-900/40 select-none"
+>
+  <div class="p-4 border-b border-neutral-800">
+    <h3 class="font-semibold">Procesos realizados</h3>
+    <p class="text-xs text-neutral-400 mt-1">
+      Estadísticas de actividad reciente
+    </p>
+  </div>
+  <ul class="p-4 space-y-4">
+    {
+      processes.map((process, index) => (
+        <li class="flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <p class="text-sm text-neutral-300 font-medium">{process.name}</p>
+          </div>
+          <span
+            class="count-up text-xs text-neutral-500"
+            data-target={process.count}
+          >
+            0
+          </span>
+        </li>
+      ))
+    }
+  </ul>
+</div>
+
+<script>
+  import { animateCountUp } from "../../animate/timeline";
+
+  document.addEventListener("DOMContentLoaded", () => {
+    animateCountUp(".count-up");
+  });
+</script>

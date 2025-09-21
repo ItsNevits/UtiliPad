@@ -1,0 +1,33 @@
+---
+interface BreadcrumbLink {
+  href: string;
+  name: string;
+  isActive?: boolean;
+}
+
+interface Props {
+  links: BreadcrumbLink[];
+}
+
+const { links } = Astro.props;
+---
+
+<nav class="mb-6 select-none" aria-label="Breadcrumb">
+  <ol class="flex items-center space-x-2 text-sm text-neutral-400">
+    <li><a href="/" class="hover:text-emerald-400">Inicio</a></li>
+    {
+      links.map(({ href, name, isActive }, index) => (
+        <li class="flex items-center">
+          <span class="mx-2">/</span>
+          {isActive || index === links.length - 1 ? (
+            <span class="text-neutral-200">{name}</span>
+          ) : (
+            <a href={href} class="hover:text-emerald-400">
+              {name}
+            </a>
+          )}
+        </li>
+      ))
+    }
+  </ol>
+</nav>

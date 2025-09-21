@@ -1,0 +1,74 @@
+---
+import type { Tool } from "@constants/tools";
+import { TOOLS_CATEGORIES, getToolsByCategory } from "@constants/tools";
+
+interface Props {
+  categoryId?: string;
+}
+
+const { categoryId = "all" } = Astro.props;
+
+// Mapear las herramientas de la constante al formato esperado por el HTML
+const mapToolToDisplay = (tool: Tool) => ({
+  title: tool.name,
+  desc: tool.description,
+  badge: tool.bagde,
+  href: tool.href,
+});
+
+// Obtener herramientas según la categoría
+let tools;
+if (categoryId === "all") {
+  // Mostrar todas las herramientas de todas las categorías
+  tools = TOOLS_CATEGORIES.flatMap((category) => category.tools).map(
+    mapToolToDisplay
+  );
+} else {
+  // Mostrar herramientas de una categoría específica
+  tools = getToolsByCategory(categoryId).map(mapToolToDisplay);
+}
+---
+
+<div
+  class="mt-6 grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 select-none"
+>
+  {
+    tools.map((t) => (
+      <div
+        id={t.title}
+        class="flex flex-col justify-between group rounded-2xl border border-neutral-800 bg-neutral-900/60 p-4 hover:border-emerald-600/60 hover:shadow-[0_0_0_1px_rgba(16,185,129,0.25)] transition"
+      >
+        <div class="flex items-start justify-between gap-2">
+          <h3 class="font-semibold leading-snug">{t.title}</h3>
+          {t.badge && (
+            <span class="text-[10px] rounded-full px-2 py-0.5 bg-neutral-800 border border-neutral-700 text-neutral-300">
+              {t.badge}
+            </span>
+          )}
+        </div>
+        <p class="mt-1 text-sm text-neutral-400 line-clamp-2">{t.desc}</p>
+        <div class="mt-4 flex items-center justify-between">
+          <a
+            title={t.title}
+            href={t.href}
+            class="cursor-pointer text-sm text-emerald-400 group-hover:underline"
+          >
+            Abrir
+          </a>
+          <span class="shortcut text-xs text-neutral-500">⌘K para buscar</span>
+        </div>
+      </div>
+    ))
+  }
+</div>
+
+<script>
+  const initWindowsOrMac = () => {
+    const isMac = navigator.userAgent.indexOf("Mac OS X") != -1;
+    document.querySelectorAll(".shortcut").forEach((el) => {
+      el.textContent = isMac ? "⌘K para buscar" : "Ctrl+K para buscar";
+    });
+  };
+
+  document.addEventListener("DOMContentLoaded", initWindowsOrMac);
+</script>

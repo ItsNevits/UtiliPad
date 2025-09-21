@@ -1,0 +1,42 @@
+---
+const categories = [
+  { name: "Archivos", href: "/files" },
+  { name: "Imágenes", href: "/images" },
+  { name: "Texto", href: "/text" },
+];
+
+// Obtener la URL actual para marcar la categoría activa
+const currentPath = Astro.url.pathname;
+---
+
+<aside class="flex xl:block xl:col-span-2 select-none">
+  <div
+    class="sticky top-20 space-y-2 flex xl:block justify-center items-center gap-2"
+  >
+    <h3
+      class="text-xs mb-0 xl:mb-5 xl:text-md flex uppercase tracking-wider text-neutral-400"
+    >
+      Categorías <span class="xl:hidden">:</span>
+    </h3>
+    <ul class="flex xl:block gap-2 max-w-dvw overflow-x-auto box-border">
+      {
+        categories.map((category) => (
+          <li class="flex-shrink-0 xl:flex-shrink xl:mb-2">
+            <a
+              href={category.href}
+              class={`block text-sm xl:text-md px-3 py-1 xl:py-2 xl:rounded-lg transition-colors duration-200 whitespace-nowrap xl:whitespace-normal ${
+                currentPath === category.href
+                  ? "xl:bg-neutral-800 border-b border-b-neutral-800 text-white"
+                  : "text-neutral-300 hover:bg-neutral-900 hover:text-white"
+              }`}
+            >
+              <span class="inline-flex items-center gap-2">
+                {category.name}
+              </span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</aside>

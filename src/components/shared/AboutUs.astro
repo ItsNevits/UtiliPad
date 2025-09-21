@@ -1,0 +1,25 @@
+---
+import AboutUsImage from "@assets/images/about-us.png";
+import Picture from "astro/components/Picture.astro";
+---
+
+<div
+  class="relative rounded-2xl border border-neutral-800 overflow-hidden select-none"
+>
+  <div
+    class="aspect-[4/3] bg-gradient-to-br from-emerald-600/20 via-teal-400/10 to-fuchsia-500/10"
+  >
+    <Picture
+      src={AboutUsImage}
+      alt="About Us"
+      class="object-cover object-top w-full h-full"
+      formats={["avif", "webp", "png"]}
+    />
+  </div>
+  <div class="p-4">
+    <h3 class="font-semibold">Quienes somos</h3>
+    <p class="text-sm text-neutral-400 mt-1">
+      Solo nos gusta colaborar con la comunidad y crear cosas útiles.
+    </p>
+  </div>
+</div>

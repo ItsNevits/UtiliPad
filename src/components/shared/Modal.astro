@@ -1,0 +1,152 @@
+---
+// El modal ahora es controlado por el store, no necesita props
+---
+
+<div
+  id="global-modal"
+  class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden opacity-0 transition-all duration-300"
+>
+  <div class="flex items-center justify-center min-h-screen p-4">
+    <div
+      class="bg-neutral-900 rounded-2xl border border-neutral-700 w-full max-w-6xl max-h-[85vh] flex flex-col shadow-2xl overflow-hidden"
+    >
+      <!-- Header del modal -->
+      <div
+        class="flex items-center justify-between p-6 border-b border-neutral-700 relative"
+      >
+        <div class="flex items-center gap-3">
+          <div>
+            <h3 id="modal-title" class="text-xl font-semibold text-white"></h3>
+            <p id="modal-description" class="text-sm text-neutral-400"></p>
+          </div>
+        </div>
+        <div class="flex items-center gap-2">
+          <button
+            id="close-modal-btn"
+            title="Cerrar"
+            class="absolute top-2 right-2 p-2 hover:bg-neutral-800 rounded-lg transition-colors cursor-pointer"
+          >
+            <svg
+              class="w-5 h-5 text-neutral-400"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Contenido del modal -->
+      <div class="flex-1 overflow-hidden min-h-0">
+        <div
+          id="modal-content"
+          class="bg-neutral-800/50 rounded-xl mx-6 my-4 p-6 overflow-auto border border-neutral-700 code-area max-h-full"
+        >
+          <!-- El contenido se insertará dinámicamente -->
+        </div>
+      </div>
+
+      <!-- Footer del modal -->
+      <div class="p-6 border-t border-neutral-700 bg-neutral-900/50">
+        <div class="flex items-center justify-between text-sm text-neutral-400">
+          <div id="modal-info" class="flex items-center gap-4">
+            <!-- Información adicional se insertará aquí -->
+          </div>
+          <div class="text-xs">
+            Presiona <kbd class="px-2 py-1 bg-neutral-700 rounded">Esc</kbd> para
+            cerrar
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  import { modalStore, closeModal } from "../../stores/modal";
+
+  const modal = document.getElementById("global-modal") as HTMLElement;
+  const modalTitle = document.getElementById("modal-title") as HTMLElement;
+  const modalDescription = document.getElementById(
+    "modal-description"
+  ) as HTMLElement;
+  const modalContent = document.getElementById("modal-content") as HTMLElement;
+  const modalInfo = document.getElementById("modal-info") as HTMLElement;
+  const closeBtn = document.getElementById(
+    "close-modal-btn"
+  ) as HTMLButtonElement;
+  const copyBtn = document.getElementById(
+    "modal-copy-btn"
+  ) as HTMLButtonElement;
+
+  let currentOnCopy: (() => void) | undefined;
+
+  // Función para mostrar el modal
+  function showModal() {
+    modal.classList.remove("hidden");
+    requestAnimationFrame(() => {
+      modal.classList.remove("opacity-0");
+      modal.classList.add("opacity-100");
+    });
+    document.body.style.overflow = "hidden";
+  }
+
+  // Función para ocultar el modal
+  function hideModal() {
+    modal.classList.remove("opacity-100");
+    modal.classList.add("opacity-0");
+
+    setTimeout(() => {
+      modal.classList.add("hidden");
+      document.body.style.overflow = "auto";
+    }, 300);
+  }
+
+  // Suscribirse a cambios en el store
+  modalStore.subscribe((state) => {
+    if (state.isOpen) {
+      // Actualizar contenido
+      modalTitle.textContent = state.title;
+      modalDescription.textContent = state.description;
+
+      // Limpiar contenido previo
+      modalContent.innerHTML = "";
+      modalInfo.innerHTML = "";
+
+      // Insertar nuevo contenido
+      if (state.content) {
+        if (typeof state.content === "string") {
+          modalContent.innerHTML = state.content;
+        } else if (state.content instanceof HTMLElement) {
+          modalContent.appendChild(state.content);
+        } else {
+          // Para contenido JSON u otros objetos
+          const pre = document.createElement("pre");
+          pre.className = "text-sm text-neutral-300 whitespace-pre-wrap";
+          pre.textContent = JSON.stringify(state.content, null, 2);
+          modalContent.appendChild(pre);
+        }
+      }
+
+      showModal();
+    } else {
+      hideModal();
+    }
+  });
+
+  // Event listeners
+  closeBtn.addEventListener("click", closeModal);
+
+  // Cerrar modal con Escape
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && !modal.classList.contains("hidden")) {
+      closeModal();
+    }
+  });
+</script>
