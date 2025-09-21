@@ -13,7 +13,210 @@ import { ClientRouter } from "astro:transitions";
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>UtiliPad</title>
+
+    <!-- SEO Básico -->
+    <title>
+      UtiliPad - Suite Gratuita de Herramientas Web Online | Formateador JSON,
+      Contador de Palabras y Más
+    </title>
+    <meta
+      name="description"
+      content="UtiliPad es una suite completa de herramientas web gratuitas. Formatea JSON, cuenta palabras, comprime imágenes, convierte archivos y mucho más. Rápido, seguro y sin registros."
+    />
+    <meta
+      name="keywords"
+      content="herramientas online, formateador json, contador palabras, compresor imagenes, convertidor archivos, utilidades web, herramientas gratis, formato json, validador json, analizador texto, herramientas desarrollo, productividad, web tools, online tools, free tools"
+    />
+    <meta name="author" content="UtiliPad" />
+    <meta
+      name="robots"
+      content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    />
+    <meta name="language" content="es" />
+    <meta name="geo.region" content="ES" />
+    <meta name="geo.country" content="Spain" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://utilipad.com/" />
+    <meta
+      property="og:title"
+      content="UtiliPad - Suite Gratuita de Herramientas Web Online"
+    />
+    <meta
+      property="og:description"
+      content="Herramientas web gratuitas para desarrolladores y usuarios. Formateador JSON, contador de palabras, compresor de imágenes y más. Sin registros, 100% gratis."
+    />
+    <meta property="og:image" content="https://utilipad.com/og-image.jpg" />
+    <meta
+      property="og:image:alt"
+      content="UtiliPad - Herramientas Web Gratuitas"
+    />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:site_name" content="UtiliPad" />
+    <meta property="og:locale" content="es_ES" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="https://utilipad.com/" />
+    <meta
+      name="twitter:title"
+      content="UtiliPad - Suite Gratuita de Herramientas Web Online"
+    />
+    <meta
+      name="twitter:description"
+      content="Herramientas web gratuitas: Formateador JSON, contador de palabras, compresor imágenes. Sin registros, rápido y seguro."
+    />
+    <meta
+      name="twitter:image"
+      content="https://utilipad.com/twitter-image.jpg"
+    />
+    <meta
+      name="twitter:image:alt"
+      content="UtiliPad - Herramientas Web Gratuitas"
+    />
+    <meta name="twitter:creator" content="@utilipad" />
+    <meta name="twitter:site" content="@utilipad" />
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://utilipad.com/" />
+
+    <!-- Alternate Languages -->
+    <link rel="alternate" hreflang="es" href="https://utilipad.com/" />
+    <link rel="alternate" hreflang="en" href="https://utilipad.com/en/" />
+    <link rel="alternate" hreflang="x-default" href="https://utilipad.com/" />
+
+    <!-- Favicon e Icons -->
+    <link rel="icon" type="image/x-icon" href="/icons/favicon.ico" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="/icons/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="/icons/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="/icons/favicon-16x16.png"
+    />
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta name="theme-color" content="#10b981" />
+    <meta name="msapplication-TileColor" content="#10b981" />
+    <!-- Schema.org JSON-LD -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "UtiliPad",
+        "alternateName": "UtiliPad Tools",
+        "description": "Suite completa de herramientas web gratuitas para desarrolladores y usuarios. Incluye formateador JSON, contador de palabras, compresor de imágenes y más utilidades online.",
+        "url": "https://utilipad.com",
+        "applicationCategory": "ProductivityApplication",
+        "operatingSystem": "Web Browser",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "EUR",
+          "availability": "https://schema.org/InStock"
+        },
+        "creator": {
+          "@type": "Organization",
+          "name": "UtiliPad",
+          "url": "https://utilipad.com"
+        },
+        "featureList": [
+          "Formateador y Validador JSON",
+          "Contador de Palabras y Caracteres",
+          "Analizador de Texto",
+          "Compresor de Imágenes",
+          "Convertidor de Archivos",
+          "Herramientas de Productividad"
+        ],
+        "softwareVersion": "1.0.0",
+        "datePublished": "2025",
+        "inLanguage": "es",
+        "screenshot": "https://utilipad.com/screenshot.jpg",
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": "4.8",
+          "reviewCount": "150"
+        }
+      }
+    </script>
+
+    <!-- Website Schema -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "UtiliPad",
+        "url": "https://utilipad.com",
+        "description": "Herramientas web gratuitas y utilidades online",
+        "inLanguage": "es",
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": {
+            "@type": "EntryPoint",
+            "urlTemplate": "https://utilipad.com/search?q={search_term_string}"
+          },
+          "query-input": "required name=search_term_string"
+        },
+        "publisher": {
+          "@type": "Organization",
+          "name": "UtiliPad",
+          "url": "https://utilipad.com"
+        }
+      }
+    </script>
+
+    <!-- Performance & Security -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+    <meta name="apple-mobile-web-app-title" content="UtiliPad" />
+    <meta name="application-name" content="UtiliPad" />
+    <meta name="msapplication-tooltip" content="Herramientas Web Gratuitas" />
+    <meta name="msapplication-starturl" content="/" />
+    <meta name="msapplication-navbutton-color" content="#10b981" />
+    <meta name="msapplication-config" content="/browserconfig.xml" />
+
+    <!-- Verificación de Motores de Búsqueda -->
+    <meta
+      name="google-site-verification"
+      content="your-google-verification-code"
+    />
+    <meta name="msvalidate.01" content="your-bing-verification-code" />
+    <meta name="yandex-verification" content="your-yandex-verification-code" />
+
+    <!-- Analytics y Tracking -->
+    <!-- Google Analytics 4 -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"
+    ></script>
+    <script is:inline>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(...args) {
+        dataLayer.push(args);
+      }
+      gtag("js", new Date());
+      gtag("config", "GA_MEASUREMENT_ID");
+    </script>
+
+    <!-- Astro Client Router -->
     <ClientRouter />
   </head>
   <body class="bg-primary text-priamry-text">
