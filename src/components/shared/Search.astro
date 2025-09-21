@@ -39,214 +39,234 @@ import { searchTools } from "@constants/tools";
 <script>
   import { searchTools, type Tool } from "../../constants/tools";
 
-  const searchInput = document.getElementById(
-    "search-input"
-  ) as HTMLInputElement;
-  const searchResults = document.getElementById(
-    "search-results"
-  ) as HTMLElement;
-  const resultsContainer = document.getElementById(
-    "results-container"
-  ) as HTMLElement;
-  const noResults = document.getElementById("no-results") as HTMLElement;
+  function initializeSearch() {
+    const searchInput = document.getElementById(
+      "search-input"
+    ) as HTMLInputElement;
+    const searchResults = document.getElementById(
+      "search-results"
+    ) as HTMLElement;
+    const resultsContainer = document.getElementById(
+      "results-container"
+    ) as HTMLElement;
+    const noResults = document.getElementById("no-results") as HTMLElement;
 
-  let currentIndex = -1; // Índice del resultado seleccionado
-  let currentResults: Tool[] = []; // Resultados actuales
-
-  // Función para renderizar los resultados
-  function renderResults(tools: Tool[]) {
-    currentResults = tools;
-    currentIndex = -1; // Reset del índice
-
-    if (tools.length === 0) {
-      resultsContainer.innerHTML = "";
-      noResults.classList.remove("hidden");
+    // Si no se encuentran los elementos, salir
+    if (!searchInput || !searchResults || !resultsContainer || !noResults) {
       return;
     }
 
-    noResults.classList.add("hidden");
-    resultsContainer.innerHTML = tools
-      .map(
-        (tool, index) => `
-      <a
-        href="${tool.href}"
-        data-index="${index}"
-        class="result-item block p-3 rounded-lg hover:bg-neutral-800/60 transition-colors border-b border-neutral-800/50 last:border-b-0 focus:outline-none focus:bg-neutral-800/60"
-        tabindex="-1"
-      >
-        <div class="font-medium text-sm text-neutral-200">${tool.name}</div>
-        <div class="text-xs text-neutral-400 mt-1 line-clamp-2">${tool.description}</div>
-      </a>
-    `
-      )
-      .join("");
-  }
+    let currentIndex = -1; // Índice del resultado seleccionado
+    let currentResults: Tool[] = []; // Resultados actuales
 
-  // Función para actualizar la selección visual
-  function updateSelection() {
-    const items = resultsContainer.querySelectorAll(".result-item");
-    items.forEach((item, index) => {
-      if (index === currentIndex) {
-        item.classList.add("bg-neutral-800/60");
-        item.classList.remove("hover:bg-neutral-800/60");
-      } else {
-        item.classList.remove("bg-neutral-800/60");
-        item.classList.add("hover:bg-neutral-800/60");
+    // Función para renderizar los resultados
+    function renderResults(tools: Tool[]) {
+      currentResults = tools;
+      currentIndex = -1; // Reset del índice
+
+      if (tools.length === 0) {
+        resultsContainer.innerHTML = "";
+        noResults.classList.remove("hidden");
+        return;
       }
-    });
-  }
 
-  // Función para navegar a la opción seleccionada
-  function navigateToSelected() {
-    if (currentIndex >= 0 && currentIndex < currentResults.length) {
-      const selectedTool = currentResults[currentIndex];
-      window.location.href = selectedTool.href;
-    }
-  }
-
-  // Función para realizar la búsqueda
-  function performSearch(query: string) {
-    if (query.trim().length === 0) {
-      searchResults.classList.add("hidden");
-      return;
-    }
-
-    const results = searchTools(query);
-    renderResults(results);
-    searchResults.classList.remove("hidden");
-  }
-
-  // Event listeners
-  searchInput.addEventListener("input", (e) => {
-    const query = (e.target as HTMLInputElement).value;
-    performSearch(query);
-  });
-
-  // Agregar evento change para compatibilidad móvil (solo en móviles)
-  searchInput.addEventListener("change", (e) => {
-    // Solo procesar en dispositivos móviles para evitar conflictos
-    if ("ontouchstart" in window) {
-      const query = (e.target as HTMLInputElement).value;
-      performSearch(query);
-    }
-  });
-
-  // Agregar eventos adicionales para mejor soporte móvil
-  searchInput.addEventListener("keyup", (e) => {
-    // Ignorar teclas de navegación
-    const navigationKeys = ["ArrowDown", "ArrowUp", "Tab", "Enter", "Escape"];
-    if (navigationKeys.includes(e.key)) {
-      return;
+      noResults.classList.add("hidden");
+      resultsContainer.innerHTML = tools
+        .map(
+          (tool, index) => `
+        <a
+          href="${tool.href}"
+          data-index="${index}"
+          class="result-item block p-3 rounded-lg hover:bg-neutral-800/60 transition-colors border-b border-neutral-800/50 last:border-b-0 focus:outline-none focus:bg-neutral-800/60"
+          tabindex="-1"
+        >
+          <div class="font-medium text-sm text-neutral-200">${tool.name}</div>
+          <div class="text-xs text-neutral-400 mt-1 line-clamp-2">${tool.description}</div>
+        </a>
+      `
+        )
+        .join("");
     }
 
-    const query = (e.target as HTMLInputElement).value;
-    performSearch(query);
-  });
-
-  searchInput.addEventListener("paste", (e) => {
-    // Usar setTimeout para esperar que el paste se complete
-    setTimeout(() => {
-      const query = searchInput.value;
-      performSearch(query);
-    }, 10);
-  });
-
-  // Cerrar resultados al hacer clic fuera
-  document.addEventListener("click", (e) => {
-    if (!searchResults.contains(e.target as Node) && e.target !== searchInput) {
-      searchResults.classList.add("hidden");
+    // Función para actualizar la selección visual
+    function updateSelection() {
+      const items = resultsContainer.querySelectorAll(".result-item");
+      items.forEach((item, index) => {
+        if (index === currentIndex) {
+          item.classList.add("bg-neutral-800/60");
+          item.classList.remove("hover:bg-neutral-800/60");
+        } else {
+          item.classList.remove("bg-neutral-800/60");
+          item.classList.add("hover:bg-neutral-800/60");
+        }
+      });
     }
-  });
 
-  // Mostrar resultados al hacer focus si hay contenido
-  searchInput.addEventListener("focus", () => {
-    if (searchInput.value.trim().length > 0) {
+    // Función para navegar a la opción seleccionada
+    function navigateToSelected() {
+      if (currentIndex >= 0 && currentIndex < currentResults.length) {
+        const selectedTool = currentResults[currentIndex];
+        window.location.href = selectedTool.href;
+      }
+    }
+
+    // Función para realizar la búsqueda
+    function performSearch(query: string) {
+      if (query.trim().length === 0) {
+        searchResults.classList.add("hidden");
+        return;
+      }
+
+      const results = searchTools(query);
+      renderResults(results);
       searchResults.classList.remove("hidden");
     }
-  });
 
-  // Navegación con teclado en el input de búsqueda
-  searchInput.addEventListener("keydown", (e) => {
-    const isResultsVisible = !searchResults.classList.contains("hidden");
+    // Event listeners
+    searchInput.addEventListener("input", (e) => {
+      const query = (e.target as HTMLInputElement).value;
+      performSearch(query);
+    });
 
-    // Manejar Escape siempre
-    if (e.key === "Escape") {
-      e.preventDefault();
-      searchResults.classList.add("hidden");
-      currentIndex = -1;
-      return;
-    }
+    // Agregar evento change para compatibilidad móvil (solo en móviles)
+    searchInput.addEventListener("change", (e) => {
+      // Solo procesar en dispositivos móviles para evitar conflictos
+      if ("ontouchstart" in window) {
+        const query = (e.target as HTMLInputElement).value;
+        performSearch(query);
+      }
+    });
 
-    // Solo procesar navegación si hay resultados visibles
-    if (!isResultsVisible || currentResults.length === 0) return;
+    // Agregar eventos adicionales para mejor soporte móvil
+    searchInput.addEventListener("keyup", (e) => {
+      // Ignorar teclas de navegación
+      const navigationKeys = ["ArrowDown", "ArrowUp", "Tab", "Enter", "Escape"];
+      if (navigationKeys.includes(e.key)) {
+        return;
+      }
 
-    switch (e.key) {
-      case "ArrowDown":
+      const query = (e.target as HTMLInputElement).value;
+      performSearch(query);
+    });
+
+    searchInput.addEventListener("paste", (e) => {
+      // Usar setTimeout para esperar que el paste se complete
+      setTimeout(() => {
+        const query = searchInput.value;
+        performSearch(query);
+      }, 10);
+    });
+
+    // Cerrar resultados al hacer clic fuera
+    document.addEventListener("click", (e) => {
+      if (
+        !searchResults.contains(e.target as Node) &&
+        e.target !== searchInput
+      ) {
+        searchResults.classList.add("hidden");
+      }
+    });
+
+    // Mostrar resultados al hacer focus si hay contenido
+    searchInput.addEventListener("focus", () => {
+      if (searchInput.value.trim().length > 0) {
+        searchResults.classList.remove("hidden");
+      }
+    });
+
+    // Navegación con teclado en el input de búsqueda
+    searchInput.addEventListener("keydown", (e) => {
+      const isResultsVisible = !searchResults.classList.contains("hidden");
+
+      // Manejar Escape siempre
+      if (e.key === "Escape") {
         e.preventDefault();
-        e.stopPropagation();
-        currentIndex =
-          currentIndex < currentResults.length - 1 ? currentIndex + 1 : 0;
-        updateSelection();
-        break;
+        searchResults.classList.add("hidden");
+        currentIndex = -1;
+        return;
+      }
 
-      case "ArrowUp":
-        e.preventDefault();
-        e.stopPropagation();
-        currentIndex =
-          currentIndex > 0 ? currentIndex - 1 : currentResults.length - 1;
-        updateSelection();
-        break;
+      // Solo procesar navegación si hay resultados visibles
+      if (!isResultsVisible || currentResults.length === 0) return;
 
-      case "Tab":
-        if (!e.shiftKey) {
+      switch (e.key) {
+        case "ArrowDown":
           e.preventDefault();
           e.stopPropagation();
           currentIndex =
             currentIndex < currentResults.length - 1 ? currentIndex + 1 : 0;
           updateSelection();
-        } else {
+          break;
+
+        case "ArrowUp":
           e.preventDefault();
           e.stopPropagation();
           currentIndex =
             currentIndex > 0 ? currentIndex - 1 : currentResults.length - 1;
           updateSelection();
-        }
-        break;
+          break;
 
-      case "Enter":
-        e.preventDefault();
-        e.stopPropagation();
-        navigateToSelected();
-        break;
-    }
-  });
+        case "Tab":
+          if (!e.shiftKey) {
+            e.preventDefault();
+            e.stopPropagation();
+            currentIndex =
+              currentIndex < currentResults.length - 1 ? currentIndex + 1 : 0;
+            updateSelection();
+          } else {
+            e.preventDefault();
+            e.stopPropagation();
+            currentIndex =
+              currentIndex > 0 ? currentIndex - 1 : currentResults.length - 1;
+            updateSelection();
+          }
+          break;
 
-  // Atajo de teclado (/) para enfocar la búsqueda
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "/" && !searchInput.matches(":focus")) {
-      e.preventDefault();
-      searchInput.focus();
-    }
-
-    // ESC para cerrar resultados (global)
-    if (e.key === "Escape") {
-      searchResults.classList.add("hidden");
-      searchInput.blur();
-      currentIndex = -1;
-    }
-  });
-
-  // Click en los resultados para seleccionar con mouse
-  resultsContainer.addEventListener("mouseover", (e) => {
-    const target = e.target as HTMLElement;
-    const resultItem = target.closest(".result-item") as HTMLElement;
-
-    if (resultItem) {
-      const index = parseInt(resultItem.dataset.index || "-1");
-      if (index >= 0) {
-        currentIndex = index;
-        updateSelection();
+        case "Enter":
+          e.preventDefault();
+          e.stopPropagation();
+          navigateToSelected();
+          break;
       }
-    }
-  });
+    });
+
+    // Atajo de teclado (/) para enfocar la búsqueda
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "/" && !searchInput.matches(":focus")) {
+        e.preventDefault();
+        searchInput.focus();
+      }
+
+      // ESC para cerrar resultados (global)
+      if (e.key === "Escape") {
+        searchResults.classList.add("hidden");
+        searchInput.blur();
+        currentIndex = -1;
+      }
+    });
+
+    // Click en los resultados para seleccionar con mouse
+    resultsContainer.addEventListener("mouseover", (e) => {
+      const target = e.target as HTMLElement;
+      const resultItem = target.closest(".result-item") as HTMLElement;
+
+      if (resultItem) {
+        const index = parseInt(resultItem.dataset.index || "-1");
+        if (index >= 0) {
+          currentIndex = index;
+          updateSelection();
+        }
+      }
+    });
+  }
+
+  // Inicializar cuando el DOM esté listo
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initializeSearch);
+  } else {
+    initializeSearch();
+  }
+
+  // Reinicializar después de las transiciones de página de Astro
+  document.addEventListener("astro:page-load", initializeSearch);
 </script>
