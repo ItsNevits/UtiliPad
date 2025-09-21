@@ -122,6 +122,26 @@ import { searchTools } from "@constants/tools";
     performSearch(query);
   });
 
+  // Agregar evento change para compatibilidad móvil
+  searchInput.addEventListener("change", (e) => {
+    const query = (e.target as HTMLInputElement).value;
+    performSearch(query);
+  });
+
+  // Agregar eventos adicionales para mejor soporte móvil
+  searchInput.addEventListener("keyup", (e) => {
+    const query = (e.target as HTMLInputElement).value;
+    performSearch(query);
+  });
+
+  searchInput.addEventListener("paste", (e) => {
+    // Usar setTimeout para esperar que el paste se complete
+    setTimeout(() => {
+      const query = searchInput.value;
+      performSearch(query);
+    }, 10);
+  });
+
   // Cerrar resultados al hacer clic fuera
   document.addEventListener("click", (e) => {
     if (!searchResults.contains(e.target as Node) && e.target !== searchInput) {
