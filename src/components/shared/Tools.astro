@@ -55,7 +55,9 @@ if (categoryId === "all") {
           >
             Abrir
           </a>
-          <span class="shortcut text-xs text-neutral-500">⌘K para buscar</span>
+          <span class="shortcut text-xs text-neutral-500 hidden xl:inline">
+            ⌘K para buscar
+          </span>
         </div>
       </div>
     ))
@@ -70,5 +72,6 @@ if (categoryId === "all") {
     });
   };
 
+  document.addEventListener("astro:page-load", initWindowsOrMac);
   document.addEventListener("DOMContentLoaded", initWindowsOrMac);
 </script>
