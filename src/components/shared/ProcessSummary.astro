@@ -6,8 +6,8 @@ const process = [
 ];
 ---
 
-<div class="rounded-2xl border border-neutral-800 bg-neutral-900/40">
-  <div class="p-4 border-b border-neutral-800">
+<div class="rounded-2xl border border-neutral-800 bg-neutral-800/50">
+  <div class="p-4 border-b border-neutral-700">
     <h3 class="font-semibold">Procesos realizados</h3>
   </div>
   <ul class="p-4 space-y-4">
@@ -15,7 +15,7 @@ const process = [
       process.map((p) => (
         <li id={p.name} class="flex justify-between items-center">
           <p class="text-sm text-neutral-300">{p.name}</p>
-          <p class="text-sm text-neutral-500 mt-1">{p.progress}</p>
+          <p class="text-sm text-neutral-400 mt-1">{p.progress}</p>
         </li>
       ))
     }

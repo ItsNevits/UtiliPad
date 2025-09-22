@@ -36,7 +36,7 @@ if (categoryId === "all") {
     tools.map((t) => (
       <div
         id={t.title}
-        class="flex flex-col justify-between group rounded-2xl border border-neutral-800 bg-neutral-900/60 p-4 hover:border-emerald-600/60 hover:shadow-[0_0_0_1px_rgba(16,185,129,0.25)] transition"
+        class="flex flex-col justify-between group rounded-2xl border border-neutral-800 bg-neutral-800/50 p-4 hover:border-emerald-600/60 hover:shadow-[0_0_0_1px_rgba(16,185,129,0.25)] transition"
       >
         <div class="flex items-start justify-between gap-2">
           <h3 class="font-semibold leading-snug">{t.title}</h3>
@@ -55,7 +55,7 @@ if (categoryId === "all") {
           >
             Abrir
           </a>
-          <span class="shortcut text-xs text-neutral-500 hidden xl:inline">
+          <span class="shortcut text-xs text-neutral-400 hidden xl:inline">
             ⌘K para buscar
           </span>
         </div>

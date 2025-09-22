@@ -12,7 +12,7 @@ import Hero from "../components/shared/Hero.astro";
   <div class="mt-5 flex flex-col xl:flex-row gap-5">
     <!-- Información de contacto -->
     <div
-      class="overflow-hidden rounded-2xl border border-neutral-800 p-6 space-y-6 flex-1"
+      class="overflow-hidden rounded-2xl border border-neutral-800 p-6 space-y-6 flex-1 bg-neutral-800/50 select-none"
     >
       <h2 class="text-xl font-semibold text-neutral-200">
         Información de contacto
@@ -83,7 +83,7 @@ import Hero from "../components/shared/Hero.astro";
 
     <!-- Formulario de contacto -->
     <div
-      class="overflow-hidden rounded-2xl border border-neutral-800 p-6 flex-1"
+      class="overflow-hidden rounded-2xl border border-neutral-800 bg-neutral-800/50 p-6 flex-1"
     >
       <h2 class="text-xl font-semibold text-neutral-200 mb-6">
         Envíanos un mensaje
@@ -176,7 +176,9 @@ import Hero from "../components/shared/Hero.astro";
   </div>
 
   <!-- FAQ Section -->
-  <div class="overflow-hidden rounded-2xl border border-neutral-800 p-6 mt-5">
+  <div
+    class="overflow-hidden rounded-2xl border border-neutral-800 bg-neutral-800/50 p-6 mt-5"
+  >
     <h2 class="text-xl font-semibold text-neutral-200 mb-6">
       Preguntas Frecuentes
     </h2>

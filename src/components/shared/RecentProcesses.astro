@@ -17,11 +17,11 @@ const recents = [
       recents.map((r) => (
         <div
           id={r.name}
-          class="flex items-center justify-between px-4 py-3 bg-neutral-900/40 hover:bg-neutral-900"
+          class="flex items-center justify-between px-4 py-3 bg-neutral-800/50 "
         >
           <div class="min-w-0">
             <p class="truncate">{r.name}</p>
-            <p class="text-xs text-neutral-500">{r.time}</p>
+            <p class="text-xs text-neutral-400">{r.time}</p>
           </div>
           <span class="text-xs rounded-full border border-neutral-700 px-2 py-0.5 text-neutral-300">
             {r.status}
