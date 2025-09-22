@@ -5,6 +5,8 @@ import tailwindcss from "@tailwindcss/vite";
 
 import cloudflare from "@astrojs/cloudflare";
 
+import sitemap from "@astrojs/sitemap";
+
 // https://astro.build/config
 export default defineConfig({
   vite: {
@@ -14,4 +16,7 @@ export default defineConfig({
   adapter: cloudflare({
     imageService: "compile",
   }),
+
+  site: "https://utilipad.com/",
+  integrations: [sitemap()],
 });

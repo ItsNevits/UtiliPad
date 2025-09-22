@@ -20,18 +20,15 @@ import Modal from "@components/shared/Modal.astro";
       name="description"
       content="UtiliPad es una suite completa de herramientas web gratuitas. Formatea JSON, cuenta palabras, comprime imágenes, convierte archivos y mucho más. Rápido, seguro y sin registros."
     />
-    <meta
-      name="keywords"
-      content="herramientas online, formateador json, contador palabras, compresor imagenes, convertidor archivos, utilidades web, herramientas gratis, formato json, validador json, analizador texto, herramientas desarrollo, productividad, web tools, online tools, free tools"
-    />
     <meta name="author" content="UtiliPad" />
     <meta
       name="robots"
       content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
     />
     <meta name="language" content="es" />
-    <meta name="geo.region" content="ES" />
-    <meta name="geo.country" content="Spain" />
+
+    <!-- SiteMap -->
+    <link rel="sitemap" href="/sitemap-index.xml" />
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
@@ -76,10 +73,7 @@ import Modal from "@components/shared/Modal.astro";
     <!-- Canonical URL -->
     <link rel="canonical" href="https://utilipad.com/" />
 
-    <!-- Alternate Languages -->
     <link rel="alternate" hreflang="es" href="https://utilipad.com/" />
-    <link rel="alternate" hreflang="en" href="https://utilipad.com/en/" />
-    <link rel="alternate" hreflang="x-default" href="https://utilipad.com/" />
 
     <!-- Favicon e Icons -->
     <link rel="icon" type="image/x-icon" href="/icons/favicon.ico" />
@@ -153,13 +147,7 @@ import Modal from "@components/shared/Modal.astro";
         ],
         "softwareVersion": "1.0.0",
         "datePublished": "2025",
-        "inLanguage": "es",
-        "screenshot": "https://utilipad.com/screenshot.jpg",
-        "aggregateRating": {
-          "@type": "AggregateRating",
-          "ratingValue": "4.8",
-          "reviewCount": "150"
-        }
+        "inLanguage": "es"
       }
     </script>
 
@@ -167,24 +155,13 @@ import Modal from "@components/shared/Modal.astro";
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
-        "@type": "WebSite",
+        "@type": "SoftwareApplication",
         "name": "UtiliPad",
+        "applicationCategory": "UtilitiesApplication",
+        "operatingSystem": "Web Browser",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
         "url": "https://utilipad.com",
-        "description": "Herramientas web gratuitas y utilidades online",
-        "inLanguage": "es",
-        "potentialAction": {
-          "@type": "SearchAction",
-          "target": {
-            "@type": "EntryPoint",
-            "urlTemplate": "https://utilipad.com/search?q={search_term_string}"
-          },
-          "query-input": "required name=search_term_string"
-        },
-        "publisher": {
-          "@type": "Organization",
-          "name": "UtiliPad",
-          "url": "https://utilipad.com"
-        }
+        "inLanguage": "es"
       }
     </script>
 
