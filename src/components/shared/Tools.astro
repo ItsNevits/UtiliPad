@@ -54,7 +54,7 @@ if (categoryId === "all") {
             href={t.href}
             class:list={[
               "cursor-pointer text-sm text-emerald-400",
-              !t.isAvailable && "pointer-events-none text-neutral-600",
+              !t.isAvailable && "pointer-events-none text-neutral-600 hidden",
               t.isAvailable && "hover:underline",
             ]}
           >
