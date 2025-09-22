@@ -1,0 +1,161 @@
+---
+import Hero from "@components/shared/Hero.astro";
+import MainLayout from "src/Layouts/MainLayout.astro";
+
+import { getCollection } from "astro:content";
+const news = await getCollection("news", ({ data }) => !data.draft);
+const sortedNews = news.sort(
+  (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
+);
+---
+
+<MainLayout pathname="/news">
+  <Hero
+    title="Novedades"
+    description="Mantente al día con las últimas actualizaciones y nuevas herramientas que hemos añadido a UtiliPad."
+  />
+
+  <section class="mt-8">
+    {
+      sortedNews.length > 0 ? (
+        <div class="grid gap-6 md:gap-8">
+          {sortedNews.map((article) => (
+            <article class="bg-neutral-800/50 rounded-2xl border border-neutral-800 p-6 hover:border-neutral-700 transition-colors group">
+              <div class="flex flex-col space-y-4">
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                  <div class="flex-1">
+                    <h2 class="text-xl font-semibold text-white  transition-colors">
+                      <a href={`/news/${article.slug}`} class="block">
+                        {article.data.title}
+                      </a>
+                    </h2>
+                    <div class="flex items-center gap-4 mt-2 text-sm text-neutral-400">
+                      <span>Por {article.data.author}</span>
+                      <span>•</span>
+                      <time datetime={article.data.date.toISOString()}>
+                        {article.data.date.toLocaleDateString("es-ES", {
+                          year: "numeric",
+                          month: "long",
+                          day: "numeric",
+                        })}
+                      </time>
+                    </div>
+                  </div>
+
+                  <div class="flex flex-wrap gap-2">
+                    {article.data.tags?.slice(0, 3).map((tag) => (
+                      <span class="px-3 py-1 bg-green-500/20 text-green-400 rounded-full text-sm">
+                        {tag}
+                      </span>
+                    ))}
+                    {article.data.tags && article.data.tags.length > 3 && (
+                      <span class="px-3 py-1 bg-neutral-700/50 text-neutral-400 rounded-full text-sm">
+                        +{article.data.tags.length - 3}
+                      </span>
+                    )}
+                  </div>
+                </div>
+
+                <div class="text-neutral-300 leading-relaxed">
+                  <p class="line-clamp-3">
+                    {article.body
+                      .slice(0, 200)
+                      .replace(/^#.*\n\n?/, "")
+                      .trim()}
+                    ...
+                  </p>
+                </div>
+
+                <div class="flex items-center justify-between pt-4 border-t border-neutral-800">
+                  <div class="flex items-center gap-2 text-sm text-neutral-400">
+                    <svg
+                      class="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
+                      />
+                    </svg>
+                    <span>Lectura completa</span>
+                  </div>
+
+                  <a
+                    href={`/news/${article.slug}`}
+                    class="cursor-pointer px-4 py-2 bg-neutral-700 hover:bg-neutral-600 text-neutral-200 rounded transition-colors inline-flex items-center gap-2 text-sm font-medium"
+                  >
+                    Leer más
+                    <svg
+                      class="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M9 5l7 7-7 7"
+                      />
+                    </svg>
+                  </a>
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
+      ) : (
+        <div class="text-center py-12">
+          <div class="w-16 h-16 bg-neutral-800 rounded-full flex items-center justify-center mx-auto mb-4">
+            <svg
+              class="w-8 h-8 text-neutral-600"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9.5a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"
+              />
+            </svg>
+          </div>
+          <h3 class="text-lg font-medium text-neutral-400 mb-2">
+            No hay noticias disponibles
+          </h3>
+          <p class="text-neutral-500">
+            Pronto añadiremos nuevas actualizaciones sobre UtiliPad.
+          </p>
+        </div>
+      )
+    }
+
+    <!-- Estadísticas de noticias -->
+    {
+      sortedNews.length > 0 && (
+        <div class="mt-12 p-6 bg-neutral-900/20 rounded-2xl border border-neutral-800">
+          <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="text-center sm:text-left">
+              <h3 class="text-lg font-semibold text-white">Estadísticas</h3>
+              <p class="text-neutral-400">Resumen de noticias publicadas</p>
+            </div>
+
+            <div class="flex gap-6">
+              <div class="text-center">
+                <div class="text-2xl font-bold text-neutral-400">
+                  {sortedNews.length}
+                </div>
+                <div class="text-sm text-neutral-400">Artículos</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )
+    }
+  </section>
+</MainLayout>
