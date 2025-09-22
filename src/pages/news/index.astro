@@ -20,7 +20,7 @@ const sortedNews = news.sort(
       sortedNews.length > 0 ? (
         <div class="grid gap-6 md:gap-8">
           {sortedNews.map((article) => (
-            <article class="bg-neutral-800/50 rounded-2xl border border-neutral-800 p-6 hover:border-neutral-700 transition-colors group">
+            <article class="opacity-0 sequence-item-tool bg-neutral-800/50 rounded-2xl border border-neutral-800 p-6 hover:border-neutral-700 transition-colors group">
               <div class="flex flex-col space-y-4">
                 <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                   <div class="flex-1">
@@ -159,3 +159,15 @@ const sortedNews = news.sort(
     }
   </section>
 </MainLayout>
+
+<script>
+  import { animateSequenceItems } from "../../animate/timeline";
+
+  // Múltiples listeners para asegurar la ejecución
+  document.addEventListener("astro:page-load", () => {
+    animateSequenceItems(".sequence-item-tool");
+  });
+  document.addEventListener("DOMContentLoaded", () => {
+    animateSequenceItems(".sequence-item-tool");
+  });
+</script>

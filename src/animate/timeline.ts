@@ -30,3 +30,21 @@ export function animateCountUp(selector: string, targetNumber?: number) {
     );
   });
 }
+
+export function animateSequenceItems(selector: string) {
+  const elements = document.querySelectorAll(selector);
+
+  if (elements.length === 0) {
+    return;
+  }
+
+  gsap.set(elements, { opacity: 0 });
+
+  // Animar todos los elementos con stagger
+  gsap.to(elements, {
+    opacity: 1,
+    ease: "power3.out",
+    duration: 0.15,
+    stagger: 0.15,
+  });
+}

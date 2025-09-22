@@ -39,7 +39,7 @@ if (categoryId === "all") {
     tools.map((t) => (
       <div
         id={t.title}
-        class="flex flex-col justify-between group rounded-2xl border border-neutral-800 bg-neutral-800/50 p-4 hover:border-emerald-600/60 hover:shadow-[0_0_0_1px_rgba(16,185,129,0.25)] transition"
+        class="sequence-item-tool opacity-0 flex flex-col justify-between group rounded-2xl border border-neutral-800 bg-neutral-800/50 p-4 hover:border-emerald-600/60 hover:shadow-[0_0_0_1px_rgba(16,185,129,0.25)] transition"
       >
         <div class="flex items-start justify-between gap-2">
           <h2 class="font-semibold leading-snug">{t.title}</h2>
@@ -72,6 +72,8 @@ if (categoryId === "all") {
 </div>
 
 <script>
+  import { animateSequenceItems } from "../../animate/timeline";
+
   const initWindowsOrMac = () => {
     const isMac = navigator.userAgent.indexOf("Mac OS X") != -1;
     document.querySelectorAll(".shortcut").forEach((el) => {
@@ -79,6 +81,16 @@ if (categoryId === "all") {
     });
   };
 
-  document.addEventListener("astro:page-load", initWindowsOrMac);
-  document.addEventListener("DOMContentLoaded", initWindowsOrMac);
+  const initSequenceAnimation = () => {
+    animateSequenceItems(".sequence-item-tool");
+  };
+
+  const init = () => {
+    initSequenceAnimation();
+    initWindowsOrMac();
+  };
+
+  // Múltiples listeners para asegurar la ejecución
+  document.addEventListener("astro:page-load", init);
+  document.addEventListener("DOMContentLoaded", init);
 </script>
