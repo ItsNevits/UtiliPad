@@ -111,11 +111,11 @@ export async function getStaticPaths() {
 
         <div class="mt-8">
           <h3 class="text-lg font-semibold mb-4">
-            Otras herramientas de {category.name}
+            Otras herramientas de {category.name.toLocaleLowerCase()}
           </h3>
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {category.tools
-              .filter((tool) => tool.id !== selectedTool.id)
+              .filter((tool) => tool.id !== selectedTool.id && tool.isAvailable)
               .map((tool) => (
                 <a
                   href={tool.href}
@@ -125,6 +125,13 @@ export async function getStaticPaths() {
                   <p class="text-sm text-neutral-400">{tool.description}</p>
                 </a>
               ))}
+            {category.tools.filter(
+              (tool) => tool.id !== selectedTool.id && tool.isAvailable
+            ).length === 0 && (
+              <p class="text-sm text-neutral-400 col-span-full">
+                No hay más herramientas disponibles en esta categoría.
+              </p>
+            )}
           </div>
         </div>
       </div>
