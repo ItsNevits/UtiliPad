@@ -3,8 +3,9 @@ export interface Tool {
   name: string;
   description: string;
   href: string;
-  bagde?: string;
-  component?: string;
+  bagde: string;
+  isAvailable: boolean;
+  component: string;
 }
 
 export interface Category {
@@ -27,7 +28,8 @@ export const TOOLS_CATEGORIES: Category[] = [
         name: "Crear ZIP",
         description: "Comprime archivos en formato ZIP",
         href: "/files?tool=zip-files",
-        bagde: "Proximamente",
+        bagde: "Nuevo",
+        isAvailable: true,
         component: "ZipCompressor",
       },
       {
@@ -36,6 +38,7 @@ export const TOOLS_CATEGORIES: Category[] = [
         description: "Convierte entre diferentes formatos de archivo",
         href: "/files?tool=file-converter",
         bagde: "Proximamente",
+        isAvailable: false,
         component: "FileConverter",
       },
     ],
@@ -52,6 +55,7 @@ export const TOOLS_CATEGORIES: Category[] = [
         description: "Reduce el tamaño de tus imágenes",
         href: "/images?tool=image-compress",
         bagde: "Proximamente",
+        isAvailable: false,
         component: "ImageCompressor",
       },
       {
@@ -60,6 +64,7 @@ export const TOOLS_CATEGORIES: Category[] = [
         description: "Cambia las dimensiones de la imagen",
         href: "/images?tool=image-resize",
         bagde: "Proximamente",
+        isAvailable: false,
         component: "ImageResizer",
       },
       {
@@ -68,6 +73,7 @@ export const TOOLS_CATEGORIES: Category[] = [
         description: "Recorta partes específicas de la imagen",
         href: "/images?tool=image-crop",
         bagde: "Proximamente",
+        isAvailable: false,
         component: "ImageCropper",
       },
       {
@@ -76,6 +82,7 @@ export const TOOLS_CATEGORIES: Category[] = [
         description: "Convierte entre JPG, PNG, WebP, etc.",
         href: "/images?tool=image-format",
         bagde: "Proximamente",
+        isAvailable: false,
         component: "ImageFormatConverter",
       },
     ],
@@ -92,6 +99,7 @@ export const TOOLS_CATEGORIES: Category[] = [
         description: "Formatea, valida y embellece código JSON",
         href: "/text?tool=json-formatter",
         bagde: "Nuevo",
+        isAvailable: true,
         component: "JsonFormatter",
       },
       {
@@ -100,6 +108,7 @@ export const TOOLS_CATEGORIES: Category[] = [
         description: "Cuenta palabras, caracteres y párrafos",
         href: "/text?tool=text-analyzer",
         bagde: "Nuevo",
+        isAvailable: true,
         component: "WordCounter",
       },
     ],

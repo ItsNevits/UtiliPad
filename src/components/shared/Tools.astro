@@ -13,6 +13,7 @@ const mapToolToDisplay = (tool: Tool) => ({
   title: tool.name,
   desc: tool.description,
   badge: tool.bagde,
+  isAvailable: tool.isAvailable,
   href: tool.href,
 });
 
@@ -51,7 +52,11 @@ if (categoryId === "all") {
           <a
             title={t.title}
             href={t.href}
-            class="cursor-pointer text-sm text-emerald-400 group-hover:underline"
+            class:list={[
+              "cursor-pointer text-sm text-emerald-400",
+              !t.isAvailable && "pointer-events-none text-neutral-600",
+              t.isAvailable && "hover:underline",
+            ]}
           >
             Abrir
           </a>
