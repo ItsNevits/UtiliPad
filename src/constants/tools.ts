@@ -28,7 +28,7 @@ export const TOOLS_CATEGORIES: Category[] = [
         description: "Comprime archivos en formato ZIP",
         href: "/files?tool=zip-files",
         bagde: "Proximamente",
-        component: "ZipCreator",
+        component: "ZipCompressor",
       },
       {
         id: "file-converter",

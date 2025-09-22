@@ -1,0 +1,164 @@
+---
+import BoxIcon from "@assets/icons/box.svg";
+import Image from "astro/components/Image.astro";
+---
+
+<div class="bg-neutral-800/50 rounded-xl p-6 select-none mb-5">
+  <div
+    class="border border-neutral-700 p-5 rounded-lg flex flex-col items-center justify-center cursor-pointer"
+  >
+    <Image
+      class="text-neutral-400 mb-2 svg-color-neutral-400 opacity-40"
+      src={BoxIcon}
+      alt={"Box icon"}
+      quality={"mid"}
+      width={45}
+      height={45}
+      loading={"lazy"}
+    />
+    <span class="text-neutral-400"
+      >Suelta los archivos aquí o da clic para seleccionar</span
+    >
+  </div>
+</div>
+
+<div class="bg-neutral-800/50 rounded-xl p-6 select-none mb-5">
+  <div class="flex items-end justify-between mb-4">
+    <h2 class="text-xl md:text-2xl font-bold leading-tight">
+      Archivos cargados
+    </h2>
+
+    <span class="text-neutral-400 text-sm">Total archivos: <span>5</span></span>
+  </div>
+
+  <div class="relative flex flex-col gap-4 max-h-100 overflow-y-auto mb-4">
+    <div
+      id="overlay-zip-files"
+      class="absolute hidden z-10 top-0 left-0 bg-neutral-700/80 w-full h-full rounded-2xl justify-center items-center"
+    >
+      <p class="text-lg md:text-xl font-bold leading-tight animate-bounce">
+        Procesando información...
+      </p>
+    </div>
+
+    <div
+      class="bg-neutral-900/40 rounded-2xl border border-neutral-800 p-4 flex items-center justify-between"
+    >
+      <div class="flex items-center gap-4">
+        <div
+          class="w-10 h-10 bg-neutral-700/50 rounded-lg flex items-center justify-center"
+        >
+          <span class="text-sm text-neutral-400">ZIP</span>
+        </div>
+        <div>
+          <p class="font-medium">archivos.zip</p>
+          <p class="text-sm text-neutral-400">1.2 MB</p>
+        </div>
+      </div>
+      <button
+        title="Eliminar"
+        class="cursor-pointer px-3 py-1 bg-red-600/20 hover:bg-red-600/30 text-red-400 rounded-lg transition-colors text-sm"
+      >
+        Eliminar
+      </button>
+    </div>
+
+    <div
+      class="bg-neutral-900/40 rounded-2xl border border-neutral-800 p-4 flex items-center justify-between"
+    >
+      <div class="flex items-center gap-4">
+        <div
+          class="w-10 h-10 bg-neutral-700/50 rounded-lg flex items-center justify-center"
+        >
+          <span class="text-sm text-neutral-400">ZIP</span>
+        </div>
+        <div>
+          <p class="font-medium">archivos.zip</p>
+          <p class="text-sm text-neutral-400">1.2 MB</p>
+        </div>
+      </div>
+      <button
+        title="Eliminar"
+        class="cursor-pointer px-3 py-1 bg-red-600/20 hover:bg-red-600/30 text-red-400 rounded-lg transition-colors text-sm"
+      >
+        Eliminar
+      </button>
+    </div>
+
+    <div
+      class="bg-neutral-900/40 rounded-2xl border border-neutral-800 p-4 flex items-center justify-between"
+    >
+      <div class="flex items-center gap-4">
+        <div
+          class="w-10 h-10 bg-neutral-700/50 rounded-lg flex items-center justify-center"
+        >
+          <span class="text-sm text-neutral-400">ZIP</span>
+        </div>
+        <div>
+          <p class="font-medium">archivos.zip</p>
+          <p class="text-sm text-neutral-400">1.2 MB</p>
+        </div>
+      </div>
+      <button
+        title="Eliminar"
+        class="cursor-pointer px-3 py-1 bg-red-600/20 hover:bg-red-600/30 text-red-400 rounded-lg transition-colors text-sm"
+      >
+        Eliminar
+      </button>
+    </div>
+
+    <div
+      class="bg-neutral-900/40 rounded-2xl border border-neutral-800 p-4 flex items-center justify-between"
+    >
+      <div class="flex items-center gap-4">
+        <div
+          class="w-10 h-10 bg-neutral-700/50 rounded-lg flex items-center justify-center"
+        >
+          <span class="text-sm text-neutral-400">ZIP</span>
+        </div>
+        <div>
+          <p class="font-medium">archivos.zip</p>
+          <p class="text-sm text-neutral-400">1.2 MB</p>
+        </div>
+      </div>
+      <button
+        class="px-3 py-1 bg-red-600/20 hover:bg-red-600/30 text-red-400 rounded-lg transition-colors text-sm"
+      >
+        Eliminar
+      </button>
+    </div>
+
+    <div
+      class="bg-neutral-900/40 rounded-2xl border border-neutral-800 p-4 flex items-center justify-between"
+    >
+      <div class="flex items-center gap-4">
+        <div
+          class="w-10 h-10 bg-neutral-700/50 rounded-lg flex items-center justify-center"
+        >
+          <span class="text-sm text-neutral-400">ZIP</span>
+        </div>
+        <div>
+          <p class="font-medium">archivos.zip</p>
+          <p class="text-sm text-neutral-400">1.2 MB</p>
+        </div>
+      </div>
+      <button
+        title="Eliminar"
+        class="cursor-pointer px-3 py-1 bg-red-600/20 hover:bg-red-600/30 text-red-400 rounded-lg transition-colors text-sm"
+      >
+        Eliminar
+      </button>
+    </div>
+  </div>
+
+  <!-- Information -->
+  <div class="flex flex-col justify-between md:flex-row gap-2">
+    <span class="text-neutral-400 text-sm"
+      >Tamaño previo: <span>120 KB</span></span
+    >
+
+    <span class="text-neutral-400 text-sm"
+      >Tamaño comprimido: <span>50 KB</span></span
+    >
+  </div>
+</div>
