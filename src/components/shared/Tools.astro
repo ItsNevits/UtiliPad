@@ -21,12 +21,14 @@ const mapToolToDisplay = (tool: Tool) => ({
 let tools;
 if (categoryId === "all") {
   // Mostrar todas las herramientas de todas las categorías
-  tools = TOOLS_CATEGORIES.flatMap((category) => category.tools).map(
-    mapToolToDisplay
-  );
+  tools = TOOLS_CATEGORIES.flatMap((category) => category.tools)
+    .map(mapToolToDisplay)
+    .sort((a, b) => a.title.localeCompare(b.title));
 } else {
   // Mostrar herramientas de una categoría específica
-  tools = getToolsByCategory(categoryId).map(mapToolToDisplay);
+  tools = getToolsByCategory(categoryId)
+    .map(mapToolToDisplay)
+    .sort((a, b) => a.title.localeCompare(b.title));
 }
 ---
 
