@@ -9,14 +9,17 @@ import { TOOLS_CATEGORIES, getToolById } from "../constants/tools";
 
 // Importar componentes de herramientas
 import WordCounter from "@components/tools/WordCounter.astro";
-import JsonFormatter from "../components/tools/JsonFormatter.astro";
+import JsonFormatter from "@components/tools/JsonFormatter.astro";
+import ZipCompressor from "@components/tools/ZipCompressor.astro";
 
 // Mapeo de componentes
 const COMPONENT_MAP = {
+  // Files Components
+  ZipCompressor: ZipCompressor,
+
+  // Text Components
   WordCounter: WordCounter,
   JsonFormatter: JsonFormatter,
-  // "ImageCompressor": ImageCompressor,
-  // "FileConverter": FileConverter,
 };
 
 // Obtener el parámetro de la URL
@@ -89,7 +92,7 @@ export async function getStaticPaths() {
 }
 ---
 
-<MainLayout>
+<MainLayout pathname={`/${categoryId}`}>
   {selectedTool ? <BreadCrumbs links={breadcrumbs} /> : null}
 
   <!-- Hero -->

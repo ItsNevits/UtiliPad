@@ -5,6 +5,11 @@ import Aside from "@components/Aside.astro";
 import Header from "@components/Header.astro";
 import Footer from "@components/Footer.astro";
 import Modal from "@components/shared/Modal.astro";
+
+interface Props {
+  pathname: string;
+}
+const { pathname } = Astro.props;
 ---
 
 <!doctype html>
@@ -20,11 +25,11 @@ import Modal from "@components/shared/Modal.astro";
       content="Suite de utilidades online: formateador y validador JSON, analizador de texto, compresor/redimensionador de imágenes y más. Rápido, gratis y sin registro."
     />
     <meta name="robots" content="index, follow, max-image-preview:large" />
-    <link rel="canonical" href="https://utilipad.com/" />
+    <link rel="canonical" href={"https://utilipad.com" + pathname} />
 
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://utilipad.com/" />
+    <meta property="og:url" content={"https://utilipad.com" + pathname} />
     <meta property="og:title" content="UtiliPad — Herramientas web gratis" />
     <meta
       property="og:description"

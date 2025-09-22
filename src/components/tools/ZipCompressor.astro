@@ -1,0 +1,292 @@
+---
+import BoxIcon from "@assets/icons/box.svg";
+import Image from "astro/components/Image.astro";
+---
+
+<div class="bg-neutral-800/50 rounded-xl p-6 select-none mb-5">
+  <div
+    id="drop-zone"
+    class="border border-neutral-700 p-5 rounded-lg flex flex-col items-center justify-center cursor-pointer"
+  >
+    <Image
+      class="text-neutral-400 mb-2 svg-color-neutral-400 opacity-40"
+      src={BoxIcon}
+      alt={"Box icon"}
+      quality={"mid"}
+      width={35}
+      height={35}
+      loading={"lazy"}
+    />
+    <span class="text-neutral-400"
+      >Suelta los archivos aquí o da clic para seleccionar</span
+    >
+
+    <input type="file" class="hidden" id="zip-file-input" multiple />
+  </div>
+</div>
+
+<div
+  id="files-uploaded"
+  class="bg-neutral-800/50 rounded-xl p-6 select-none mb-5 hidden"
+>
+  <div class="flex items-end justify-between mb-4">
+    <h2 class="text-xl md:text-2xl font-bold leading-tight">
+      Archivos cargados
+    </h2>
+
+    <span class="text-neutral-400 text-sm"
+      >Total archivos: <span id="total-files-uploaded">0</span></span
+    >
+  </div>
+
+  <div
+    id="content-files-uploaded"
+    class="relative flex flex-col gap-4 max-h-100 overflow-y-auto mb-4"
+  >
+    <div
+      id="overlay-zip-files"
+      class="absolute hidden z-10 top-0 left-0 bg-neutral-700/80 w-full h-full rounded-2xl justify-center items-center"
+    >
+      <p class="text-lg md:text-xl font-bold leading-tight animate-bounce">
+        Procesando información...
+      </p>
+    </div>
+  </div>
+
+  <!-- Information -->
+  <div class="flex flex-col justify-between md:flex-row gap-2">
+    <span class="text-neutral-400 text-sm"
+      >Tamaño previo: <span id="total-files-prev-sizes">0 KB</span></span
+    >
+
+    <span class="text-neutral-400 text-sm"
+      >Tamaño comprimido: <span id="total-files-next-sizes">0 KB</span></span
+    >
+  </div>
+
+  <button
+    id="compress-and-download"
+    class="cursor-pointer mt-5 px-4 py-2 bg-neutral-700 hover:bg-neutral-600 text-neutral-200 rounded transition-colors text-sm"
+  >
+    Comprimir y descargar
+  </button>
+</div>
+
+<script>
+  import JSZip from "jszip";
+
+  const dropZone = document.getElementById("drop-zone") as HTMLDivElement;
+  const fileInput = document.getElementById(
+    "zip-file-input"
+  ) as HTMLInputElement;
+  const filesUploaded = document.getElementById(
+    "files-uploaded"
+  ) as HTMLDivElement;
+  const contentFilesUploaded = document.getElementById(
+    "content-files-uploaded"
+  ) as HTMLDivElement;
+  const compressButton = document.getElementById(
+    "compress-and-download"
+  ) as HTMLButtonElement;
+  const overlay = document.getElementById(
+    "overlay-zip-files"
+  ) as HTMLDivElement;
+
+  // Array para mantener los archivos cargados
+  let currentFiles: File[] = [];
+
+  dropZone.addEventListener("click", () => {
+    fileInput.click();
+  });
+
+  dropZone.addEventListener("dragover", (event) => {
+    event.preventDefault();
+    dropZone.classList.add("border-blue-500");
+  });
+
+  dropZone.addEventListener("dragleave", () => {
+    dropZone.classList.remove("border-blue-500");
+  });
+
+  dropZone.addEventListener("drop", (event) => {
+    event.preventDefault();
+    dropZone.classList.remove("border-blue-500");
+    if (!event.dataTransfer) return;
+    const files = event.dataTransfer.files;
+    handleFiles(files);
+  });
+
+  fileInput.addEventListener("change", () => {
+    const files = fileInput.files;
+    handleFiles(files);
+  });
+
+  function handleFiles(files: FileList | null) {
+    if (!files || files.length === 0) return;
+
+    // Agregar nuevos archivos al array existente
+    const newFiles = Array.from(files);
+    currentFiles = [...currentFiles, ...newFiles];
+
+    updateUI();
+  }
+
+  function updateUI() {
+    if (currentFiles.length === 0) {
+      filesUploaded.classList.add("hidden");
+      return;
+    }
+
+    filesUploaded.classList.remove("hidden");
+    contentFilesUploaded.innerHTML = "";
+
+    currentFiles.forEach((file: File, index: number) => {
+      const fileType = file.name.split(".").pop() || "file";
+      const fileName = file.name;
+      const fileSize = (file.size / 1024).toFixed(2) + " KB";
+
+      const newElement = generateElement(fileType, fileName, fileSize, index);
+      contentFilesUploaded.appendChild(
+        document.createRange().createContextualFragment(newElement)
+      );
+    });
+
+    // Actualizar información adicional
+    const totalSize = currentFiles.reduce((acc, file) => acc + file.size, 0);
+    const estimatedCompressedSize = totalSize * 0.7; // Estimación del 70% del tamaño original
+    AditionalFilesInfo(
+      currentFiles.length,
+      (totalSize / 1024).toFixed(2) + " KB",
+      (estimatedCompressedSize / 1024).toFixed(2) + " KB"
+    );
+
+    // Actualizar el input file con los archivos actuales
+    updateFileInput();
+  }
+
+  function updateFileInput() {
+    const dt = new DataTransfer();
+    currentFiles.forEach((file) => dt.items.add(file));
+    fileInput.files = dt.files;
+  }
+
+  function generateElement(
+    type: string,
+    name: string,
+    size: string,
+    index: number
+  ) {
+    const elementHtml = `
+    <div
+      class="bg-neutral-900/40 rounded-2xl border border-neutral-800 p-4 flex items-center justify-between"
+    >
+      <div class="flex items-center gap-4">
+        <div
+          class="w-10 h-10 bg-neutral-700/50 rounded-lg flex items-center justify-center"
+        >
+          <span class="text-sm text-neutral-400">${type.toUpperCase()}</span>
+        </div>
+        <div>
+          <p class="font-medium">${name}</p>
+          <p class="text-sm text-neutral-400">${size}</p>
+        </div>
+      </div>
+      <button
+        title="Eliminar"
+        class="cursor-pointer px-3 py-1 bg-red-600/20 hover:bg-red-600/30 text-red-400 rounded-lg transition-colors text-sm"
+        onclick="removeFileUploaded(${index})"
+      >
+        Eliminar
+      </button>
+    </div>`;
+
+    return elementHtml;
+  }
+
+  function removeFileUploaded(index: number) {
+    // Remover el archivo del array
+    currentFiles.splice(index, 1);
+    // Actualizar la interfaz
+    updateUI();
+  }
+
+  function AditionalFilesInfo(
+    totalFiles: number,
+    originalSize: string,
+    compressedSize: string
+  ) {
+    const totalFilesSpan = document.getElementById(
+      "total-files-uploaded"
+    ) as HTMLSpanElement;
+    const originalSizeSpan = document.getElementById(
+      "total-files-prev-sizes"
+    ) as HTMLSpanElement;
+    const compressedSizeSpan = document.getElementById(
+      "total-files-next-sizes"
+    ) as HTMLSpanElement;
+
+    totalFilesSpan.textContent = totalFiles.toString();
+    originalSizeSpan.textContent = originalSize;
+    compressedSizeSpan.textContent = compressedSize;
+  }
+
+  // Agregar evento al botón de comprimir
+  compressButton.addEventListener("click", compressAndDownload);
+
+  async function compressAndDownload() {
+    if (currentFiles.length === 0) {
+      return;
+    }
+
+    // Mostrar overlay de procesamiento
+    overlay.classList.remove("hidden");
+    overlay.classList.add("flex");
+
+    try {
+      const zip = new JSZip();
+
+      // Agregar cada archivo al ZIP
+      for (const file of currentFiles) {
+        const arrayBuffer = await file.arrayBuffer();
+        zip.file(file.name, arrayBuffer);
+      }
+
+      // Generar el ZIP con máxima compresión
+      const zipBlob = await zip.generateAsync({
+        type: "blob",
+        compression: "DEFLATE",
+        compressionOptions: {
+          level: 9, // Máxima compresión
+        },
+      });
+
+      // Actualizar tamaño comprimido real
+      const compressedSizeSpan = document.getElementById(
+        "total-files-next-sizes"
+      ) as HTMLSpanElement;
+      compressedSizeSpan.textContent = (zipBlob.size / 1024).toFixed(2) + " KB";
+
+      // Crear enlace de descarga
+      const url = URL.createObjectURL(zipBlob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `utilipad-compressed-files.zip`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+
+      // Limpiar URL
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Error al comprimir archivos:", error);
+      alert("Error al comprimir los archivos. Inténtalo de nuevo.");
+    } finally {
+      // Ocultar overlay
+      overlay.classList.add("hidden");
+      overlay.classList.remove("flex");
+    }
+  }
+
+  // Hacer la función global para que sea accesible desde el onclick
+  (window as any).removeFileUploaded = removeFileUploaded;
+</script>
