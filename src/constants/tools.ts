@@ -111,6 +111,15 @@ export const TOOLS_CATEGORIES: Category[] = [
         isAvailable: true,
         component: "TextAnalyzer",
       },
+      {
+        id: "qr-generator",
+        name: "Generador de QR",
+        description: "Genera códigos QR para URLs y texto",
+        href: "/text?tool=qr-generator",
+        bagde: "Nuevo",
+        isAvailable: true,
+        component: "QrGenerator",
+      },
     ],
   },
 ];

@@ -1,0 +1,334 @@
+---
+
+---
+
+<div class="bg-neutral-800/50 rounded-xl p-6 select-none mb-4">
+  <label for="qr-input" class="block text-sm font-medium text-neutral-300 mb-2"
+    >Pega tu Url o escribe tu texto:</label
+  >
+  <input
+    id="qr-input"
+    type="text"
+    class="w-full mb-3 px-4 py-3 bg-neutral-900/60 border border-neutral-700 rounded-lg text-neutral-200 placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50"
+    placeholder="Introduce el texto o URL aquí..."
+  />
+
+  <button
+    id="generate-qr"
+    type="button"
+    class="cursor-pointer w-full md:w-fit px-6 py-2 bg-neutral-700 hover:bg-neutral-600 text-neutral-200 rounded transition-colors font-medium focus:outline-none focus:ring-2 focus:ring-emerald-500/50 disabled:opacity-50 disabled:cursor-not-allowed"
+  >
+    Generar QR
+  </button>
+</div>
+
+<div
+  class="bg-neutral-800/50 rounded-xl p-6 select-none hidden"
+  id="qr-section"
+>
+  <div>
+    <span class="text-sm font-medium text-neutral-300 mb-2">
+      Código QR generado
+    </span>
+
+    <div class="text-xs text-neutral-400 mb-2">
+      Haz clic derecho en el QR para guardar o usa los botones de descarga
+    </div>
+    <div
+      id="qr-code"
+      class="my-3 flex flex-col items-center justify-center border-2 border-dashed border-neutral-700 rounded-xl p-6 min-h-64 w-full"
+    >
+    </div>
+
+    <!-- Botones de descarga -->
+    <div id="download-buttons" class="hidden mt-4">
+      <div class="flex flex-col sm:flex-row gap-3">
+        <button
+          id="download-png"
+          type="button"
+          class="cursor-pointer w-full md:w-fit px-6 py-2 bg-neutral-700 hover:bg-neutral-600 text-neutral-200 rounded transition-colors font-medium focus:outline-none focus:ring-2 focus:ring-emerald-500/50 disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          Descargar PNG
+        </button>
+
+        <button
+          id="download-svg"
+          type="button"
+          class="cursor-pointer w-full md:w-fit px-6 py-2 bg-neutral-700 hover:bg-neutral-600 text-neutral-200 rounded transition-colors font-medium focus:outline-none focus:ring-2 focus:ring-emerald-500/50 disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          Descargar SVG
+        </button>
+
+        <button
+          id="share-qr"
+          type="button"
+          class="cursor-pointer w-full md:w-fit px-6 py-2 bg-neutral-700 hover:bg-neutral-600 text-neutral-200 rounded transition-colors font-medium focus:outline-none focus:ring-2 focus:ring-emerald-500/50 disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          <span class="hidden sm:inline">Compartir</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    import QRCode from "qr-code-styling";
+
+    const generateQrButton = document.getElementById(
+      "generate-qr"
+    ) as HTMLButtonElement;
+    const downloadButtons = document.getElementById(
+      "download-buttons"
+    ) as HTMLDivElement;
+    const downloadPngButton = document.getElementById(
+      "download-png"
+    ) as HTMLButtonElement;
+    const downloadSvgButton = document.getElementById(
+      "download-svg"
+    ) as HTMLButtonElement;
+    const shareButton = document.getElementById(
+      "share-qr"
+    ) as HTMLButtonElement;
+
+    let currentQr: QRCode | null = null;
+    let currentData: string = "";
+
+    function GenerateQr() {
+      const qrCodeContainer = document.getElementById(
+        "qr-code"
+      ) as HTMLDivElement;
+      const qrInput = document.getElementById("qr-input") as HTMLInputElement;
+
+      const qrSection = document.getElementById("qr-section") as HTMLDivElement;
+
+      if (!qrInput.value.trim()) {
+        downloadButtons.classList.add("hidden");
+        qrSection.classList.add("hidden");
+        return;
+      }
+
+      currentData = qrInput.value.trim();
+
+      // Calcular tamaño responsive basado en el contenedor
+      const containerWidth = qrCodeContainer.clientWidth;
+      const maxSize = Math.min(containerWidth - 48, 320); // 48px para padding, máximo 320px
+      const qrSize = Math.max(200, maxSize); // mínimo 200px
+
+      currentQr = new QRCode({
+        width: qrSize,
+        height: qrSize,
+        type: "svg",
+        data: currentData,
+        image: "",
+        dotsOptions: {
+          color: "#ffffff",
+          type: "rounded",
+        },
+        backgroundOptions: {
+          color: "#000000",
+        },
+        imageOptions: {
+          crossOrigin: "anonymous",
+          margin: 20,
+        },
+      });
+
+      qrCodeContainer.innerHTML = "";
+      currentQr.append(qrCodeContainer);
+
+      // Hacer el SVG responsive
+      const svgElement = qrCodeContainer.querySelector("svg");
+      if (svgElement) {
+        svgElement.style.width = "100%";
+        svgElement.style.height = "auto";
+        svgElement.style.maxWidth = "320px";
+        svgElement.setAttribute("viewBox", `0 0 ${qrSize} ${qrSize}`);
+      }
+
+      // Mostrar botones de descarga
+      downloadButtons.classList.remove("hidden");
+      qrSection.classList.remove("hidden");
+    }
+
+    async function downloadQrAsPng() {
+      if (!currentQr) return;
+
+      try {
+        const blob = await currentQr.download({
+          name: `qr-code-${Date.now()}`,
+          extension: "png",
+        });
+      } catch (error) {
+        console.error("Error descargando PNG:", error);
+        downloadQrFallback("png");
+      }
+    }
+
+    async function downloadQrAsSvg() {
+      if (!currentQr) return;
+
+      try {
+        const blob = await currentQr.download({
+          name: `qr-code-${Date.now()}`,
+          extension: "svg",
+        });
+      } catch (error) {
+        console.error("Error descargando SVG:", error);
+        downloadQrFallback("svg");
+      }
+    }
+
+    function downloadQrFallback(format: "png" | "svg") {
+      const qrElement = document.querySelector("#qr-code svg") as SVGElement;
+      if (!qrElement) return;
+
+      if (format === "svg") {
+        // Descargar SVG
+        const svgData = new XMLSerializer().serializeToString(qrElement);
+        const svgBlob = new Blob([svgData], {
+          type: "image/svg+xml;charset=utf-8",
+        });
+        const url = URL.createObjectURL(svgBlob);
+
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `qr-code-${Date.now()}.svg`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      } else {
+        // Convertir a PNG usando canvas
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+        const img = new Image();
+
+        img.onload = () => {
+          const downloadSize = 512;
+          canvas.width = downloadSize;
+          canvas.height = downloadSize;
+          ctx?.drawImage(img, 0, 0, downloadSize, downloadSize);
+
+          canvas.toBlob((blob) => {
+            if (blob) {
+              const url = URL.createObjectURL(blob);
+              const a = document.createElement("a");
+              a.href = url;
+              a.download = `qr-code-${Date.now()}.png`;
+              document.body.appendChild(a);
+              a.click();
+              document.body.removeChild(a);
+              URL.revokeObjectURL(url);
+            }
+          }, "image/png");
+        };
+
+        const svgData = new XMLSerializer().serializeToString(qrElement);
+        const svgBlob = new Blob([svgData], {
+          type: "image/svg+xml;charset=utf-8",
+        });
+        const url = URL.createObjectURL(svgBlob);
+        img.src = url;
+      }
+    }
+
+    async function shareQr() {
+      if (!currentData) return;
+
+      // Verificar si el navegador soporta Web Share API
+      if (navigator.share) {
+        try {
+          await navigator.share({
+            title: "Código QR generado",
+            text: `Código QR para: ${currentData}`,
+            url: window.location.href,
+          });
+        } catch (error) {
+          console.error("Error compartiendo:", error);
+        }
+      }
+    }
+
+    function showShareOptions() {
+      const encodedText = encodeURIComponent(currentData);
+      const shareText = `Código QR para: ${currentData}`;
+
+      // Crear opciones de compartir
+      const shareUrls = {
+        whatsapp: `https://wa.me/?text=${encodeURIComponent(shareText)}`,
+        twitter: `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`,
+        telegram: `https://t.me/share/url?url=${encodedText}&text=${encodeURIComponent(shareText)}`,
+        email: `mailto:?subject=Código QR&body=${encodeURIComponent(shareText)}`,
+      };
+
+      // Mostrar modal simple con opciones
+      const modal = confirm(
+        `¿Cómo quieres compartir?\n\nPresiona Aceptar para abrir WhatsApp\nPresiona Cancelar para copiar el texto`
+      );
+
+      if (modal) {
+        window.open(shareUrls.whatsapp, "_blank");
+      } else {
+        // Intentar copiar al portapapeles de forma manual
+        const textArea = document.createElement("textarea");
+        textArea.value = currentData;
+        document.body.appendChild(textArea);
+        textArea.select();
+        try {
+          document.execCommand("copy");
+          alert("Texto copiado al portapapeles");
+        } catch (err) {
+          alert(
+            `No se pudo copiar automáticamente. Copia manualmente: ${currentData}`
+          );
+        }
+        document.body.removeChild(textArea);
+      }
+    }
+
+    // Event listeners
+    generateQrButton.addEventListener("click", GenerateQr);
+    downloadPngButton.addEventListener("click", downloadQrAsPng);
+    downloadSvgButton.addEventListener("click", downloadQrAsSvg);
+
+    // si el navegador soporta share
+    if (!navigator.share) {
+      shareButton.classList.add("hidden");
+    } else {
+      shareButton.classList.remove("hidden");
+    }
+
+    shareButton.addEventListener("click", shareQr);
+
+    // Generar QR al presionar Enter en el input
+    const qrInput = document.getElementById("qr-input") as HTMLInputElement;
+    qrInput.addEventListener("keypress", (e) => {
+      if (e.key === "Enter") {
+        GenerateQr();
+      }
+    });
+
+    // Función para redimensionar el QR existente
+    function resizeQr() {
+      if (!currentQr || !currentData) return;
+
+      const qrCodeContainer = document.getElementById(
+        "qr-code"
+      ) as HTMLDivElement;
+      const svgElement = qrCodeContainer.querySelector("svg");
+
+      if (svgElement) {
+        // Solo ajustar CSS, no regenerar el QR
+        svgElement.style.width = "100%";
+        svgElement.style.height = "auto";
+        svgElement.style.maxWidth = "320px";
+      }
+    }
+
+    // Listener para cambios de tamaño de ventana (con throttle)
+    let resizeTimeout: ReturnType<typeof setTimeout>;
+    window.addEventListener("resize", () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(resizeQr, 150);
+    });
+  </script>
+</div>

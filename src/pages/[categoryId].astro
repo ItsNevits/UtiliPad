@@ -11,6 +11,7 @@ import { TOOLS_CATEGORIES, getToolById } from "../constants/tools";
 import TextAnalyzer from "@components/tools/TextAnalyzer.astro";
 import JsonFormatter from "@components/tools/JsonFormatter.astro";
 import ZipCompressor from "@components/tools/ZipCompressor.astro";
+import QrGenerator from "@components/tools/QrGenerator.astro";
 
 // Mapeo de componentes
 const COMPONENT_MAP = {
@@ -20,6 +21,7 @@ const COMPONENT_MAP = {
   // Text Components
   TextAnalyzer: TextAnalyzer,
   JsonFormatter: JsonFormatter,
+  QrGenerator: QrGenerator,
 };
 
 // Obtener el parámetro de la URL
@@ -100,7 +102,7 @@ export async function getStaticPaths() {
 
   {
     selectedTool ? (
-      <div class="container mx-auto py-5 select-none">
+      <div class="py-5 select-none">
         {ToolComponent ? (
           <ToolComponent />
         ) : (

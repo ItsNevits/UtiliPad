@@ -10,18 +10,22 @@ const categories = [
 const currentPath = Astro.url.pathname;
 ---
 
-<aside class="flex xl:block col-span-2 select-none">
+<aside
+  class="flex xl:block xl:col-span-2 select-none overflow-x-hidden col-span-12"
+>
   <div class="sticky top-20 space-y-2">
     <h3 class="text-xs uppercase tracking-wider text-neutral-400">
       Categorías <span class="xl:hidden">:</span>
     </h3>
-    <ul class="flex xl:block gap-2">
+    <ul
+      class="flex xl:block gap-2 overflow-x-auto xl:overflow-x-visible w-[90vw] pb-2"
+    >
       {
         categories.map((category) => (
-          <li>
+          <li class="flex-shrink-0">
             <a
               href={category.href}
-              class={`block px-3 py-2 rounded-lg transition-colors duration-200 ${
+              class={`block px-3 py-2 rounded-lg transition-colors duration-200 whitespace-nowrap ${
                 currentPath.startsWith(category.href)
                   ? "bg-neutral-800 text-white"
                   : "text-neutral-300 hover:bg-neutral-900 hover:text-white"
