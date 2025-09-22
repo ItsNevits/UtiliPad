@@ -7,6 +7,7 @@
     "/sitemap-*.xml",
     "/favicon.svg",
     "/icons/*",
+    "/og/*",
     "/_astro/*"
   ]
 }
