@@ -178,11 +178,11 @@ import Image from "astro/components/Image.astro";
   ) {
     const elementHtml = `
     <div
-      class="bg-neutral-900/40 rounded-2xl border border-neutral-800 p-4 flex items-center justify-between"
+      class="bg-neutral-900/40 rounded-2xl border border-neutral-800 p-4 flex flex-col md:flex-row gap-4 justify-between"
     >
       <div class="flex items-center gap-4">
         <div
-          class="w-10 h-10 bg-neutral-700/50 rounded-lg flex items-center justify-center"
+          class="w-10 min-w-10 h-10 min-h-10 bg-neutral-700/50 rounded-lg flex items-center justify-center"
         >
           <span class="text-sm text-neutral-400">${type.toUpperCase()}</span>
         </div>
