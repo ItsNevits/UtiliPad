@@ -3,6 +3,7 @@ const categories = [
   { name: "Archivos", href: "/files" },
   { name: "Imágenes", href: "/images" },
   { name: "Texto", href: "/text" },
+  { name: "Novedades", href: "/news" },
 ];
 
 // Obtener la URL actual para marcar la categoría activa
@@ -21,7 +22,7 @@ const currentPath = Astro.url.pathname;
             <a
               href={category.href}
               class={`block px-3 py-2 rounded-lg transition-colors duration-200 ${
-                currentPath === category.href
+                currentPath.startsWith(category.href)
                   ? "bg-neutral-800 text-white"
                   : "text-neutral-300 hover:bg-neutral-900 hover:text-white"
               }`}

@@ -109,7 +109,7 @@ export const TOOLS_CATEGORIES: Category[] = [
         href: "/text?tool=text-analyzer",
         bagde: "Nuevo",
         isAvailable: true,
-        component: "WordCounter",
+        component: "TextAnalyzer",
       },
     ],
   },

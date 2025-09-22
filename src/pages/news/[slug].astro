@@ -1,0 +1,65 @@
+---
+import { getCollection } from "astro:content";
+import Hero from "@components/shared/Hero.astro";
+import MainLayout from "src/Layouts/MainLayout.astro";
+import BreadCrumbs from "@components/shared/BreadCrumbs.astro";
+
+export async function getStaticPaths() {
+  const news = await getCollection("news");
+  return news.map((entry) => ({
+    params: { slug: entry.slug },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await entry.render();
+---
+
+<MainLayout pathname={`/news/${entry.slug}`}>
+  <BreadCrumbs
+    links={[
+      { href: "/news", name: "Noticias" },
+      { href: `/news/${entry.slug}`, name: entry.data.title, isActive: true },
+    ]}
+  />
+  <Hero
+    title={entry.data.title}
+    description={`Publicado el ${entry.data.date.toLocaleDateString("es-ES", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    })}`}
+  />
+
+  <article class="prose prose-invert prose-lg max-w-none mt-8">
+    <!-- Metadatos del artículo -->
+    <div class="border-b border-neutral-700 pb-6 mb-8">
+      <div class="flex flex-wrap gap-2 mb-4">
+        {
+          entry.data.tags?.map((tag) => (
+            <span class="px-3 py-1 bg-green-500/20 text-green-400 rounded-full text-sm">
+              {tag}
+            </span>
+          ))
+        }
+      </div>
+      <div class="flex items-center gap-4 text-sm text-neutral-400">
+        <span>Por {entry.data.author}</span>
+        <span>•</span>
+        <time datetime={entry.data.date.toISOString()}>
+          {
+            entry.data.date.toLocaleDateString("es-ES", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })
+          }
+        </time>
+      </div>
+    </div>
+
+    <!-- Contenido del artículo -->
+    <Content />
+  </article>
+</MainLayout>
