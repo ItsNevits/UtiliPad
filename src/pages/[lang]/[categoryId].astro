@@ -1,5 +1,5 @@
 ---
-export const prerender = true;
+export const prerender = false;
 
 import MainLayout from "../../Layouts/MainLayout.astro";
 import Hero from "../../components/shared/Hero.astro";
@@ -121,25 +121,6 @@ if (selectedTool) {
     name: category.name,
     isActive: true,
   });
-}
-
-// Generar las rutas estáticas para todas las categorías y idiomas
-export async function getStaticPaths() {
-  const paths = [];
-  const languages = ["es", "en"];
-
-  for (const lang of languages) {
-    for (const category of TOOLS_CATEGORIES) {
-      paths.push({
-        params: {
-          lang: lang,
-          categoryId: category.id,
-        },
-      });
-    }
-  }
-
-  return paths;
 }
 ---
 
