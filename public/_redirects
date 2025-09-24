@@ -1,2 +1,2 @@
-# Redirigir raíz hacia /es
-/     /es   301
+/        /es           301
+/*       /es/:splat    301
