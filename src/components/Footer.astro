@@ -1,4 +1,5 @@
 ---
+import { getRelativeLocaleUrl } from "astro:i18n";
 import type { Language } from "../types/language.type";
 
 interface Props {
@@ -19,14 +20,17 @@ const { lang, t } = Astro.props;
       {t.components.footer.and} Astro.js
     </p>
     <div class="flex items-center gap-4">
-      <a href={`/${lang}/privacy`} class="hover:text-neutral-200"
-        >{t.components.footer.privacy}</a
+      <a
+        href={getRelativeLocaleUrl(lang, "privacy")}
+        class="hover:text-neutral-200">{t.components.footer.privacy}</a
       >
-      <a href={`/${lang}/terms`} class="hover:text-neutral-200"
-        >{t.components.footer.terms}</a
+      <a
+        href={getRelativeLocaleUrl(lang, "terms")}
+        class="hover:text-neutral-200">{t.components.footer.terms}</a
       >
-      <a href={`/${lang}/contact`} class="hover:text-neutral-200"
-        >{t.components.footer.contact}</a
+      <a
+        href={getRelativeLocaleUrl(lang, "contact")}
+        class="hover:text-neutral-200">{t.components.footer.contact}</a
       >
     </div>
   </div>
