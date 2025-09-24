@@ -16,14 +16,14 @@ const translations = { es, en };
 const t = translations[lang];
 ---
 
-<MainLayout pathname="/" lang={lang}>
+<MainLayout lang={lang} t={t}>
   <!-- Hero -->
   <Hero
     title={t.sites.home.hero.title}
     description={t.sites.home.hero.description}
   />
   <!-- Tools -->
-  <Tools t={t} />
+  <Tools lang={lang} t={t} />
   <!-- Recent Processes -->
   <RecentProcesses lang={lang} />
 </MainLayout>

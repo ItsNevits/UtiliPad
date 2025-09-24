@@ -1,15 +1,12 @@
 ---
 import type { Language } from "../types/language.type";
-import es from "../i18n/es";
-import en from "../i18n/en";
 
 interface Props {
-  lang?: Language;
+  lang: Language;
+  t: any;
 }
 
-const { lang = "es" } = Astro.props;
-const translations = { es, en };
-const t = translations[lang];
+const { lang, t } = Astro.props;
 ---
 
 <footer class="border-t border-neutral-800 py-8 select-none">

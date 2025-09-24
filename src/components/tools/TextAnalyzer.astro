@@ -1,5 +1,9 @@
 ---
+interface Props {
+  t: any;
+}
 
+const { t } = Astro.props;
 ---
 
 <div class="bg-neutral-800/50 rounded-xl p-6 select-none">
@@ -7,11 +11,11 @@
     <!-- Área de texto -->
     <div>
       <label class="block text-sm font-medium text-neutral-300 mb-2">
-        Texto a analizar
+        {t.components.textAnalyzer.inputTitle}
       </label>
       <textarea
         id="text-input"
-        placeholder="Escribe o pega tu texto aquí..."
+        placeholder={t.components.textAnalyzer.inputPlaceholder}
         class="w-full h-48 p-4 bg-neutral-900/60 border border-neutral-700 rounded-lg text-sm resize-none focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
       ></textarea>
     </div>
@@ -20,35 +24,46 @@
     <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
       <div class="bg-neutral-900/60 rounded-lg p-4 text-center">
         <div class="text-2xl font-bold text-neutral-300" id="word-count">0</div>
-        <div class="text-xs text-neutral-400">Palabras</div>
+        <div class="text-xs text-neutral-400">
+          {t.components.textAnalyzer.Words}
+        </div>
       </div>
       <div class="bg-neutral-900/60 rounded-lg p-4 text-center">
         <div class="text-2xl font-bold text-neutral-300" id="char-count">0</div>
-        <div class="text-xs text-neutral-400">Caracteres</div>
+        <div class="text-xs text-neutral-400">
+          {t.components.textAnalyzer.Characters}
+        </div>
       </div>
       <div class="bg-neutral-900/60 rounded-lg p-4 text-center">
         <div class="text-2xl font-bold text-neutral-300" id="char-no-spaces">
           0
         </div>
-        <div class="text-xs text-neutral-400">Sin espacios</div>
+        <div class="text-xs text-neutral-400">
+          {t.components.textAnalyzer.WhitOutSpaces}
+        </div>
       </div>
       <div class="bg-neutral-900/60 rounded-lg p-4 text-center">
         <div class="text-2xl font-bold text-neutral-300" id="paragraph-count">
           0
         </div>
-        <div class="text-xs text-neutral-400">Párrafos</div>
+        <div class="text-xs text-neutral-400">
+          {t.components.textAnalyzer.Paragraphs}
+        </div>
       </div>
     </div>
 
     <!-- Información adicional -->
     <div class="bg-neutral-900/60 rounded-lg p-4">
-      <h4 class="font-medium mb-2">Información adicional</h4>
+      <h4 class="font-medium mb-2">
+        {t.components.textAnalyzer.AdditionalInfo}
+      </h4>
       <div
         class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm text-neutral-400"
       >
         <div>
-          Palabras únicas: <span id="unique-words" class="text-neutral-200"
-            >0</span
+          {t.components.textAnalyzer.UniqueWords}: <span
+            id="unique-words"
+            class="text-neutral-200">0</span
           >
         </div>
       </div>

@@ -1,17 +1,14 @@
 ---
 import type { Language } from "../types/language.type";
-import es from "../i18n/es";
-import en from "../i18n/en";
 
 interface Props {
-  lang?: Language;
+  lang: Language;
+  t: any;
 }
 
-const { lang = "es" } = Astro.props;
-const translations = { es, en };
-const t = translations[lang];
+const { lang, t } = Astro.props;
 
-const categories = t.components.sidebar.categories.map((cat) => ({
+const categories = t.components.sidebar.categories.map((cat: any) => ({
   ...cat,
   href: `/${lang}${cat.href}`,
 }));
@@ -32,7 +29,7 @@ const currentPath = Astro.url.pathname;
       class="flex xl:block gap-2 overflow-x-auto xl:overflow-x-visible w-[90vw] pb-2"
     >
       {
-        categories.map((category) => (
+        categories.map((category: any) => (
           <li class="flex-shrink-0">
             <a
               href={category.href}

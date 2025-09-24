@@ -1,6 +1,12 @@
 ---
 import BoxIcon from "@assets/icons/box.svg";
 import Image from "astro/components/Image.astro";
+
+interface Props {
+  t: any;
+}
+
+const { t } = Astro.props;
 ---
 
 <div class="bg-neutral-800/50 rounded-xl p-6 select-none mb-5">
@@ -17,9 +23,7 @@ import Image from "astro/components/Image.astro";
       height={35}
       loading={"lazy"}
     />
-    <span class="text-neutral-400"
-      >Suelta los archivos aquí o da clic para seleccionar</span
-    >
+    <span class="text-neutral-400">{t.components.zipCompressor.dropFiles}</span>
 
     <input type="file" class="hidden" id="zip-file-input" multiple />
   </div>
@@ -31,11 +35,13 @@ import Image from "astro/components/Image.astro";
 >
   <div class="flex items-end justify-between mb-4">
     <h2 class="text-xl md:text-2xl font-bold leading-tight">
-      Archivos cargados
+      {t.components.zipCompressor.filesUploaded}
     </h2>
 
     <span class="text-neutral-400 text-sm"
-      >Total archivos: <span id="total-files-uploaded">0</span></span
+      >{t.components.zipCompressor.totalFiles}: <span id="total-files-uploaded"
+        >0</span
+      ></span
     >
   </div>
 
@@ -48,7 +54,7 @@ import Image from "astro/components/Image.astro";
       class="absolute hidden z-10 top-0 left-0 bg-neutral-700/80 w-full h-full rounded-2xl justify-center items-center"
     >
       <p class="text-lg md:text-xl font-bold leading-tight animate-bounce">
-        Procesando información...
+        {t.components.zipCompressor.processInfo}
       </p>
     </div>
   </div>
@@ -56,11 +62,15 @@ import Image from "astro/components/Image.astro";
   <!-- Information -->
   <div class="flex flex-col justify-between md:flex-row gap-2">
     <span class="text-neutral-400 text-sm"
-      >Tamaño previo: <span id="total-files-prev-sizes">0 KB</span></span
+      >{t.components.zipCompressor.previousSize}: <span
+        id="total-files-prev-sizes">0 KB</span
+      ></span
     >
 
     <span class="text-neutral-400 text-sm"
-      >Tamaño comprimido: <span id="total-files-next-sizes">0 KB</span></span
+      >{t.components.zipCompressor.compressSize}: <span
+        id="total-files-next-sizes">0 KB</span
+      ></span
     >
   </div>
 
@@ -68,12 +78,27 @@ import Image from "astro/components/Image.astro";
     id="compress-and-download"
     class="cursor-pointer mt-5 px-4 py-2 bg-neutral-700 hover:bg-neutral-600 text-neutral-200 rounded transition-colors text-sm"
   >
-    Comprimir y descargar
+    {t.components.zipCompressor.compressAndDownload}
   </button>
 </div>
 
+<astro-greet data-translations={JSON.stringify(t)}></astro-greet>
+
 <script>
   import JSZip from "jszip";
+
+  let jsonMessages = {} as any;
+
+  class AstroGreet extends HTMLElement {
+    connectedCallback() {
+      const t = JSON.parse(this.getAttribute("data-translations") || "{}");
+      jsonMessages = t.components.zipCompressor;
+    }
+  }
+
+  console.log(jsonMessages);
+
+  customElements.define("astro-greet", AstroGreet);
 
   const dropZone = document.getElementById("drop-zone") as HTMLDivElement;
   const fileInput = document.getElementById(
@@ -192,11 +217,11 @@ import Image from "astro/components/Image.astro";
         </div>
       </div>
       <button
-        title="Eliminar"
+        title=${jsonMessages.delete}
         class="cursor-pointer px-3 py-1 bg-red-600/20 hover:bg-red-600/30 text-red-400 rounded-lg transition-colors text-sm"
         onclick="removeFileUploaded(${index})"
       >
-        Eliminar
+        ${jsonMessages.delete}
       </button>
     </div>`;
 

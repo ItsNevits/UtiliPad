@@ -1,15 +1,12 @@
 ---
 import type { Language } from "../types/language.type";
-import es from "../i18n/es";
-import en from "../i18n/en";
 
 interface Props {
-  lang?: Language;
+  lang: Language;
+  t: any;
 }
 
-const { lang = "es" } = Astro.props;
-const translations = { es, en };
-const t = translations[lang];
+const { lang, t } = Astro.props;
 ---
 
 <div class="relative">
@@ -128,8 +125,14 @@ const t = translations[lang];
           languageMenu.classList.add("hidden");
           // cambiar ruta a la página correspondiente
           const currentPath = window.location.pathname;
+          const search = window.location.search;
+          const hash = window.location.hash;
+
+          // Reemplazar el idioma en la URL preservando parámetros de búsqueda y hash
           const newPath = currentPath.replace(/^\/(es|en)/, `/${selectedLang}`);
-          window.location.href = newPath;
+          const newUrl = newPath + search + hash;
+
+          window.location.href = newUrl;
         }
       });
     });

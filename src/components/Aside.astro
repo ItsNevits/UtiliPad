@@ -3,17 +3,13 @@ import AboutUs from "./shared/AboutUs.astro";
 import News from "./shared/News.astro";
 import ProcessSummary from "./shared/ProcessSummary.astro";
 import type { Language } from "../types/language.type";
-import es from "../i18n/es";
-import en from "../i18n/en";
 
 interface Props {
-  lang?: Language;
+  lang: Language;
+  t: any;
 }
 
-const { lang = "es" } = Astro.props;
-
-const translations = { es, en };
-const t = translations[lang];
+const { lang, t } = Astro.props;
 ---
 
 <aside class="col-span-12 xl:col-span-3 space-y-6">
@@ -22,5 +18,5 @@ const t = translations[lang];
   <!-- Processing Summary -->
   <ProcessSummary t={t} />
   <!-- News -->
-  <News t={t} lang={lang} />
+  <News lang={lang} t={t} } />
 </aside>

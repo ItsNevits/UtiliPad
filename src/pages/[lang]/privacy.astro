@@ -14,7 +14,7 @@ const translations = { es, en };
 const t = translations[lang];
 ---
 
-<MainLayout pathname="/privacy" lang={lang}>
+<MainLayout lang={lang} t={t}>
   <Hero
     title={t.sites.privacy.hero.title}
     description={t.sites.privacy.hero.description}
@@ -24,40 +24,27 @@ const t = translations[lang];
     class="bg-neutral-800/50 overflow-hidden rounded-2xl border border-neutral-800 mt-5 p-6 select-none"
   >
     <div>
-      <h2 class="text-xl md:text-2xl font-bold leading-tight mb-4">
-        Información que recopilamos
-      </h2>
-      <ul class="list-disc list-inside mb-4">
-        <li class="mb-2 text-neutral-400">
-          <strong class="underline">Procesamiento local</strong> : Todas las herramientas
-          (JSON Formatter, Word Counter, etc.) procesan tus archivos localmente en
-          tu navegador
-        </li>
-        <li class="mb-2 text-neutral-400">
-          <strong class="underline">No almacenamos archivos</strong> : Tus documentos,
-          imágenes y datos nunca se envían a nuestros servidores
-        </li>
-        <li class="mb-2 text-neutral-400">
-          <strong class="underline">Analytics</strong> : Utilizamos Google Analytics
-          para mejorar la experiencia del usuario
-        </li>
-      </ul>
-
-      <h2 class="text-xl md:text-2xl font-bold leading-tight mb-4">
-        Cookies y almacenamiento
-      </h2>
-      <p class="mb-4 text-neutral-400">
-        Solo utilizamos cookies técnicas necesarias para el funcionamiento de la
-        aplicación.
-      </p>
-
-      <h2 class="text-xl md:text-2xl font-bold leading-tight mb-4">
-        Tus derechos
-      </h2>
-      <p class="mb-4 text-neutral-400">
-        Puedes usar todas nuestras herramientas sin registro ni identificación
-        personal.
-      </p>
+      {
+        t.sites.privacy.content.map((section) => (
+          <div class="mb-6 last:mb-0">
+            <h2 class="text-xl md:text-2xl font-bold leading-tight mb-4">
+              {section.title}
+            </h2>
+            {section.paragraphs.length > 1 ? (
+              <ul class="list-disc list-inside mb-4">
+                {section.paragraphs.map((paragraph) => (
+                  <li class="mb-2 text-neutral-400" set:html={paragraph} />
+                ))}
+              </ul>
+            ) : (
+              <p
+                class="mb-4 text-neutral-400"
+                set:html={section.paragraphs[0]}
+              />
+            )}
+          </div>
+        ))
+      }
     </div>
   </div>
 </MainLayout>

@@ -1,16 +1,22 @@
 ---
+import type { Language } from "../../types/language.type";
 
+interface Props {
+  t: any;
+}
+
+const { t } = Astro.props;
 ---
 
 <div class="bg-neutral-800/50 rounded-xl p-6 select-none mb-4">
   <label for="qr-input" class="block text-sm font-medium text-neutral-300 mb-2"
-    >Pega tu Url o escribe tu texto:</label
+    >{t.components.qrGenerator.inputTitle}</label
   >
   <input
     id="qr-input"
     type="text"
     class="w-full mb-3 px-4 py-3 bg-neutral-900/60 border border-neutral-700 rounded-lg text-neutral-200 placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50"
-    placeholder="Introduce el texto o URL aquí..."
+    placeholder={t.components.qrGenerator.inputPlaceholder}
   />
 
   <button
@@ -18,7 +24,7 @@
     type="button"
     class="text-sm text-neutral-300 cursor-pointer w-full flex items-center justify-center gap-2 md:w-fit px-6 py-2 bg-neutral-700 hover:bg-neutral-600 rounded transition-colors font-medium focus:outline-none focus:ring-2 focus:ring-emerald-500/50 disabled:opacity-50 disabled:cursor-not-allowed"
   >
-    Generar QR
+    {t.components.qrGenerator.generate}
   </button>
 </div>
 
@@ -28,11 +34,11 @@
 >
   <div>
     <span class="text-sm font-medium text-neutral-300 mb-2">
-      Código QR generado
+      {t.components.qrGenerator.qrCodeTitle}
     </span>
 
     <div class="text-xs text-neutral-400 mb-2">
-      Haz clic derecho en el QR para guardar o usa los botones de descarga
+      {t.components.qrGenerator.qrCodeDescription}
     </div>
     <div
       id="qr-code"
@@ -48,7 +54,7 @@
           type="button"
           class="text-sm text-neutral-300 cursor-pointer w-full flex items-center justify-center gap-2 md:w-fit px-6 py-2 bg-neutral-700 hover:bg-neutral-600 rounded transition-colors font-medium focus:outline-none focus:ring-2 focus:ring-emerald-500/50 disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          Descargar PNG
+          {t.components.qrGenerator.download} PNG
         </button>
 
         <button
@@ -56,7 +62,7 @@
           type="button"
           class="text-sm text-neutral-300 cursor-pointer w-full flex items-center justify-center gap-2 md:w-fit px-6 py-2 bg-neutral-700 hover:bg-neutral-600 rounded transition-colors font-medium focus:outline-none focus:ring-2 focus:ring-emerald-500/50 disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          Descargar SVG
+          {t.components.qrGenerator.download} SVG
         </button>
 
         <button
@@ -64,7 +70,7 @@
           type="button"
           class="text-sm text-neutral-300 cursor-pointer w-full flex items-center justify-center gap-2 md:w-fit px-6 py-2 bg-neutral-700 hover:bg-neutral-600 rounded transition-colors font-medium focus:outline-none focus:ring-2 focus:ring-emerald-500/50 disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          <span class="hidden sm:inline">Compartir</span>
+          <span class="hidden sm:inline">{t.components.qrGenerator.share}</span>
         </button>
       </div>
     </div>
@@ -297,7 +303,8 @@
       shareButton.classList.remove("hidden");
     }
 
-    shareButton.addEventListener("click", shareQr);
+    shareButton.classList.add("hidden");
+    //shareButton.addEventListener("click", shareQr);
 
     // Generar QR al presionar Enter en el input
     const qrInput = document.getElementById("qr-input") as HTMLInputElement;

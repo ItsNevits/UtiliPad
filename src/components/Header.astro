@@ -4,12 +4,13 @@ import Search from "./shared/Search.astro";
 import { Picture } from "astro:assets";
 import LanguageToggle from "./LanguageToggle.astro";
 import type { Language } from "../types/language.type";
-import es from "../i18n/es";
-import en from "../i18n/en";
 
-const lang = Astro.params.lang as Language;
-const translations = { es, en };
-const t = translations[lang];
+interface Props {
+  lang: Language;
+  t: any;
+}
+
+const { lang, t } = Astro.props;
 ---
 
 <header
@@ -36,9 +37,9 @@ const t = translations[lang];
       <span class="font-semibold tracking-tight">UtiliPad</span>
     </a>
     <div class="ml-auto flex-1 max-w-xl">
-      <Search t={t} lang={lang} />
+      <Search lang={lang} t={t} />
     </div>
-    <LanguageToggle lang={lang} />
+    <LanguageToggle lang={lang} t={t} />
   </div>
 </header>
 

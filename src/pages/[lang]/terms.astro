@@ -14,7 +14,7 @@ const translations = { es, en };
 const t = translations[lang];
 ---
 
-<MainLayout pathname="/terms">
+<MainLayout lang={lang} t={t}>
   <Hero
     title={t.sites.terms.hero.title}
     description={t.sites.terms.hero.description}
@@ -24,39 +24,27 @@ const t = translations[lang];
     class="bg-neutral-800/50 overflow-hidden rounded-2xl border border-neutral-800 mt-5 p-6 select-none"
   >
     <div>
-      <h2 class="text-xl md:text-2xl font-bold leading-tight mb-4">
-        Uso del servicio
-      </h2>
-      <ul class="list-disc list-inside mb-4">
-        <li class="mb-2 text-neutral-400">
-          <strong class="underline">Gratuito</strong> : Todas las herramientas son
-          completamente gratuitas
-        </li>
-        <li class="mb-2 text-neutral-400">
-          <strong class="underline">Sin límites</strong> : No hay restricciones en
-          el uso de nuestras herramientas
-        </li>
-        <li class="mb-2 text-neutral-400">
-          <strong class="underline">Responsabilidad</strong> : El usuario es responsable
-          del contenido que procesa
-        </li>
-      </ul>
-
-      <h2 class="text-xl md:text-2xl font-bold leading-tight mb-4">
-        Limitaciones
-      </h2>
-      <p class="mb-4 text-neutral-400">
-        Las herramientas se proporcionan "tal como están" sin garantías de
-        funcionamiento perfecto.
-      </p>
-
-      <h2 class="text-xl md:text-2xl font-bold leading-tight mb-4">
-        Propiedad intelectual
-      </h2>
-      <p class="mb-4 text-neutral-400">
-        El código fuente está disponible bajo licencia MIT. Los contenidos
-        procesados pertenecen al usuario.
-      </p>
+      {
+        t.sites.terms.content.map((section) => (
+          <div class="mb-6 last:mb-0">
+            <h2 class="text-xl md:text-2xl font-bold leading-tight mb-4">
+              {section.title}
+            </h2>
+            {section.paragraphs.length > 1 ? (
+              <ul class="list-disc list-inside mb-4">
+                {section.paragraphs.map((paragraph) => (
+                  <li class="mb-2 text-neutral-400" set:html={paragraph} />
+                ))}
+              </ul>
+            ) : (
+              <p
+                class="mb-4 text-neutral-400"
+                set:html={section.paragraphs[0]}
+              />
+            )}
+          </div>
+        ))
+      }
     </div>
   </div>
 </MainLayout>

@@ -14,7 +14,7 @@ const translations = { es, en };
 const t = translations[lang];
 ---
 
-<MainLayout pathname="/contact">
+<MainLayout lang={lang} t={t}>
   <Hero
     title={t.sites.contact.hero.title}
     description={t.sites.contact.hero.description}
@@ -26,68 +26,59 @@ const t = translations[lang];
       class="overflow-hidden rounded-2xl border border-neutral-800 p-6 space-y-6 flex-1 bg-neutral-800/50 select-none"
     >
       <h2 class="text-xl font-semibold text-neutral-200">
-        Información de contacto
+        {t.sites.contact.contactInfo.title}
       </h2>
 
       <div class="space-y-4">
-        <div class="flex items-center gap-3">
-          <div
-            class="w-8 h-8 bg-emerald-500/20 rounded-lg flex items-center justify-center"
-          >
-            <span class="text-emerald-400">📧</span>
-          </div>
-          <div>
-            <p class="text-sm text-neutral-400">Email</p>
-            <a
-              href="mailto:bs.alvarado21@gmail.com"
-              class="text-neutral-200 hover:text-emerald-400 transition-colors"
-            >
-              bs.alvarado21@gmail.com
-            </a>
-          </div>
-        </div>
+        {
+          t.sites.contact.contactInfo.options.map((option) => (
+            <div class="flex items-center gap-3">
+              <div class="w-8 h-8 bg-emerald-500/20 rounded-lg flex items-center justify-center">
+                <span class="text-emerald-400">{option.icon}</span>
+              </div>
+              <div>
+                <p class="text-sm text-neutral-400">{option.title}</p>
+                <a
+                  href={option.href}
+                  target={option.href.startsWith("http") ? "_blank" : undefined}
+                  class="text-neutral-200 hover:text-emerald-400 transition-colors"
+                >
+                  {option.description}
+                </a>
+              </div>
+            </div>
+          ))
+        }
 
         <div class="flex items-center gap-3">
           <div
             class="w-8 h-8 bg-emerald-500/20 rounded-lg flex items-center justify-center"
           >
-            <span class="text-emerald-400">🐙</span>
-          </div>
-          <div>
-            <p class="text-sm text-neutral-400">GitHub</p>
-            <a
-              href="https://github.com/ItsNevits"
-              target="_blank"
-              class="text-neutral-200 hover:text-emerald-400 transition-colors"
+            <span class="text-emerald-400"
+              >{t.sites.contact.contactInfo.responseTime.icon}</span
             >
-              https://github.com/ItsNevits
-            </a>
-          </div>
-        </div>
-
-        <div class="flex items-center gap-3">
-          <div
-            class="w-8 h-8 bg-emerald-500/20 rounded-lg flex items-center justify-center"
-          >
-            <span class="text-emerald-400">⚡</span>
           </div>
           <div>
-            <p class="text-sm text-neutral-400">Tiempo de respuesta</p>
-            <p class="text-neutral-200">24-48 horas</p>
+            <p class="text-sm text-neutral-400">
+              {t.sites.contact.contactInfo.responseTime.title}
+            </p>
+            <p class="text-neutral-200">
+              {t.sites.contact.contactInfo.responseTime.description}
+            </p>
           </div>
         </div>
       </div>
 
       <div class="border-t border-neutral-700 pt-6">
         <h3 class="text-lg font-medium text-neutral-200 mb-3">
-          ¿En qué podemos ayudarte?
+          {t.sites.contact.contactInfo.helpWith.title}
         </h3>
         <ul class="space-y-2 text-sm text-neutral-400">
-          <li>• Reportar errores o bugs</li>
-          <li>• Sugerir nuevas herramientas</li>
-          <li>• Mejorar herramientas existentes</li>
-          <li>• Colaborar en el proyecto</li>
-          <li>• Preguntas generales</li>
+          {
+            t.sites.contact.contactInfo.helpWith.items.map((item) => (
+              <li>• {item}</li>
+            ))
+          }
         </ul>
       </div>
     </div>
@@ -97,7 +88,7 @@ const t = translations[lang];
       class="overflow-hidden rounded-2xl border border-neutral-800 bg-neutral-800/50 p-6 flex-1"
     >
       <h2 class="text-xl font-semibold text-neutral-200 mb-6">
-        Envíanos un mensaje
+        {t.sites.contact.form.title}
       </h2>
 
       <form id="contact-form" class="space-y-4">
@@ -106,7 +97,7 @@ const t = translations[lang];
             for="name"
             class="block text-sm font-medium text-neutral-300 mb-2"
           >
-            Nombre
+            {t.sites.contact.form.fields.name.label}
           </label>
           <input
             type="text"
@@ -114,7 +105,7 @@ const t = translations[lang];
             name="name"
             required
             class="w-full px-4 py-3 bg-neutral-900/60 border border-neutral-700 rounded-lg text-neutral-200 placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50"
-            placeholder="Tu nombre"
+            placeholder={t.sites.contact.form.fields.name.placeholder}
           />
         </div>
 
@@ -123,7 +114,7 @@ const t = translations[lang];
             for="email"
             class="block text-sm font-medium text-neutral-300 mb-2"
           >
-            Email
+            {t.sites.contact.form.fields.email.label}
           </label>
           <input
             type="email"
@@ -131,7 +122,7 @@ const t = translations[lang];
             name="email"
             required
             class="w-full px-4 py-3 bg-neutral-900/60 border border-neutral-700 rounded-lg text-neutral-200 placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50"
-            placeholder="tu@email.com"
+            placeholder={t.sites.contact.form.fields.email.placeholder}
           />
         </div>
 
@@ -140,7 +131,7 @@ const t = translations[lang];
             for="subject"
             class="block text-sm font-medium text-neutral-300 mb-2"
           >
-            Asunto
+            {t.sites.contact.form.fields.subject.label}
           </label>
           <select
             id="subject"
@@ -148,12 +139,11 @@ const t = translations[lang];
             required
             class="w-full px-4 py-3 bg-neutral-900/60 border border-neutral-700 rounded-lg text-neutral-200 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50"
           >
-            <option value="">Selecciona un asunto</option>
-            <option value="bug">Reportar error</option>
-            <option value="feature">Sugerir herramienta</option>
-            <option value="improvement">Mejora existente</option>
-            <option value="collaboration">Colaboración</option>
-            <option value="other">Otro</option>
+            {
+              t.sites.contact.form.fields.subject.options.map((option) => (
+                <option value={option.value}>{option.label}</option>
+              ))
+            }
           </select>
         </div>
 
@@ -162,7 +152,7 @@ const t = translations[lang];
             for="message"
             class="block text-sm font-medium text-neutral-300 mb-2"
           >
-            Mensaje
+            {t.sites.contact.form.fields.message.label}
           </label>
           <textarea
             id="message"
@@ -170,7 +160,7 @@ const t = translations[lang];
             rows="6"
             required
             class="w-full px-4 py-3 bg-neutral-900/60 border border-neutral-700 rounded-lg text-neutral-200 placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50 resize-none"
-            placeholder="Describe tu consulta, sugerencia o problema..."
+            placeholder={t.sites.contact.form.fields.message.placeholder}
           ></textarea>
         </div>
 
@@ -178,7 +168,7 @@ const t = translations[lang];
           type="submit"
           class="cursor-pointer w-full px-6 py-3 bg-neutral-700 hover:bg-neutral-600 text-neutral-200 rounded transition-colors font-medium focus:outline-none focus:ring-2 focus:ring-emerald-500/50 disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          <span id="submit-text">Enviar mensaje</span>
+          <span id="submit-text">{t.sites.contact.form.submit.default}</span>
         </button>
       </form>
 
@@ -191,75 +181,40 @@ const t = translations[lang];
     class="overflow-hidden rounded-2xl border border-neutral-800 bg-neutral-800/50 p-6 mt-5"
   >
     <h2 class="text-xl font-semibold text-neutral-200 mb-6">
-      Preguntas Frecuentes
+      {t.sites.contact.faq.title}
     </h2>
 
     <div class="space-y-4">
-      <details class="group">
-        <summary
-          class="cursor-pointer text-neutral-300 hover:text-neutral-100 font-medium"
-        >
-          ¿UtiliPad es realmente gratuito?
-        </summary>
-        <p class="mt-2 text-sm text-neutral-400 pl-4">
-          ● Sí, todas las herramientas son completamente gratuitas y sin límites
-          de uso. Es un proyecto open source.
-        </p>
-      </details>
-
-      <details class="group">
-        <summary
-          class="cursor-pointer text-neutral-300 hover:text-neutral-100 font-medium"
-        >
-          ¿Mis archivos se envían a algún servidor?
-        </summary>
-        <p class="mt-2 text-sm text-neutral-400 pl-4">
-          ● No, todo el procesamiento se hace en nuesta API open source. <br /> ●
-          Tus archivos nunca se envían a ningún servidor. <br /> ● Puedes revisar
-          el código en GitHub.
-        </p>
-      </details>
-
-      <details class="group">
-        <summary
-          class="cursor-pointer text-neutral-300 hover:text-neutral-100 font-medium"
-        >
-          ¿Puedo sugerir nuevas herramientas?
-        </summary>
-        <p class="mt-2 text-sm text-neutral-400 pl-4">
-          ¡Por supuesto! Envíanos tus ideas a través del formulario de contacto
-          o crea un issue en GitHub.
-        </p>
-      </details>
-
-      <details class="group">
-        <summary
-          class="cursor-pointer text-neutral-300 hover:text-neutral-100 font-medium"
-        >
-          ¿Cómo puedo contribuir al proyecto?
-        </summary>
-        <p class="mt-2 text-sm text-neutral-400 pl-4">
-          ● Puedes contribuir reportando bugs, sugiriendo mejoras.
-        </p>
-      </details>
+      {
+        t.sites.contact.faq.items.map((faqItem) => (
+          <details class="group">
+            <summary class="cursor-pointer text-neutral-300 hover:text-neutral-100 font-medium">
+              {faqItem.question}
+            </summary>
+            <div class="mt-2 text-sm text-neutral-400 pl-4">
+              {faqItem.answer.split("\n").map((line) => (
+                <p>{line.startsWith("●") ? line : `● ${line}`}</p>
+              ))}
+            </div>
+          </details>
+        ))
+      }
     </div>
   </div>
 </MainLayout>
 
-<script>
-  const form = document.getElementById("contact-form") as HTMLFormElement;
-  const submitText = document.getElementById("submit-text") as HTMLElement;
-  const formStatus = document.getElementById("form-status") as HTMLElement;
-  const submitButton = form.querySelector(
-    'button[type="submit"]'
-  ) as HTMLButtonElement;
+<script define:vars={{ t, lang }}>
+  const form = document.getElementById("contact-form");
+  const submitText = document.getElementById("submit-text");
+  const formStatus = document.getElementById("form-status");
+  const submitButton = form.querySelector('button[type="submit"]');
 
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
     // Cambiar estado del botón
     submitButton.disabled = true;
-    submitText.textContent = "Enviando...";
+    submitText.textContent = t.sites.contact.form.submit.sending;
     formStatus.classList.add("hidden");
 
     // Simular envío (aquí integrarías con tu servicio de email)
@@ -274,46 +229,19 @@ const t = translations[lang];
       await new Promise((resolve) => setTimeout(resolve, 1500));
 
       // Mostrar éxito
-      formStatus.innerHTML =
-        '<span class="text-emerald-400">✓ Mensaje enviado correctamente. Te responderemos pronto.</span>';
+      formStatus.innerHTML = `<span class="text-emerald-400">${t.sites.contact.form.submit.success}</span>`;
       formStatus.classList.remove("hidden");
 
       // Limpiar formulario
       form.reset();
     } catch (error) {
       // Mostrar error
-      formStatus.innerHTML =
-        '<span class="text-red-400">✗ Error al enviar el mensaje. Inténtalo de nuevo.</span>';
+      formStatus.innerHTML = `<span class="text-red-400">${t.sites.contact.form.submit.error}</span>`;
       formStatus.classList.remove("hidden");
     } finally {
       // Restaurar botón
       submitButton.disabled = false;
-      submitText.textContent = "Enviar mensaje";
+      submitText.textContent = t.sites.contact.form.submit.default;
     }
   });
 </script>
-
-<style>
-  details summary {
-    list-style: none;
-    position: relative;
-    padding-right: 1.5rem;
-  }
-
-  details summary::-webkit-details-marker {
-    display: none;
-  }
-
-  details summary::after {
-    content: "+";
-    position: absolute;
-    right: 0;
-    top: 0;
-    font-size: 1.2rem;
-    transition: transform 0.2s;
-  }
-
-  details[open] summary::after {
-    transform: rotate(45deg);
-  }
-</style>

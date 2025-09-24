@@ -5,14 +5,14 @@ import Aside from "@components/Aside.astro";
 import Header from "@components/Header.astro";
 import Footer from "@components/Footer.astro";
 import Modal from "@components/shared/Modal.astro";
-
 import type { Language } from "../types/language.type";
 
 interface Props {
-  pathname: string;
-  lang?: Language;
+  lang: Language;
+  t: any;
 }
-const { pathname, lang = "es" } = Astro.props;
+
+const { lang, t } = Astro.props;
 ---
 
 <!doctype html>
@@ -22,22 +22,16 @@ const { pathname, lang = "es" } = Astro.props;
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <!-- SEO Básico -->
-    <title>UtiliPad</title>
-    <meta
-      name="description"
-      content="Suite de utilidades online: formateador y validador JSON, analizador de texto, compresor/redimensionador de imágenes y más. Rápido, gratis y sin registro."
-    />
+    <title>{t.seo.title}</title>
+    <meta name="description" content={t.seo.description} />
     <meta name="robots" content="index, follow, max-image-preview:large" />
-    <link rel="canonical" href={"https://utilipad.com" + pathname} />
+    <link rel="canonical" href={"https://utilipad.com"} />
 
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
-    <meta property="og:url" content={"https://utilipad.com" + pathname} />
-    <meta property="og:title" content="UtiliPad — Herramientas web gratis" />
-    <meta
-      property="og:description"
-      content="Formateador JSON, analizador de texto, compresor/redimensionador de imágenes y más."
-    />
+    <meta property="og:url" content={"https://utilipad.com"} />
+    <meta property="og:title" content={t.seo.title} />
+    <meta property="og:description" content={t.seo.description} />
     <meta
       property="og:image"
       content="https://utilipad.com/og/og-home-1200x630.jpg"
@@ -49,11 +43,8 @@ const { pathname, lang = "es" } = Astro.props;
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="UtiliPad — Herramientas web gratis" />
-    <meta
-      name="twitter:description"
-      content="Formateador JSON, analizador de texto, compresor/redimensionador de imágenes y más."
-    />
+    <meta name="twitter:title" content={t.seo.title} />
+    <meta name="twitter:description" content={t.seo.description} />
     <meta
       name="twitter:image"
       content="https://utilipad.com/og/og-home-1200x630.jpg"
@@ -103,7 +94,6 @@ const { pathname, lang = "es" } = Astro.props;
     <meta name="yandex-verification" content="your-yandex-verification-code" />
 
     <!-- Analytics y Tracking -->
-    <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-Q0C3PRC4E8"
     ></script>
     <script is:inline>
@@ -123,15 +113,15 @@ const { pathname, lang = "es" } = Astro.props;
       crossorigin="anonymous"></script>
   </head>
   <body class="bg-primary text-priamry-text">
-    <Header />
+    <Header lang={lang} t={t} />
     <main class="mx-auto max-w-7xl px-4 py-8 grid grid-cols-12 gap-6">
-      <SideBar lang={lang} />
+      <SideBar lang={lang} t={t} />
       <section class="col-span-12 xl:col-span-7">
         <slot />
       </section>
-      <Aside lang={lang} />
+      <Aside lang={lang} t={t} />
     </main>
-    <Footer lang={lang} />
-    <Modal />
+    <Footer lang={lang} t={t} />
+    <Modal t={t} />
   </body>
 </html>

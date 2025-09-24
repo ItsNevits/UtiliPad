@@ -143,7 +143,7 @@ export async function getStaticPaths() {
 }
 ---
 
-<MainLayout pathname={`/${categoryId}`} lang={lang as Language}>
+<MainLayout lang={lang as Language} t={t}>
   <BreadCrumbs links={breadcrumbs} />
 
   <!-- Hero -->
@@ -153,7 +153,7 @@ export async function getStaticPaths() {
     selectedTool ? (
       <div class="py-5 select-none">
         {ToolComponent ? (
-          <ToolComponent />
+          <ToolComponent lang={lang as Language} t={t} />
         ) : (
           <div class="bg-neutral-900/40 rounded-2xl border border-neutral-800 p-6">
             <span>{t.tools.messages.notImplemented}</span>
@@ -193,7 +193,7 @@ export async function getStaticPaths() {
         </div>
       </div>
     ) : (
-      <Tools categoryId={categoryId} t={t} />
+      <Tools categoryId={categoryId} lang={lang as Language} t={t} />
     )
   }
 </MainLayout>

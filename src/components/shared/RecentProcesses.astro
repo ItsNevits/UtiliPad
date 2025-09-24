@@ -11,23 +11,7 @@ const { lang = "es" } = Astro.props;
 const translations = { es, en };
 const t = translations[lang];
 
-const recents = [
-  {
-    name: "video-evento.mp4 → .webm",
-    time: t.components.recent.timeAgo.hoursAgo.replace("{count}", "2"),
-    status: t.components.recent.completed,
-  },
-  {
-    name: "encuesta.pdf → páginas 1-4",
-    time: t.components.recent.timeAgo.yesterday,
-    status: t.components.recent.completed,
-  },
-  {
-    name: "logo.png → 512x512",
-    time: t.components.recent.timeAgo.yesterday,
-    status: t.components.recent.completed,
-  },
-];
+const recents = [] as any[];
 ---
 
 <div class="mt-8 select-none">
@@ -39,6 +23,13 @@ const recents = [
   <div
     class="divide-y divide-neutral-800 rounded-2xl border border-neutral-800 overflow-hidden"
   >
+    {
+      recents.length === 0 && (
+        <div class="px-4 py-3 text-sm text-neutral-500">
+          {t.components.recent.noRecent}
+        </div>
+      )
+    }
     {
       recents.map((r) => (
         <div

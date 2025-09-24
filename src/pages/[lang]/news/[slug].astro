@@ -4,30 +4,50 @@ import Hero from "@components/shared/Hero.astro";
 import MainLayout from "src/Layouts/MainLayout.astro";
 import BreadCrumbs from "@components/shared/BreadCrumbs.astro";
 import type { Language } from "../../../types/language.type";
+import es from "../../../i18n/es";
+import en from "../../../i18n/en";
 
 const lang = Astro.currentLocale as Language;
+const translations = { es, en };
+const t = translations[lang];
 
 export async function getStaticPaths() {
   const news = await getCollection("news");
   const languages = ["es", "en"];
 
-  return languages.flatMap((lang) =>
-    news.map((entry) => ({
-      params: { slug: entry.slug, lang },
-      props: { entry, lang },
-    }))
-  );
+  return languages.flatMap((lang) => {
+    // Filtrar noticias por idioma basándose en la estructura de carpetas
+    const newsForLang = news.filter((entry) => {
+      // Normalizar las barras para manejar Windows y Unix
+      const normalizedId = entry.id.replace(/\\/g, "/");
+      return normalizedId.startsWith(`${lang}/`);
+    });
+
+    return newsForLang.map((entry) => {
+      // Extraer el slug sin la carpeta del idioma
+      const normalizedId = entry.id.replace(/\\/g, "/");
+      const slug = normalizedId.replace(`${lang}/`, "");
+      return {
+        params: { slug, lang },
+        props: { entry, lang },
+      };
+    });
+  });
 }
 
 const { entry } = Astro.props;
 const { Content } = await entry.render();
 ---
 
-<MainLayout pathname={`/news/${entry.slug}`}>
+<MainLayout lang={lang} t={t}>
   <BreadCrumbs
     links={[
       { href: `/${lang}/news`, name: "Noticias" },
-      { href: `/news/${entry.slug}`, name: entry.data.title, isActive: true },
+      {
+        href: `/${lang}/news/${entry.id.replace(/\\/g, "/").replace(`${lang}/`, "")}`,
+        name: entry.data.title,
+        isActive: true,
+      },
     ]}
   />
   <Hero

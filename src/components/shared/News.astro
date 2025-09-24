@@ -1,14 +1,22 @@
 ---
 import { getCollection } from "astro:content";
+import type { Language } from "../../types/language.type";
 
 interface Props {
+  lang: Language;
   t: any;
-  lang: string;
 }
 
-const { t, lang } = Astro.props;
+const { lang, t } = Astro.props;
 
-const news = await getCollection("news", ({ data }) => !data.draft);
+// Obtener todas las noticias y filtrar por idioma
+const allNews = await getCollection("news", ({ data }) => !data.draft);
+
+const news = allNews.filter(({ id }) => {
+  const normalizedId = id.replace(/\\/g, "/");
+  return normalizedId.startsWith(`${lang}/`);
+});
+
 const sortedNews = news.sort(
   (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
 );
@@ -33,7 +41,7 @@ const sortedNews = news.sort(
         .map((item) => (
           <li class="flex gap-2">
             <a
-              href={`/${lang}/news/${item.slug}`}
+              href={`/${lang}/news/${item.id.replace(/\\/g, "/").replace(`${lang}/`, "")}`}
               class="cursor-pointer mt-1 hover:text-green-400 rounded-full flex gap-2 before:content-['●'] before:text-green-400"
             >
               {item.data.title}
