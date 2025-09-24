@@ -1,14 +1,40 @@
 ---
+import type { Language } from "../../types/language.type";
+import es from "../../i18n/es";
+import en from "../../i18n/en";
+
+interface Props {
+  lang?: Language;
+}
+
+const { lang = "es" } = Astro.props;
+const translations = { es, en };
+const t = translations[lang];
+
 const recents = [
-  { name: "video-evento.mp4 → .webm", time: "hace 2 h", status: "Completado" },
-  { name: "encuesta.pdf → páginas 1-4", time: "ayer", status: "Completado" },
-  { name: "logo.png → 512x512", time: "ayer", status: "Completado" },
+  {
+    name: "video-evento.mp4 → .webm",
+    time: t.components.recent.timeAgo.hoursAgo.replace("{count}", "2"),
+    status: t.components.recent.completed,
+  },
+  {
+    name: "encuesta.pdf → páginas 1-4",
+    time: t.components.recent.timeAgo.yesterday,
+    status: t.components.recent.completed,
+  },
+  {
+    name: "logo.png → 512x512",
+    time: t.components.recent.timeAgo.yesterday,
+    status: t.components.recent.completed,
+  },
 ];
 ---
 
 <div class="mt-8 select-none">
   <div class="flex items-center justify-between mb-2">
-    <h2 class="text-sm uppercase tracking-wider text-neutral-400">Recientes</h2>
+    <h2 class="text-sm uppercase tracking-wider text-neutral-400">
+      {t.components.recent.title}
+    </h2>
   </div>
   <div
     class="divide-y divide-neutral-800 rounded-2xl border border-neutral-800 overflow-hidden"

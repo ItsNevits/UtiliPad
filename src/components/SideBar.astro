@@ -1,10 +1,20 @@
 ---
-const categories = [
-  { name: "Archivos", href: "/files" },
-  { name: "Imágenes", href: "/images" },
-  { name: "Texto", href: "/text" },
-  { name: "Novedades", href: "/news" },
-];
+import type { Language } from "../types/language.type";
+import es from "../i18n/es";
+import en from "../i18n/en";
+
+interface Props {
+  lang?: Language;
+}
+
+const { lang = "es" } = Astro.props;
+const translations = { es, en };
+const t = translations[lang];
+
+const categories = t.components.sidebar.categories.map((cat) => ({
+  ...cat,
+  href: `/${lang}${cat.href}`,
+}));
 
 // Obtener la URL actual para marcar la categoría activa
 const currentPath = Astro.url.pathname;
@@ -13,9 +23,10 @@ const currentPath = Astro.url.pathname;
 <aside
   class="flex xl:block xl:col-span-2 select-none overflow-x-hidden col-span-12"
 >
-  <div class="sticky top-20 space-y-2">
+  <div class="sticky space-y-2">
     <h3 class="text-xs uppercase tracking-wider text-neutral-400">
-      Categorías <span class="xl:hidden">:</span>
+      {t.components.sidebar.title}
+      <span class="xl:hidden">:</span>
     </h3>
     <ul
       class="flex xl:block gap-2 overflow-x-auto xl:overflow-x-visible w-[90vw] pb-2"
@@ -26,13 +37,13 @@ const currentPath = Astro.url.pathname;
             <a
               href={category.href}
               class={`block px-3 py-2 rounded-lg transition-colors duration-200 whitespace-nowrap ${
-                currentPath.startsWith(category.href)
+                currentPath.includes(category.href.split("/").pop() || "")
                   ? "bg-neutral-800 text-white"
                   : "text-neutral-300 hover:bg-neutral-900 hover:text-white"
               }`}
             >
               <span class="inline-flex items-center gap-2">
-                {category.name}
+                {category.label}
               </span>
             </a>
           </li>

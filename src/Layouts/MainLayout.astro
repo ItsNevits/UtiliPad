@@ -6,14 +6,17 @@ import Header from "@components/Header.astro";
 import Footer from "@components/Footer.astro";
 import Modal from "@components/shared/Modal.astro";
 
+import type { Language } from "../types/language.type";
+
 interface Props {
   pathname: string;
+  lang?: Language;
 }
-const { pathname } = Astro.props;
+const { pathname, lang = "es" } = Astro.props;
 ---
 
 <!doctype html>
-<html lang="es">
+<html lang={lang}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -120,15 +123,15 @@ const { pathname } = Astro.props;
       crossorigin="anonymous"></script>
   </head>
   <body class="bg-primary text-priamry-text">
-    <Header />
+    <Header lang={lang} />
     <main class="mx-auto max-w-7xl px-4 py-8 grid grid-cols-12 gap-6">
-      <SideBar />
+      <SideBar lang={lang} />
       <section class="col-span-12 xl:col-span-7">
         <slot />
       </section>
-      <Aside />
+      <Aside lang={lang} />
     </main>
-    <Footer />
+    <Footer lang={lang} />
     <Modal />
   </body>
 </html>

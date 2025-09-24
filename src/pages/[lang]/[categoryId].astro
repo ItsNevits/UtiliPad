@@ -1,0 +1,199 @@
+---
+export const prerender = false;
+
+import MainLayout from "../../Layouts/MainLayout.astro";
+import Hero from "../../components/shared/Hero.astro";
+import Tools from "../../components/shared/Tools.astro";
+import BreadCrumbs from "../../components/shared/BreadCrumbs.astro";
+import { TOOLS_CATEGORIES, getToolById } from "../../constants/tools";
+import type { Language } from "../../types/language.type";
+import es from "../../i18n/es";
+import en from "../../i18n/en";
+import { getTranslatedCategories } from "../../utils/tools";
+
+// Importar componentes de herramientas
+import TextAnalyzer from "@components/tools/TextAnalyzer.astro";
+import JsonFormatter from "@components/tools/JsonFormatter.astro";
+import ZipCompressor from "@components/tools/ZipCompressor.astro";
+import QrGenerator from "@components/tools/QrGenerator.astro";
+
+// Mapeo de componentes
+const COMPONENT_MAP = {
+  // Files Components
+  ZipCompressor: ZipCompressor,
+
+  // Text Components
+  TextAnalyzer: TextAnalyzer,
+  JsonFormatter: JsonFormatter,
+  QrGenerator: QrGenerator,
+};
+
+// Obtener los parámetros de la URL
+const { categoryId, lang } = Astro.params;
+
+// Configurar traducciones
+const translations = { es, en };
+const t = translations[lang as Language];
+const translatedCategories = getTranslatedCategories(t);
+
+// Obtener el parámetro de query 'tool' si existe
+const toolId = Astro.url.searchParams.get("tool");
+
+// Buscar la categoría correspondiente (original para lógica)
+const originalCategory = TOOLS_CATEGORIES.find((cat) => cat.id === categoryId);
+
+// Si no existe la categoría, retornar 404
+if (!originalCategory) {
+  return Astro.redirect("/404");
+}
+
+// Obtener la categoría traducida
+const category =
+  translatedCategories.find((cat) => cat.id === categoryId) || originalCategory;
+
+// Obtener traducciones de herramientas
+const getTranslatedToolName = (toolId: string, tool?: any) => {
+  const toolTranslations = t.tools.items as Record<
+    string,
+    { name: string; description: string }
+  >;
+  return toolTranslations[toolId]?.name || tool?.name || toolId;
+};
+
+const getTranslatedToolDescription = (toolId: string, tool?: any) => {
+  const toolTranslations = t.tools.items as Record<
+    string,
+    { name: string; description: string }
+  >;
+  return toolTranslations[toolId]?.description || tool?.description || "";
+};
+
+// Si hay un toolId específico, buscar la herramienta
+let selectedTool = null;
+if (toolId) {
+  selectedTool = getToolById(toolId);
+  // Verificar que la herramienta pertenezca a esta categoría
+  if (
+    !selectedTool ||
+    !originalCategory.tools.find((tool) => tool.id === toolId)
+  ) {
+    return Astro.redirect("/404");
+  }
+}
+
+// Configurar el contenido del hero basado en si hay una herramienta específica
+const currentHero = selectedTool
+  ? {
+      title: getTranslatedToolName(selectedTool.id, selectedTool),
+      description: getTranslatedToolDescription(selectedTool.id, selectedTool),
+    }
+  : {
+      title: category.title,
+      description: category.description,
+    };
+
+// Obtener el componente correspondiente si existe
+let ToolComponent = null;
+if (
+  selectedTool?.component &&
+  COMPONENT_MAP[selectedTool.component as keyof typeof COMPONENT_MAP]
+) {
+  ToolComponent =
+    COMPONENT_MAP[selectedTool.component as keyof typeof COMPONENT_MAP];
+}
+
+// Generar breadcrumbs
+const breadcrumbs = [];
+if (selectedTool) {
+  // Para herramienta específica: Inicio > Categoría > Herramienta
+  const translatedToolName = getTranslatedToolName(
+    selectedTool.id,
+    selectedTool
+  );
+  breadcrumbs.push(
+    { href: `/${lang}/${categoryId}`, name: category.name, isActive: false },
+    { href: selectedTool.href, name: translatedToolName, isActive: true }
+  );
+} else {
+  // Para categoría: Inicio > Categoría
+  breadcrumbs.push({
+    href: `/${lang}/${categoryId}`,
+    name: category.name,
+    isActive: true,
+  });
+}
+
+// Generar las rutas estáticas para todas las categorías y idiomas
+export async function getStaticPaths() {
+  const paths = [];
+  const languages = ["es", "en"];
+
+  for (const lang of languages) {
+    for (const category of TOOLS_CATEGORIES) {
+      paths.push({
+        params: {
+          lang: lang,
+          categoryId: category.id,
+        },
+      });
+    }
+  }
+
+  return paths;
+}
+---
+
+<MainLayout pathname={`/${categoryId}`} lang={lang as Language}>
+  <BreadCrumbs links={breadcrumbs} />
+
+  <!-- Hero -->
+  <Hero title={currentHero.title} description={currentHero.description} />
+
+  {
+    selectedTool ? (
+      <div class="py-5 select-none">
+        {ToolComponent ? (
+          <ToolComponent />
+        ) : (
+          <div class="bg-neutral-900/40 rounded-2xl border border-neutral-800 p-6">
+            <span>{t.tools.messages.notImplemented}</span>
+          </div>
+        )}
+
+        <div class="mt-8">
+          <h3 class="text-lg font-semibold mb-4">
+            {lang === "es"
+              ? `${t.tools.messages.otherToolsPrefix} ${category.name.toLowerCase()}`
+              : `${t.tools.messages.otherToolsPrefix} ${category.name.toLowerCase()} ${t.tools.messages.otherToolsSuffix}`}
+          </h3>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {originalCategory.tools
+              .filter((tool) => tool.id !== selectedTool.id && tool.isAvailable)
+              .map((tool) => (
+                <a
+                  href={tool.href}
+                  class="block p-4 bg-neutral-900/40 rounded-xl border border-neutral-800 hover:border-emerald-600/60 transition-colors"
+                >
+                  <h4 class="font-medium mb-1">
+                    {getTranslatedToolName(tool.id, tool)}
+                  </h4>
+                  <p class="text-sm text-neutral-400">
+                    {getTranslatedToolDescription(tool.id, tool)}
+                  </p>
+                </a>
+              ))}
+            {originalCategory.tools.filter(
+              (tool) => tool.id !== selectedTool.id && tool.isAvailable
+            ).length === 0 && (
+              <p class="text-sm text-neutral-400 col-span-full">
+                {t.tools.messages.noMoreTools}
+              </p>
+            )}
+          </div>
+        </div>
+      </div>
+    ) : (
+      <Tools categoryId={categoryId} t={t} />
+    )
+  }
+</MainLayout>

@@ -1,5 +1,15 @@
 ---
+import type { Language } from "../types/language.type";
+import es from "../i18n/es";
+import en from "../i18n/en";
 
+interface Props {
+  lang?: Language;
+}
+
+const { lang = "es" } = Astro.props;
+const translations = { es, en };
+const t = translations[lang];
 ---
 
 <footer class="border-t border-neutral-800 py-8 select-none">
@@ -7,12 +17,20 @@
     class="mx-auto max-w-7xl px-4 text-sm text-neutral-400 flex flex-col md:flex-row items-center justify-between gap-4"
   >
     <p>
-      Hecho con <span class="text-red-500">❤︎</span> y Astro.js
+      {t.components.footer.madeWith}
+      <span class="text-red-500">❤︎</span>
+      {t.components.footer.and} Astro.js
     </p>
     <div class="flex items-center gap-4">
-      <a href="/privacy" class="hover:text-neutral-200">Privacidad</a>
-      <a href="/terms" class="hover:text-neutral-200">Términos</a>
-      <a href="/contact" class="hover:text-neutral-200">Contacto</a>
+      <a href={`/${lang}/privacy`} class="hover:text-neutral-200"
+        >{t.components.footer.privacy}</a
+      >
+      <a href={`/${lang}/terms`} class="hover:text-neutral-200"
+        >{t.components.footer.terms}</a
+      >
+      <a href={`/${lang}/contact`} class="hover:text-neutral-200"
+        >{t.components.footer.contact}</a
+      >
     </div>
   </div>
 </footer>

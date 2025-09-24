@@ -1,8 +1,16 @@
 ---
+export const prerender = false;
 import Hero from "@components/shared/Hero.astro";
 import MainLayout from "src/Layouts/MainLayout.astro";
-
+import type { Language } from "../../../types/language.type";
 import { getCollection } from "astro:content";
+import es from "../../../i18n/es";
+import en from "../../../i18n/en";
+
+const lang = Astro.currentLocale as Language;
+const translations = { es, en };
+const t = translations[lang];
+
 const news = await getCollection("news", ({ data }) => !data.draft);
 const sortedNews = news.sort(
   (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
@@ -11,8 +19,8 @@ const sortedNews = news.sort(
 
 <MainLayout pathname="/news">
   <Hero
-    title="Novedades"
-    description="Mantente al día con las últimas actualizaciones y nuevas herramientas que hemos añadido a UtiliPad."
+    title={t.sites.news.hero.title}
+    description={t.sites.news.hero.description}
   />
 
   <section class="mt-8">
@@ -85,7 +93,7 @@ const sortedNews = news.sort(
                   </div>
 
                   <a
-                    href={`/news/${article.slug}`}
+                    href={`/${lang}/news/${article.slug}`}
                     class="cursor-pointer px-4 py-2 bg-neutral-700 hover:bg-neutral-600 text-neutral-200 rounded transition-colors inline-flex items-center gap-2 text-sm font-medium"
                   >
                     Leer más
@@ -161,7 +169,7 @@ const sortedNews = news.sort(
 </MainLayout>
 
 <script>
-  import { animateSequenceItems } from "../../animate/timeline";
+  import { animateSequenceItems } from "../../../animate/timeline";
 
   // Múltiples listeners para asegurar la ejecución
   document.addEventListener("astro:page-load", () => {

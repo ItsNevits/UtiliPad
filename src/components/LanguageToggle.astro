@@ -1,0 +1,140 @@
+---
+import type { Language } from "../types/language.type";
+import es from "../i18n/es";
+import en from "../i18n/en";
+
+interface Props {
+  lang?: Language;
+}
+
+const { lang = "es" } = Astro.props;
+const translations = { es, en };
+const t = translations[lang];
+---
+
+<div class="relative">
+  <button
+    id="language-toggle"
+    class="cursor-pointer flex items-center gap-2 px-3 py-2 rounded-lg bg-neutral-800/50 border border-neutral-700 hover:bg-neutral-700/50 transition-colors"
+    aria-label={t.components.language.changeLanguage}
+  >
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      class="text-neutral-400"
+    >
+      <circle cx="12" cy="12" r="10"></circle>
+      <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path>
+      <path d="M2 12h20"></path>
+    </svg>
+    <span class="text-sm font-medium text-neutral-300 uppercase">{lang}</span>
+    <svg
+      width="12"
+      height="12"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      class="text-neutral-400"
+    >
+      <polyline points="6,9 12,15 18,9"></polyline>
+    </svg>
+  </button>
+
+  <!-- Dropdown menu -->
+  <div
+    id="language-menu"
+    class="absolute top-full right-0 mt-2 w-32 bg-neutral-900/95 backdrop-blur-sm border border-neutral-700 rounded-lg shadow-xl z-50 hidden"
+  >
+    <div class="p-1">
+      <button
+        data-lang="es"
+        class="cursor-pointer w-full flex items-center gap-2 px-3 py-2 text-sm text-neutral-300 hover:bg-neutral-700/50 rounded-md transition-colors"
+      >
+        <span
+          class="text-xs font-mono bg-neutral-700 px-1.5 py-0.5 rounded uppercase"
+        >
+          es
+        </span>
+        {t.languageOptions.es}
+      </button>
+      <button
+        data-lang="en"
+        class="cursor-pointer w-full flex items-center gap-2 px-3 py-2 text-sm text-neutral-300 hover:bg-neutral-700/50 rounded-md transition-colors"
+      >
+        <span
+          class="text-xs font-mono bg-neutral-700 px-1.5 py-0.5 rounded uppercase"
+        >
+          en
+        </span>
+        {t.languageOptions.en}
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+  function initLanguageToggle() {
+    const toggleButton = document.getElementById("language-toggle");
+    const languageMenu = document.getElementById("language-menu");
+
+    if (!toggleButton || !languageMenu) return;
+
+    // Toggle del menú
+    toggleButton.addEventListener("click", (e) => {
+      e.stopPropagation();
+      languageMenu.classList.toggle("hidden");
+    });
+
+    // Cerrar menú al hacer click fuera
+    document.addEventListener("click", (e) => {
+      if (
+        !toggleButton.contains(e.target as Node) &&
+        !languageMenu.contains(e.target as Node)
+      ) {
+        languageMenu.classList.add("hidden");
+      }
+    });
+
+    // Cerrar menú con tecla Escape
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        languageMenu.classList.add("hidden");
+      }
+    });
+
+    // Manejar selección de idioma
+    const languageButtons = languageMenu.querySelectorAll("[data-lang]");
+    const currentLangSpan = toggleButton.querySelector("span");
+
+    languageButtons.forEach((button) => {
+      button.addEventListener("click", (e) => {
+        e.stopPropagation();
+
+        const selectedLang = button.getAttribute("data-lang");
+        if (selectedLang && currentLangSpan) {
+          // Actualizar el texto del botón principal
+          currentLangSpan.textContent = selectedLang.toUpperCase();
+
+          // Cerrar el menú
+          languageMenu.classList.add("hidden");
+          // cambiar ruta a la página correspondiente
+          const currentPath = window.location.pathname;
+          const newPath = currentPath.replace(/^\/(es|en)/, `/${selectedLang}`);
+          window.location.href = newPath;
+        }
+      });
+    });
+  }
+
+  // Inicializar cuando el DOM esté listo
+  document.addEventListener("DOMContentLoaded", initLanguageToggle);
+</script>

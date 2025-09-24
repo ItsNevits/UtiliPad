@@ -1,12 +1,24 @@
 ---
-import { searchTools } from "@constants/tools";
+interface Props {
+  t: any;
+  lang: string;
+}
+
+const { t, lang } = Astro.props;
+
+// Preparar los datos de herramientas para el cliente
+const toolsData = {
+  items: t.tools.items,
+  categories: t.tools.categories,
+  lang: lang,
+};
 ---
 
 <div class="relative">
   <label class="relative block">
     <input
       id="search-input"
-      placeholder="Busca una herramienta…"
+      placeholder={t.components.search.placeholder}
       class="w-full rounded-xl bg-neutral-800/80 border border-neutral-700 px-4 py-2 text-sm placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
       autocomplete="off"
     />
@@ -22,7 +34,9 @@ import { searchTools } from "@constants/tools";
     class="absolute top-full left-0 right-0 mt-2 bg-neutral-900/95 backdrop-blur-sm border border-neutral-700 rounded-xl shadow-2xl z-50 max-h-96 overflow-y-auto hidden"
   >
     <div class="p-3">
-      <div class="text-xs text-neutral-400 mb-2">Resultados de búsqueda</div>
+      <div class="text-xs text-neutral-400 mb-2">
+        {t.components.search.results}
+      </div>
       <div id="results-container">
         <!-- Los resultados se insertan aquí -->
       </div>
@@ -30,26 +44,63 @@ import { searchTools } from "@constants/tools";
         id="no-results"
         class="text-sm text-neutral-500 text-center py-8 hidden"
       >
-        No se encontraron herramientas
+        {t.components.search.noResults}
       </div>
     </div>
   </div>
 </div>
 
-<script>
-  import { searchTools, type Tool } from "../../constants/tools";
+<script define:vars={{ toolsData }}>
+  // Función de búsqueda simple que replica la lógica de searchTools
+  function searchTools(query) {
+    // Obtener el idioma y los datos de herramientas
+    const lang = toolsData.lang;
+    const items = toolsData.items || {};
+
+    // Simulamos la estructura de TOOLS_CATEGORIES desde las traducciones
+    const allTools = [];
+
+    // Crear herramientas desde las traducciones
+    const toolIds = Object.keys(items);
+    toolIds.forEach((toolId) => {
+      const toolTranslation = items[toolId];
+      if (toolTranslation) {
+        // Determinar la categoría y href basado en el ID
+        let categoryId = "text"; // default
+        let href = `/${lang}/text?tool=${toolId}`;
+
+        if (toolId.includes("zip") || toolId.includes("file")) {
+          categoryId = "files";
+          href = `/${lang}/files?tool=${toolId}`;
+        } else if (toolId.includes("image")) {
+          categoryId = "images";
+          href = `/${lang}/images?tool=${toolId}`;
+        }
+
+        allTools.push({
+          id: toolId,
+          name: toolTranslation.name,
+          description: toolTranslation.description,
+          href: href,
+          isAvailable: true,
+        });
+      }
+    });
+
+    // Filtrar por query
+    const lowerQuery = query.toLowerCase();
+    return allTools.filter(
+      (tool) =>
+        tool.name.toLowerCase().includes(lowerQuery) ||
+        tool.description.toLowerCase().includes(lowerQuery)
+    );
+  }
 
   function initializeSearch() {
-    const searchInput = document.getElementById(
-      "search-input"
-    ) as HTMLInputElement;
-    const searchResults = document.getElementById(
-      "search-results"
-    ) as HTMLElement;
-    const resultsContainer = document.getElementById(
-      "results-container"
-    ) as HTMLElement;
-    const noResults = document.getElementById("no-results") as HTMLElement;
+    const searchInput = document.getElementById("search-input");
+    const searchResults = document.getElementById("search-results");
+    const resultsContainer = document.getElementById("results-container");
+    const noResults = document.getElementById("no-results");
 
     // Si no se encuentran los elementos, salir
     if (!searchInput || !searchResults || !resultsContainer || !noResults) {
@@ -57,10 +108,10 @@ import { searchTools } from "@constants/tools";
     }
 
     let currentIndex = -1; // Índice del resultado seleccionado
-    let currentResults: Tool[] = []; // Resultados actuales
+    let currentResults = []; // Resultados actuales
 
     // Función para renderizar los resultados
-    function renderResults(tools: Tool[]) {
+    function renderResults(tools) {
       currentResults = tools;
       currentIndex = -1; // Reset del índice
 
@@ -111,7 +162,7 @@ import { searchTools } from "@constants/tools";
     }
 
     // Función para realizar la búsqueda
-    function performSearch(query: string) {
+    function performSearch(query) {
       if (query.trim().length === 0) {
         searchResults.classList.add("hidden");
         return;
@@ -124,7 +175,7 @@ import { searchTools } from "@constants/tools";
 
     // Event listeners
     searchInput.addEventListener("input", (e) => {
-      const query = (e.target as HTMLInputElement).value;
+      const query = e.target.value;
       performSearch(query);
     });
 
@@ -132,7 +183,7 @@ import { searchTools } from "@constants/tools";
     searchInput.addEventListener("change", (e) => {
       // Solo procesar en dispositivos móviles para evitar conflictos
       if ("ontouchstart" in window) {
-        const query = (e.target as HTMLInputElement).value;
+        const query = e.target.value;
         performSearch(query);
       }
     });
@@ -145,7 +196,7 @@ import { searchTools } from "@constants/tools";
         return;
       }
 
-      const query = (e.target as HTMLInputElement).value;
+      const query = e.target.value;
       performSearch(query);
     });
 
@@ -159,10 +210,7 @@ import { searchTools } from "@constants/tools";
 
     // Cerrar resultados al hacer clic fuera
     document.addEventListener("click", (e) => {
-      if (
-        !searchResults.contains(e.target as Node) &&
-        e.target !== searchInput
-      ) {
+      if (!searchResults.contains(e.target) && e.target !== searchInput) {
         searchResults.classList.add("hidden");
       }
     });
@@ -247,8 +295,8 @@ import { searchTools } from "@constants/tools";
 
     // Click en los resultados para seleccionar con mouse
     resultsContainer.addEventListener("mouseover", (e) => {
-      const target = e.target as HTMLElement;
-      const resultItem = target.closest(".result-item") as HTMLElement;
+      const target = e.target;
+      const resultItem = target.closest(".result-item");
 
       if (resultItem) {
         const index = parseInt(resultItem.dataset.index || "-1");

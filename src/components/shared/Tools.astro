@@ -1,69 +1,66 @@
 ---
-import type { Tool } from "@constants/tools";
-import { TOOLS_CATEGORIES, getToolsByCategory } from "@constants/tools";
+import { getTranslatedTools } from "../../utils/tools";
+import type { Language } from "../../types/language.type";
 
 interface Props {
   categoryId?: string;
+  t: any;
 }
 
-const { categoryId = "all" } = Astro.props;
+const lang = Astro.currentLocale as Language;
 
-// Mapear las herramientas de la constante al formato esperado por el HTML
-const mapToolToDisplay = (tool: Tool) => ({
+const { categoryId = "all", t: translations } = Astro.props;
+
+// Obtener herramientas con traducciones aplicadas
+const translatedTools = getTranslatedTools(categoryId, translations);
+
+// Mapear las herramientas al formato esperado por el HTML
+const tools = translatedTools.map((tool) => ({
   title: tool.name,
   desc: tool.description,
-  badge: tool.bagde,
+  badge: tool.translatedBadge,
   isAvailable: tool.isAvailable,
   href: tool.href,
-});
-
-// Obtener herramientas según la categoría
-let tools;
-if (categoryId === "all") {
-  // Mostrar todas las herramientas de todas las categorías
-  tools = TOOLS_CATEGORIES.flatMap((category) => category.tools)
-    .map(mapToolToDisplay)
-    .sort((a, b) => a.title.localeCompare(b.title));
-} else {
-  // Mostrar herramientas de una categoría específica
-  tools = getToolsByCategory(categoryId)
-    .map(mapToolToDisplay)
-    .sort((a, b) => a.title.localeCompare(b.title));
-}
+}));
 ---
 
 <div
   class="mt-6 grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 select-none"
 >
   {
-    tools.map((t) => (
+    tools.map((tool) => (
       <div
-        id={t.title}
+        id={tool.title}
         class="sequence-item-tool opacity-0 flex flex-col justify-between group rounded-2xl border border-neutral-800 bg-neutral-800/50 p-4 hover:border-emerald-600/60 hover:shadow-[0_0_0_1px_rgba(16,185,129,0.25)] transition"
       >
         <div class="flex items-start justify-between gap-2">
-          <h2 class="font-semibold leading-snug">{t.title}</h2>
-          {t.badge && (
+          <h2 class="font-semibold leading-snug">{tool.title}</h2>
+          {tool.badge && (
             <span class="text-[10px] rounded-full px-2 py-0.5 bg-neutral-800 border border-neutral-700 text-neutral-300">
-              {t.badge}
+              {tool.badge}
             </span>
           )}
         </div>
-        <p class="mt-1 text-sm text-neutral-400 line-clamp-2">{t.desc}</p>
+        <p class="mt-1 text-sm text-neutral-400 line-clamp-2">{tool.desc}</p>
         <div class="mt-4 flex items-center justify-between">
           <a
-            title={t.title}
-            href={t.href}
+            title={tool.title}
+            href={`/${lang}${tool.href}`}
             class:list={[
               "cursor-pointer text-sm text-emerald-400",
-              !t.isAvailable && "pointer-events-none text-neutral-600 hidden",
-              t.isAvailable && "hover:underline",
+              !tool.isAvailable &&
+                "pointer-events-none text-neutral-600 hidden",
+              tool.isAvailable && "hover:underline",
             ]}
           >
-            Abrir
+            {translations.tools.actions.open}
           </a>
-          <span class="shortcut text-xs text-neutral-400 hidden xl:inline">
-            ⌘K para buscar
+          <span
+            class="shortcut text-xs text-neutral-400 hidden xl:inline"
+            data-mac-text={translations.tools.actions.searchShortcut}
+            data-win-text={translations.tools.actions.searchShortcutWin}
+          >
+            {translations.tools.actions.searchShortcut}
           </span>
         </div>
       </div>
@@ -77,7 +74,9 @@ if (categoryId === "all") {
   const initWindowsOrMac = () => {
     const isMac = navigator.userAgent.indexOf("Mac OS X") != -1;
     document.querySelectorAll(".shortcut").forEach((el) => {
-      el.textContent = isMac ? "⌘K para buscar" : "Ctrl+K para buscar";
+      const macText = el.getAttribute("data-mac-text") || "⌘K to search";
+      const winText = el.getAttribute("data-win-text") || "Ctrl+K to search";
+      el.textContent = isMac ? macText : winText;
     });
   };
 
