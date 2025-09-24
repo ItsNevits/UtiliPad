@@ -1,5 +1,9 @@
 ---
-// El modal ahora es controlado por el store, no necesita props
+interface Props {
+  t: any;
+}
+
+const { t } = Astro.props;
 ---
 
 <div
@@ -59,8 +63,9 @@
             <!-- Información adicional se insertará aquí -->
           </div>
           <div class="text-xs">
-            Presiona <kbd class="px-2 py-1 bg-neutral-700 rounded">Esc</kbd> para
-            cerrar
+            {t.components.modal.press}
+            <kbd class="px-2 py-1 bg-neutral-700 rounded">Esc</kbd> para
+            {t.components.modal.toClose}
           </div>
         </div>
       </div>

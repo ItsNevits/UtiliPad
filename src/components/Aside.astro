@@ -2,13 +2,21 @@
 import AboutUs from "./shared/AboutUs.astro";
 import News from "./shared/News.astro";
 import ProcessSummary from "./shared/ProcessSummary.astro";
+import type { Language } from "../types/language.type";
+
+interface Props {
+  lang: Language;
+  t: any;
+}
+
+const { lang, t } = Astro.props;
 ---
 
 <aside class="col-span-12 xl:col-span-3 space-y-6">
   <!-- About Us -->
-  <AboutUs />
+  <AboutUs t={t} />
   <!-- Processing Summary -->
-  <ProcessSummary />
+  <ProcessSummary t={t} />
   <!-- News -->
-  <News />
+  <News lang={lang} t={t} } />
 </aside>

@@ -1,0 +1,247 @@
+---
+import Hero from "@components/shared/Hero.astro";
+import type { Language } from "../../types/language.type";
+import en from "src/i18n/en";
+import es from "src/i18n/es";
+import MainLayout from "src/Layouts/MainLayout.astro";
+
+export function getStaticPaths() {
+  return [{ params: { lang: "es" } }, { params: { lang: "en" } }];
+}
+
+const lang = Astro.params.lang as Language;
+const translations = { es, en };
+const t = translations[lang];
+---
+
+<MainLayout lang={lang} t={t}>
+  <Hero
+    title={t.sites.contact.hero.title}
+    description={t.sites.contact.hero.description}
+  />
+
+  <div class="mt-5 flex flex-col xl:flex-row gap-5">
+    <!-- Información de contacto -->
+    <div
+      class="overflow-hidden rounded-2xl border border-neutral-800 p-6 space-y-6 flex-1 bg-neutral-800/50 select-none"
+    >
+      <h2 class="text-xl font-semibold text-neutral-200">
+        {t.sites.contact.contactInfo.title}
+      </h2>
+
+      <div class="space-y-4">
+        {
+          t.sites.contact.contactInfo.options.map((option) => (
+            <div class="flex items-center gap-3">
+              <div class="w-8 h-8 bg-emerald-500/20 rounded-lg flex items-center justify-center">
+                <span class="text-emerald-400">{option.icon}</span>
+              </div>
+              <div>
+                <p class="text-sm text-neutral-400">{option.title}</p>
+                <a
+                  href={option.href}
+                  target={option.href.startsWith("http") ? "_blank" : undefined}
+                  class="text-neutral-200 hover:text-emerald-400 transition-colors"
+                >
+                  {option.description}
+                </a>
+              </div>
+            </div>
+          ))
+        }
+
+        <div class="flex items-center gap-3">
+          <div
+            class="w-8 h-8 bg-emerald-500/20 rounded-lg flex items-center justify-center"
+          >
+            <span class="text-emerald-400"
+              >{t.sites.contact.contactInfo.responseTime.icon}</span
+            >
+          </div>
+          <div>
+            <p class="text-sm text-neutral-400">
+              {t.sites.contact.contactInfo.responseTime.title}
+            </p>
+            <p class="text-neutral-200">
+              {t.sites.contact.contactInfo.responseTime.description}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="border-t border-neutral-700 pt-6">
+        <h3 class="text-lg font-medium text-neutral-200 mb-3">
+          {t.sites.contact.contactInfo.helpWith.title}
+        </h3>
+        <ul class="space-y-2 text-sm text-neutral-400">
+          {
+            t.sites.contact.contactInfo.helpWith.items.map((item) => (
+              <li>• {item}</li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+
+    <!-- Formulario de contacto -->
+    <div
+      class="overflow-hidden rounded-2xl border border-neutral-800 bg-neutral-800/50 p-6 flex-1"
+    >
+      <h2 class="text-xl font-semibold text-neutral-200 mb-6">
+        {t.sites.contact.form.title}
+      </h2>
+
+      <form id="contact-form" class="space-y-4">
+        <div>
+          <label
+            for="name"
+            class="block text-sm font-medium text-neutral-300 mb-2"
+          >
+            {t.sites.contact.form.fields.name.label}
+          </label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            required
+            class="w-full px-4 py-3 bg-neutral-900/60 border border-neutral-700 rounded-lg text-neutral-200 placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50"
+            placeholder={t.sites.contact.form.fields.name.placeholder}
+          />
+        </div>
+
+        <div>
+          <label
+            for="email"
+            class="block text-sm font-medium text-neutral-300 mb-2"
+          >
+            {t.sites.contact.form.fields.email.label}
+          </label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            required
+            class="w-full px-4 py-3 bg-neutral-900/60 border border-neutral-700 rounded-lg text-neutral-200 placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50"
+            placeholder={t.sites.contact.form.fields.email.placeholder}
+          />
+        </div>
+
+        <div>
+          <label
+            for="subject"
+            class="block text-sm font-medium text-neutral-300 mb-2"
+          >
+            {t.sites.contact.form.fields.subject.label}
+          </label>
+          <select
+            id="subject"
+            name="subject"
+            required
+            class="w-full px-4 py-3 bg-neutral-900/60 border border-neutral-700 rounded-lg text-neutral-200 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50"
+          >
+            {
+              t.sites.contact.form.fields.subject.options.map((option) => (
+                <option value={option.value}>{option.label}</option>
+              ))
+            }
+          </select>
+        </div>
+
+        <div>
+          <label
+            for="message"
+            class="block text-sm font-medium text-neutral-300 mb-2"
+          >
+            {t.sites.contact.form.fields.message.label}
+          </label>
+          <textarea
+            id="message"
+            name="message"
+            rows="6"
+            required
+            class="w-full px-4 py-3 bg-neutral-900/60 border border-neutral-700 rounded-lg text-neutral-200 placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50 resize-none"
+            placeholder={t.sites.contact.form.fields.message.placeholder}
+          ></textarea>
+        </div>
+
+        <button
+          type="submit"
+          class="cursor-pointer w-full px-6 py-3 bg-neutral-700 hover:bg-neutral-600 text-neutral-200 rounded transition-colors font-medium focus:outline-none focus:ring-2 focus:ring-emerald-500/50 disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          <span id="submit-text">{t.sites.contact.form.submit.default}</span>
+        </button>
+      </form>
+
+      <div id="form-status" class="mt-4 text-sm hidden"></div>
+    </div>
+  </div>
+
+  <!-- FAQ Section -->
+  <div
+    class="overflow-hidden rounded-2xl border border-neutral-800 bg-neutral-800/50 p-6 mt-5"
+  >
+    <h2 class="text-xl font-semibold text-neutral-200 mb-6">
+      {t.sites.contact.faq.title}
+    </h2>
+
+    <div class="space-y-4">
+      {
+        t.sites.contact.faq.items.map((faqItem) => (
+          <details class="group">
+            <summary class="cursor-pointer text-neutral-300 hover:text-neutral-100 font-medium">
+              {faqItem.question}
+            </summary>
+            <div class="mt-2 text-sm text-neutral-400 pl-4">
+              {faqItem.answer.split("\n").map((line) => (
+                <p>{line.startsWith("●") ? line : `● ${line}`}</p>
+              ))}
+            </div>
+          </details>
+        ))
+      }
+    </div>
+  </div>
+</MainLayout>
+
+<script define:vars={{ t, lang }}>
+  const form = document.getElementById("contact-form");
+  const submitText = document.getElementById("submit-text");
+  const formStatus = document.getElementById("form-status");
+  const submitButton = form.querySelector('button[type="submit"]');
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    // Cambiar estado del botón
+    submitButton.disabled = true;
+    submitText.textContent = t.sites.contact.form.submit.sending;
+    formStatus.classList.add("hidden");
+
+    // Simular envío (aquí integrarías con tu servicio de email)
+    try {
+      const formData = new FormData(form);
+      const data = Object.fromEntries(formData);
+
+      // Aquí irían los datos a tu servicio de email (Formspree, Netlify Forms, etc.)
+      console.log("Datos del formulario:", data);
+
+      // Simular delay
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+
+      // Mostrar éxito
+      formStatus.innerHTML = `<span class="text-emerald-400">${t.sites.contact.form.submit.success}</span>`;
+      formStatus.classList.remove("hidden");
+
+      // Limpiar formulario
+      form.reset();
+    } catch (error) {
+      // Mostrar error
+      formStatus.innerHTML = `<span class="text-red-400">${t.sites.contact.form.submit.error}</span>`;
+      formStatus.classList.remove("hidden");
+    } finally {
+      // Restaurar botón
+      submitButton.disabled = false;
+      submitText.textContent = t.sites.contact.form.submit.default;
+    }
+  });
+</script>

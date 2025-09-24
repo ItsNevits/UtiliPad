@@ -1,7 +1,7 @@
 export interface Tool {
   id: string;
-  name: string;
-  description: string;
+  name: string; // Este será el fallback si no hay traducción
+  description: string; // Este será el fallback si no hay traducción
   href: string;
   bagde: string;
   isAvailable: boolean;
@@ -10,9 +10,9 @@ export interface Tool {
 
 export interface Category {
   id: string;
-  name: string;
-  title: string;
-  description: string;
+  name: string; // Este será el fallback si no hay traducción
+  title: string; // Este será el fallback si no hay traducción
+  description: string; // Este será el fallback si no hay traducción
   tools: Tool[];
 }
 

@@ -1,6 +1,12 @@
 ---
 import AboutUsImage from "@assets/images/about-us.png";
 import Picture from "astro/components/Picture.astro";
+
+interface Props {
+  t: any;
+}
+
+const { t } = Astro.props;
 ---
 
 <div
@@ -11,16 +17,16 @@ import Picture from "astro/components/Picture.astro";
   >
     <Picture
       src={AboutUsImage}
-      alt="About Us"
+      alt={t.components.aboutUs.alt}
       class="object-cover object-top w-full h-full"
       formats={["avif", "webp", "png"]}
       loading={"lazy"}
     />
   </div>
   <div class="p-4 bg-neutral-800/50">
-    <h3 class="font-semibold">Quienes somos</h3>
+    <h3 class="font-semibold">{t.components.aboutUs.title}</h3>
     <p class="text-sm text-neutral-400 mt-1">
-      Solo nos gusta colaborar con la comunidad y crear cosas útiles.
+      {t.components.aboutUs.description}
     </p>
   </div>
 </div>

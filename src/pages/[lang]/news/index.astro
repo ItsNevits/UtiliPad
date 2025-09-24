@@ -1,18 +1,35 @@
 ---
+export const prerender = false;
 import Hero from "@components/shared/Hero.astro";
 import MainLayout from "src/Layouts/MainLayout.astro";
-
+import type { Language } from "../../../types/language.type";
 import { getCollection } from "astro:content";
-const news = await getCollection("news", ({ data }) => !data.draft);
+import es from "../../../i18n/es";
+import en from "../../../i18n/en";
+
+const lang = Astro.currentLocale as Language;
+const translations = { es, en };
+const t = translations[lang];
+
+// Obtener todas las noticias y filtrar por idioma
+const allNews = await getCollection("news", ({ data }) => !data.draft);
+
+// Filtrar por idioma - verificar tanto el formato "lang/filename" como "lang\\filename"
+const news = allNews.filter(({ id }) => {
+  // Normalizar las barras para manejar Windows y Unix
+  const normalizedId = id.replace(/\\/g, "/");
+  return normalizedId.startsWith(`${lang}/`);
+});
+
 const sortedNews = news.sort(
   (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
 );
 ---
 
-<MainLayout pathname="/news">
+<MainLayout lang={lang} t={t}>
   <Hero
-    title="Novedades"
-    description="Mantente al día con las últimas actualizaciones y nuevas herramientas que hemos añadido a UtiliPad."
+    title={t.sites.news.hero.title}
+    description={t.sites.news.hero.description}
   />
 
   <section class="mt-8">
@@ -25,7 +42,10 @@ const sortedNews = news.sort(
                 <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                   <div class="flex-1">
                     <h2 class="text-xl font-semibold text-white  transition-colors">
-                      <a href={`/news/${article.slug}`} class="block">
+                      <a
+                        href={`/${lang}/news/${article.id.replace(/\\/g, "/").replace(`${lang}/`, "")}`}
+                        class="block"
+                      >
                         {article.data.title}
                       </a>
                     </h2>
@@ -81,14 +101,14 @@ const sortedNews = news.sort(
                         d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
                       />
                     </svg>
-                    <span>Lectura completa</span>
+                    <span>{t.sites.news.completeReading}</span>
                   </div>
 
                   <a
-                    href={`/news/${article.slug}`}
+                    href={`/${lang}/news/${article.id.replace(/\\/g, "/").replace(`${lang}/`, "")}`}
                     class="cursor-pointer px-4 py-2 bg-neutral-700 hover:bg-neutral-600 text-neutral-200 rounded transition-colors inline-flex items-center gap-2 text-sm font-medium"
                   >
-                    Leer más
+                    {t.sites.news.readMore}
                     <svg
                       class="w-4 h-4"
                       fill="none"
@@ -126,11 +146,9 @@ const sortedNews = news.sort(
             </svg>
           </div>
           <h3 class="text-lg font-medium text-neutral-400 mb-2">
-            No hay noticias disponibles
+            {t.sites.news.noPosts}
           </h3>
-          <p class="text-neutral-500">
-            Pronto añadiremos nuevas actualizaciones sobre UtiliPad.
-          </p>
+          <p class="text-neutral-500">{t.sites.news.noPostsDesc}</p>
         </div>
       )
     }
@@ -141,8 +159,12 @@ const sortedNews = news.sort(
         <div class="mt-12 p-6 bg-neutral-900/20 rounded-2xl border border-neutral-800">
           <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
             <div class="text-center sm:text-left">
-              <h3 class="text-lg font-semibold text-white">Estadísticas</h3>
-              <p class="text-neutral-400">Resumen de noticias publicadas</p>
+              <h3 class="text-lg font-semibold text-white">
+                {t.sites.news.statisticsTitle}
+              </h3>
+              <p class="text-neutral-400">
+                {t.sites.news.statisticsDescription}
+              </p>
             </div>
 
             <div class="flex gap-6">
@@ -150,7 +172,9 @@ const sortedNews = news.sort(
                 <div class="text-2xl font-bold text-neutral-400">
                   {sortedNews.length}
                 </div>
-                <div class="text-sm text-neutral-400">Artículos</div>
+                <div class="text-sm text-neutral-400">
+                  {t.sites.news.articles}
+                </div>
               </div>
             </div>
           </div>
@@ -161,7 +185,7 @@ const sortedNews = news.sort(
 </MainLayout>
 
 <script>
-  import { animateSequenceItems } from "../../animate/timeline";
+  import { animateSequenceItems } from "../../../animate/timeline";
 
   // Múltiples listeners para asegurar la ejecución
   document.addEventListener("astro:page-load", () => {

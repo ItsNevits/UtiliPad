@@ -13,6 +13,14 @@ export default defineConfig({
     plugins: [tailwindcss()],
   },
 
+  i18n: {
+    defaultLocale: "es",
+    locales: ["es", "en"],
+    routing: {
+      prefixDefaultLocale: true,
+    },
+  },
+
   adapter: cloudflare({
     imageService: "compile",
   }),

@@ -1,6 +1,22 @@
 ---
 import { getCollection } from "astro:content";
-const news = await getCollection("news", ({ data }) => !data.draft);
+import type { Language } from "../../types/language.type";
+
+interface Props {
+  lang: Language;
+  t: any;
+}
+
+const { lang, t } = Astro.props;
+
+// Obtener todas las noticias y filtrar por idioma
+const allNews = await getCollection("news", ({ data }) => !data.draft);
+
+const news = allNews.filter(({ id }) => {
+  const normalizedId = id.replace(/\\/g, "/");
+  return normalizedId.startsWith(`${lang}/`);
+});
+
 const sortedNews = news.sort(
   (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
 );
@@ -12,11 +28,11 @@ const sortedNews = news.sort(
   <div
     class="p-4 border-b border-neutral-700 flex items-center justify-between"
   >
-    <h3 class="font-semibold">Novedades</h3>
+    <h3 class="font-semibold">{t.components.news.title}</h3>
     <a
       title="Ver todas las novedades"
       class="text-neutral-400 text-sm hover:underline"
-      href="/news">ver más</a
+      href={`/${lang}/news`}>{t.components.news.seeMore}</a
     >
   </div>
   <ul class="p-4 space-y-3 text-sm text-neutral-300">
@@ -25,7 +41,7 @@ const sortedNews = news.sort(
         .map((item) => (
           <li class="flex gap-2">
             <a
-              href={`/news/${item.slug}`}
+              href={`/${lang}/news/${item.id.replace(/\\/g, "/").replace(`${lang}/`, "")}`}
               class="cursor-pointer mt-1 hover:text-green-400 rounded-full flex gap-2 before:content-['●'] before:text-green-400"
             >
               {item.data.title}
