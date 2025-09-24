@@ -215,9 +215,9 @@ export default {
     sidebar: {
       title: "Categories",
       categories: [
-        { label: "Files", href: "/files" },
-        { label: "Images", href: "/images" },
-        { label: "Text", href: "/text" },
+        { label: "Files", href: "/category/files" },
+        { label: "Images", href: "/category/images" },
+        { label: "Text", href: "/category/text" },
         { label: "News", href: "/news" },
       ],
     },
