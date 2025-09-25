@@ -1,4 +1,3 @@
-import "dotenv/config";
 import { Resend } from "resend";
 
 export async function sendEmail({
