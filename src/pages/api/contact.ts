@@ -30,13 +30,6 @@ export const POST: APIRoute = async ({ request }) => {
     <p><strong>Asunto:</strong> ${safeSubject}</p>
     <p><strong>Mensaje:</strong><br/>${safeMessage}</p>`;
 
-  console.log("Enviando correo con los siguientes datos:", {
-    name: safeName,
-    email: safeEmail,
-    subject: safeSubject,
-    message: safeMessage,
-  });
-
   const result = await sendEmail({
     to: "bs.alvarado21@gmail.com",
     subject: `Contacto: ${safeSubject}`,
