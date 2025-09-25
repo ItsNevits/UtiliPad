@@ -211,35 +211,31 @@ const t = translations[lang];
 
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
-
-    // Cambiar estado del botón
     submitButton.disabled = true;
     submitText.textContent = t.sites.contact.form.submit.sending;
     formStatus.classList.add("hidden");
 
-    // Simular envío (aquí integrarías con tu servicio de email)
+    const formData = new FormData(form);
+    const data = Object.fromEntries(formData);
+
     try {
-      const formData = new FormData(form);
-      const data = Object.fromEntries(formData);
-
-      // Aquí irían los datos a tu servicio de email (Formspree, Netlify Forms, etc.)
-      console.log("Datos del formulario:", data);
-
-      // Simular delay
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-
-      // Mostrar éxito
-      formStatus.innerHTML = `<span class="text-emerald-400">${t.sites.contact.form.submit.success}</span>`;
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+      const result = await response.json();
+      if (result.success) {
+        formStatus.innerHTML = `<span class='text-emerald-400'>${t.sites.contact.form.submit.success}</span>`;
+        form.reset();
+      } else {
+        formStatus.innerHTML = `<span class='text-red-400'>${t.sites.contact.form.submit.error}<br>${result.error || ""}</span>`;
+      }
       formStatus.classList.remove("hidden");
-
-      // Limpiar formulario
-      form.reset();
     } catch (error) {
-      // Mostrar error
-      formStatus.innerHTML = `<span class="text-red-400">${t.sites.contact.form.submit.error}</span>`;
+      formStatus.innerHTML = `<span class='text-red-400'>${t.sites.contact.form.submit.error}</span>`;
       formStatus.classList.remove("hidden");
     } finally {
-      // Restaurar botón
       submitButton.disabled = false;
       submitText.textContent = t.sites.contact.form.submit.default;
     }
