@@ -353,6 +353,14 @@ export default {
       previousSize: "Previous size",
       compressSize: "Compressed size",
     },
+    imageConverter: {
+      dropFiles: "Drop files here or click to select",
+      filesUploaded: "Files uploaded",
+      totalFiles: "Total files",
+      DownloadAll: "Download All",
+      DownloadAsZip: "Download as ZIP",
+      Download: "Download",
+    },
   },
 
   // ===== TOOLS =====

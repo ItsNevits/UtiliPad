@@ -342,6 +342,14 @@ export default {
       previousSize: "Tamaño previo",
       compressSize: "Tamaño comprimido",
     },
+    imageConverter: {
+      dropFiles: "Suelta los archivos aquí o da clic para seleccionar",
+      filesUploaded: "Archivos subidos",
+      totalFiles: "Total de archivos",
+      DownloadAll: "Descargar todo",
+      DownloadAsZip: "Descargar como ZIP",
+      Download: "Descargar",
+    },
   },
 
   // ===== HERRAMIENTAS =====
