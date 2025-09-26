@@ -154,6 +154,7 @@ const { t } = Astro.props;
 <script>
   import JSONFormatter from "json-formatter-js";
   import { openModal } from "../../stores/modal";
+  import { fetchIncrementProcessCountByToolId } from "@utils/tools";
 
   let jsonMessages = {} as any;
 
@@ -295,6 +296,9 @@ const { t } = Astro.props;
       jsonOutputText.value = "";
       updateSizes(inputText, "");
       currentJsonData = null;
+    } finally {
+      // Incrementar el contador de uso del servicio
+      fetchIncrementProcessCountByToolId("json-formatter");
     }
   }
 
@@ -316,6 +320,9 @@ const { t } = Astro.props;
       updateSizes(inputText, minified);
     } catch (error) {
       showValidationStatus(false, (error as Error).message);
+    } finally {
+      // Incrementar el contador de uso del servicio
+      fetchIncrementProcessCountByToolId("json-formatter");
     }
   }
 

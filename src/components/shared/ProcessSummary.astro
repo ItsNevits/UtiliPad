@@ -1,15 +1,37 @@
 ---
+import { getToolById } from "@constants/tools";
 interface Props {
   t: any;
 }
 
+interface Process {
+  id: number;
+  process_name: string;
+  count: number;
+}
+
+interface ProcessItem {
+  success: boolean;
+  topProcesses: Process[];
+}
+
 const { t } = Astro.props;
 
-const process = [
-  { name: t.components.processSummary.items.filesConverted, progress: 62 },
-  { name: t.components.processSummary.items.imagesProcessed, progress: 35 },
-  { name: t.components.processSummary.items.urlDownloads, progress: 35 },
-];
+const process = [] as { name: string; progress: number }[];
+
+try {
+  const response = await fetch(`${Astro.site?.href}api/process-count/top`);
+  const data = (await response.json()) as ProcessItem;
+
+  if (data && data.success && data.topProcesses) {
+    data.topProcesses.forEach((p) => {
+      const tool = getToolById(p.process_name);
+      if (tool) {
+        process.push({ name: tool.name, progress: p.count });
+      }
+    });
+  }
+} catch (error) {}
 ---
 
 <div
@@ -20,6 +42,11 @@ const process = [
     <h3 class="font-semibold">{t.components.processSummary.title}</h3>
   </div>
   <ul class="p-4 space-y-4">
+    {
+      process.length === 0 && (
+        <li class="text-sm text-neutral-400">{t.general.noData}</li>
+      )
+    }
     {
       process.map((p, index) => (
         <li id={`process-${index}`} class="flex justify-between items-center">

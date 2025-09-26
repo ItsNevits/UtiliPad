@@ -76,6 +76,7 @@ const { t } = Astro.props;
 
   <script>
     import QRCode from "qr-code-styling";
+    import { fetchIncrementProcessCountByToolId } from "@utils/tools";
 
     const generateQrButton = document.getElementById(
       "generate-qr"
@@ -97,60 +98,69 @@ const { t } = Astro.props;
     let currentData: string = "";
 
     function GenerateQr() {
-      const qrCodeContainer = document.getElementById(
-        "qr-code"
-      ) as HTMLDivElement;
-      const qrInput = document.getElementById("qr-input") as HTMLInputElement;
+      try {
+        const qrCodeContainer = document.getElementById(
+          "qr-code"
+        ) as HTMLDivElement;
+        const qrInput = document.getElementById("qr-input") as HTMLInputElement;
 
-      const qrSection = document.getElementById("qr-section") as HTMLDivElement;
+        const qrSection = document.getElementById(
+          "qr-section"
+        ) as HTMLDivElement;
 
-      if (!qrInput.value.trim()) {
-        downloadButtons.classList.add("hidden");
-        qrSection.classList.add("hidden");
-        return;
+        if (!qrInput.value.trim()) {
+          downloadButtons.classList.add("hidden");
+          qrSection.classList.add("hidden");
+          return;
+        }
+
+        currentData = qrInput.value.trim();
+
+        // Calcular tamaño responsive basado en el contenedor
+        const containerWidth = qrCodeContainer.clientWidth;
+        const maxSize = Math.min(containerWidth - 48, 320); // 48px para padding, máximo 320px
+        const qrSize = Math.max(200, maxSize); // mínimo 200px
+
+        currentQr = new QRCode({
+          width: qrSize,
+          height: qrSize,
+          type: "svg",
+          data: currentData,
+          image: "",
+          dotsOptions: {
+            color: "#ffffff",
+            type: "rounded",
+          },
+          backgroundOptions: {
+            color: "#000000",
+          },
+          imageOptions: {
+            crossOrigin: "anonymous",
+            margin: 20,
+          },
+        });
+
+        qrCodeContainer.innerHTML = "";
+        currentQr.append(qrCodeContainer);
+
+        // Hacer el SVG responsive
+        const svgElement = qrCodeContainer.querySelector("svg");
+        if (svgElement) {
+          svgElement.style.width = "100%";
+          svgElement.style.height = "auto";
+          svgElement.style.maxWidth = "320px";
+          svgElement.setAttribute("viewBox", `0 0 ${qrSize} ${qrSize}`);
+        }
+
+        // Mostrar botones de descarga
+        downloadButtons.classList.remove("hidden");
+        qrSection.classList.remove("hidden");
+      } catch (error) {
+        console.error("Error generando el código QR:", error);
+      } finally {
+        // Incrementar el contador de uso del servicio
+        fetchIncrementProcessCountByToolId("qr-generator");
       }
-
-      currentData = qrInput.value.trim();
-
-      // Calcular tamaño responsive basado en el contenedor
-      const containerWidth = qrCodeContainer.clientWidth;
-      const maxSize = Math.min(containerWidth - 48, 320); // 48px para padding, máximo 320px
-      const qrSize = Math.max(200, maxSize); // mínimo 200px
-
-      currentQr = new QRCode({
-        width: qrSize,
-        height: qrSize,
-        type: "svg",
-        data: currentData,
-        image: "",
-        dotsOptions: {
-          color: "#ffffff",
-          type: "rounded",
-        },
-        backgroundOptions: {
-          color: "#000000",
-        },
-        imageOptions: {
-          crossOrigin: "anonymous",
-          margin: 20,
-        },
-      });
-
-      qrCodeContainer.innerHTML = "";
-      currentQr.append(qrCodeContainer);
-
-      // Hacer el SVG responsive
-      const svgElement = qrCodeContainer.querySelector("svg");
-      if (svgElement) {
-        svgElement.style.width = "100%";
-        svgElement.style.height = "auto";
-        svgElement.style.maxWidth = "320px";
-        svgElement.setAttribute("viewBox", `0 0 ${qrSize} ${qrSize}`);
-      }
-
-      // Mostrar botones de descarga
-      downloadButtons.classList.remove("hidden");
-      qrSection.classList.remove("hidden");
     }
 
     async function downloadQrAsPng() {

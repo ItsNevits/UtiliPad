@@ -85,6 +85,7 @@ const { t } = Astro.props;
 <astro-greet data-translations={JSON.stringify(t)}></astro-greet>
 
 <script>
+  import { fetchIncrementProcessCountByToolId } from "@utils/tools";
   import JSZip from "jszip";
 
   let jsonMessages = {} as any;
@@ -302,11 +303,12 @@ const { t } = Astro.props;
       URL.revokeObjectURL(url);
     } catch (error) {
       console.error("Error al comprimir archivos:", error);
-      alert("Error al comprimir los archivos. Inténtalo de nuevo.");
     } finally {
       // Ocultar overlay
       overlay.classList.add("hidden");
       overlay.classList.remove("flex");
+      // Incrementar el contador de uso del servicio
+      fetchIncrementProcessCountByToolId("zip-compressor");
     }
   }
 

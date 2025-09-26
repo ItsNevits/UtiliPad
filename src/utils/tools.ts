@@ -28,6 +28,31 @@ export const getTranslatedTools = (categoryId: string, translations: any) => {
 };
 
 /**
+ * Llama al API de process-count para una herramienta específica
+ */
+export const fetchIncrementProcessCountByToolId = async (toolId: string) => {
+  const response = await fetch(`/api/process-count`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ process_name: toolId }),
+  });
+  if (!response.ok)
+    throw new Error("Error al incrementar el conteo de procesos");
+  return await response.json();
+};
+
+/**
+ * Llama al API de process-count/top para obtener el ranking de herramientas
+ */
+export const fetchTopProcessCounts = async () => {
+  const response = await fetch(`/api/process-count/top`);
+  if (!response.ok) throw new Error("Error al obtener el ranking de procesos");
+  return await response.json();
+};
+
+/**
  * Obtiene las categorías con traducciones aplicadas
  */
 export const getTranslatedCategories = (translations: any) => {

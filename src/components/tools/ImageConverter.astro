@@ -92,6 +92,8 @@ const { t } = Astro.props;
 <astro-greet data-translations={JSON.stringify(t.general)}></astro-greet>
 
 <script>
+  import { fetchIncrementProcessCountByToolId } from "@utils/tools";
+
   // Cambia todos los selects de formato de imagen al valor global
   (window as any).changeAllImageFormats = function (format: string) {
     if (!format) return;
@@ -317,6 +319,8 @@ const { t } = Astro.props;
       if (overlay) {
         overlay.classList.add("hidden");
         overlay.classList.remove("flex");
+
+        fetchIncrementProcessCountByToolId("image-converter");
       }
     }
   };
@@ -404,6 +408,8 @@ const { t } = Astro.props;
       if (overlay) {
         overlay.classList.add("hidden");
         overlay.classList.remove("flex");
+
+        fetchIncrementProcessCountByToolId("image-converter");
       }
     }
   }

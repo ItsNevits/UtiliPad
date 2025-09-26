@@ -7,6 +7,8 @@ import vercel from "@astrojs/vercel/serverless";
 
 import sitemap from "@astrojs/sitemap";
 
+import db from "@astrojs/db";
+
 // https://astro.build/config
 export default defineConfig({
   vite: {
@@ -29,5 +31,5 @@ export default defineConfig({
   }),
 
   site: "https://utilipad.com",
-  integrations: [sitemap()],
+  integrations: [sitemap(), db()],
 });
