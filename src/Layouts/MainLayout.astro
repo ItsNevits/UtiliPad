@@ -6,6 +6,7 @@ import Header from "@components/Header.astro";
 import Footer from "@components/Footer.astro";
 import Modal from "@components/shared/Modal.astro";
 import type { Language } from "../types/language.type";
+import Analytics from "@vercel/analytics/astro";
 
 interface Props {
   lang: Language;
@@ -113,6 +114,7 @@ const { lang, t } = Astro.props;
       crossorigin="anonymous"></script>
   </head>
   <body class="bg-primary text-priamry-text">
+    <Analytics />
     <Header lang={lang} t={t} />
     <main class="mx-auto max-w-7xl px-4 py-8 grid grid-cols-12 gap-6">
       <SideBar lang={lang} t={t} />
