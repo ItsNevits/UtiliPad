@@ -47,7 +47,7 @@
       "name": "Formateador JSON",
       "short_name": "JSON",
       "description": "Formatea y valida código JSON",
-      "url": "/text?tool=json-formatter",
+      "url": "/category/text?tool=json-formatter",
       "icons": [
         {
           "src": "/favicon.svg",
@@ -60,7 +60,7 @@
       "name": "Contador de Palabras",
       "short_name": "Contador",
       "description": "Analiza y cuenta palabras, caracteres",
-      "url": "/text?tool=text-analyzer",
+      "url": "/category/text?tool=text-analyzer",
       "icons": [
         {
           "src": "/favicon.svg",
