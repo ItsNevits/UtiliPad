@@ -295,7 +295,7 @@ export default {
       current: "Español",
     },
     aboutUs: {
-      title: "Quienes soy",
+      title: "Sobre mí",
       description:
         "Solo me gusta colaborar con la comunidad y crear cosas útiles.",
       alt: "Sobre mí",
