@@ -3,7 +3,7 @@ import { defineConfig } from "astro/config";
 
 import tailwindcss from "@tailwindcss/vite";
 
-import cloudflare from "@astrojs/cloudflare";
+import vercel from "@astrojs/vercel/serverless";
 
 import sitemap from "@astrojs/sitemap";
 
@@ -21,8 +21,11 @@ export default defineConfig({
     },
   },
 
-  adapter: cloudflare({
-    imageService: "compile",
+  output: "server",
+  adapter: vercel({
+    webAnalytics: {
+      enabled: true,
+    },
   }),
 
   site: "https://utilipad.com/",
