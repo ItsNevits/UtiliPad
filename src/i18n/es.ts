@@ -5,6 +5,50 @@ export default {
     en: "Inglés",
   },
 
+  // ===== GENERAL =====
+  general: {
+    or: "o",
+    and: "y",
+    close: "Cerrar",
+    cancel: "Cancelar",
+    copy: "Copiar",
+    copied: "Copiado",
+    paste: "Pegar",
+    clear: "Limpiar",
+    confirm: "Confirmar",
+    download: "Descargar",
+    downloadZip: "Descargar todo como ZIP",
+    delete: "Eliminar",
+    back: "Volver",
+    home: "Inicio",
+    accept: "Aceptar",
+    reject: "Rechazar",
+    select: "Seleccionar",
+    selectFile: "Seleccionar archivo",
+    dragAndDrop: "Arrastra y suelta los archivos aquí",
+    browseFiles: "Explorar archivos",
+    uploadFiles: "Subir archivos",
+    processing: "Procesando...",
+    loading: "Cargando...",
+    noData: "No hay datos disponibles",
+    viewOnGitHub: "Ver en GitHub",
+    openInNewTab: "Abrir en una nueva pestaña",
+    learnMore: "Aprender más",
+    moreInfo: "Más información",
+    comingSoon: "Próximamente",
+    allTools: "Todas las herramientas",
+    allCategories: "Todas las categorías",
+    selectCategory: "Selecciona una categoría",
+    selectTool: "Selecciona una herramienta",
+    viewAll: "Ver todo",
+    seeMore: "Ver más",
+    seeLess: "Ver menos",
+    searchPlaceholder: "Busca una herramienta…",
+    noResults: "No se encontraron resultados",
+    format: "Formato",
+    all: "Todos",
+  },
+
   // ===== SEO =====
   seo: {
     title: "UtiliPad — Herramientas web gratis",
@@ -342,6 +386,14 @@ export default {
       previousSize: "Tamaño previo",
       compressSize: "Tamaño comprimido",
     },
+    imageConverter: {
+      dropFiles: "Suelta los archivos aquí o da clic para seleccionar",
+      filesUploaded: "Archivos subidos",
+      totalFiles: "Total de archivos",
+      DownloadAll: "Descargar todo",
+      DownloadAsZip: "Descargar como ZIP",
+      Download: "Descargar",
+    },
   },
 
   // ===== HERRAMIENTAS =====
@@ -383,10 +435,6 @@ export default {
         name: "Recortar Imagen",
         description: "Recorta partes específicas de la imagen",
       },
-      "image-format": {
-        name: "Convertir Formato",
-        description: "Convierte entre JPG, PNG, WebP, etc.",
-      },
       "json-formatter": {
         name: "Formateador JSON",
         description: "Formatea, valida y embellece código JSON",
@@ -398,6 +446,10 @@ export default {
       "qr-generator": {
         name: "Generador de QR",
         description: "Genera códigos QR para URLs y texto",
+      },
+      "image-converter": {
+        name: "Convertidor de imágenes",
+        description: "Convierte entre JPG, PNG, WebP, etc.",
       },
     },
     badges: {

@@ -5,6 +5,49 @@ export default {
     en: "English",
   },
 
+  general: {
+    or: "or",
+    and: "and",
+    close: "Close",
+    cancel: "Cancel",
+    copy: "Copy",
+    copied: "Copied",
+    paste: "Paste",
+    clear: "Clear",
+    confirm: "Confirm",
+    download: "Download",
+    downloadZip: "Download as ZIP",
+    delete: "Delete",
+    back: "Back",
+    home: "Home",
+    accept: "Accept",
+    reject: "Reject",
+    select: "Select",
+    selectFile: "Select file",
+    dragAndDrop: "Drag and drop files here",
+    browseFiles: "Browse files",
+    uploadFiles: "Upload files",
+    processing: "Processing...",
+    loading: "Loading...",
+    noData: "No data available",
+    viewOnGitHub: "View on GitHub",
+    openInNewTab: "Open in new tab",
+    learnMore: "Learn more",
+    moreInfo: "More info",
+    comingSoon: "Coming soon",
+    allTools: "All tools",
+    allCategories: "All categories",
+    selectCategory: "Select a category",
+    selectTool: "Select a tool",
+    viewAll: "View all",
+    seeMore: "See more",
+    seeLess: "See less",
+    searchPlaceholder: "Search for a tool…",
+    noResults: "No results found",
+    format: "Format",
+    all: "All",
+  },
+
   // ===== SEO =====
   seo: {
     title: "UtiliPad — Free Web Tools",
@@ -228,10 +271,6 @@ export default {
           "Convert, edit, and automate your files without installing anything. Drag and drop or explore the most used tools.",
       },
     },
-    indexNews: {
-      title: "News",
-      description: "Stay up to date with the latest updates and improvements.",
-    },
     header: {
       title: "Home",
       searchPlaceholder: "Search for a tool…",
@@ -353,6 +392,14 @@ export default {
       previousSize: "Previous size",
       compressSize: "Compressed size",
     },
+    imageConverter: {
+      dropFiles: "Drop files here or click to select",
+      filesUploaded: "Files uploaded",
+      totalFiles: "Total files",
+      DownloadAll: "Download All",
+      DownloadAsZip: "Download as ZIP",
+      Download: "Download",
+    },
   },
 
   // ===== TOOLS =====
@@ -394,10 +441,6 @@ export default {
         name: "Crop Image",
         description: "Crop specific parts of the image",
       },
-      "image-format": {
-        name: "Convert Format",
-        description: "Convert between JPG, PNG, WebP, etc.",
-      },
       "json-formatter": {
         name: "JSON Formatter",
         description: "Format, validate and beautify JSON code",
@@ -409,6 +452,10 @@ export default {
       "qr-generator": {
         name: "QR Generator",
         description: "Generate QR codes for URLs and text",
+      },
+      "image-converter": {
+        name: "Image Converter",
+        description: "Convert between JPG, PNG, WebP, etc.",
       },
     },
     badges: {

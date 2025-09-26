@@ -16,6 +16,7 @@ import TextAnalyzer from "@components/tools/TextAnalyzer.astro";
 import JsonFormatter from "@components/tools/JsonFormatter.astro";
 import ZipCompressor from "@components/tools/ZipCompressor.astro";
 import QrGenerator from "@components/tools/QrGenerator.astro";
+import ImageConverter from "@components/tools/ImageConverter.astro";
 
 // Mapeo de componentes
 const COMPONENT_MAP = {
@@ -26,6 +27,9 @@ const COMPONENT_MAP = {
   TextAnalyzer: TextAnalyzer,
   JsonFormatter: JsonFormatter,
   QrGenerator: QrGenerator,
+
+  // Images Components
+  ImageConverter: ImageConverter,
 };
 
 // Obtener los parámetros de la URL
