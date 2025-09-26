@@ -78,7 +78,7 @@ export const TOOLS_CATEGORIES: Category[] = [
       },
       {
         id: "image-converter",
-        name: "Convertir Formato",
+        name: "Convertidor de imágenes",
         description: "Convierte entre JPG, PNG, WebP, etc.",
         href: "/category/images?tool=image-converter",
         bagde: "Nuevo",

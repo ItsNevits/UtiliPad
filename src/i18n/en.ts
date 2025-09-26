@@ -441,10 +441,6 @@ export default {
         name: "Crop Image",
         description: "Crop specific parts of the image",
       },
-      "image-format": {
-        name: "Convert Format",
-        description: "Convert between JPG, PNG, WebP, etc.",
-      },
       "json-formatter": {
         name: "JSON Formatter",
         description: "Format, validate and beautify JSON code",
@@ -456,6 +452,10 @@ export default {
       "qr-generator": {
         name: "QR Generator",
         description: "Generate QR codes for URLs and text",
+      },
+      "image-converter": {
+        name: "Image Converter",
+        description: "Convert between JPG, PNG, WebP, etc.",
       },
     },
     badges: {
