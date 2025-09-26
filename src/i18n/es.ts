@@ -251,10 +251,10 @@ export default {
       current: "Español",
     },
     aboutUs: {
-      title: "Quienes somos",
+      title: "Quienes soy",
       description:
-        "Solo nos gusta colaborar con la comunidad y crear cosas útiles.",
-      alt: "Acerca de nosotros",
+        "Solo me gusta colaborar con la comunidad y crear cosas útiles.",
+      alt: "Sobre mí",
     },
     processSummary: {
       title: "Procesos realizados",

@@ -262,10 +262,10 @@ export default {
       current: "English",
     },
     aboutUs: {
-      title: "About Us",
+      title: "About me",
       description:
-        "We just like to collaborate with the community and create useful things.",
-      alt: "About us",
+        "I just like to collaborate with the community and create useful things.",
+      alt: "About me",
     },
     processSummary: {
       title: "Processed Tasks",
