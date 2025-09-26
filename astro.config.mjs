@@ -28,6 +28,6 @@ export default defineConfig({
     },
   }),
 
-  site: "https://utilipad.com/",
+  site: "https://utilipad.com",
   integrations: [sitemap()],
 });
