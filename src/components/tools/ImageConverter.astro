@@ -335,12 +335,29 @@ const { t } = Astro.props;
 
     try {
       // Obtener formatos seleccionados para cada archivo
+      let filesWhitoutFormat = [] as string[];
+
       const formats = currentFiles.map((_, idx) => {
         const select = document.getElementById(
           `format-select-${idx}`
         ) as HTMLSelectElement | null;
-        return select && select.value ? select.value : "jpeg";
+
+        if (select && !select.value) {
+          filesWhitoutFormat[idx] = currentFiles[idx].name;
+        }
+
+        return select && select.value ? select.value : "";
       });
+
+      if (filesWhitoutFormat.length > 0) {
+        alert(
+          (jsonMessages.selectFormatForAll ||
+            "Selecciona un formato para los siguientes archivos:") +
+            "\n- " +
+            filesWhitoutFormat.join("\n- ")
+        );
+        return;
+      }
 
       const formData = new FormData();
       currentFiles.forEach((file, idx) => {
