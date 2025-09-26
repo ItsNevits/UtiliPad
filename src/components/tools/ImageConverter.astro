@@ -12,7 +12,7 @@ const { t } = Astro.props;
 <div class="bg-neutral-800/50 rounded-xl p-6 select-none mb-5">
   <div
     id="drop-zone"
-    class="border border-neutral-700 p-5 rounded-lg flex flex-col items-center justify-center cursor-pointer"
+    class="border border-neutral-700 p-5 rounded flex flex-col items-center justify-center cursor-pointer"
   >
     <Image
       class="text-neutral-400 mb-2 svg-color-neutral-400 opacity-40"
@@ -37,8 +37,16 @@ const { t } = Astro.props;
 
 <div
   id="files-uploaded"
-  class="bg-neutral-800/50 rounded-xl p-6 select-none mb-5 hidden"
+  class="bg-neutral-800/50 rounded-xl p-6 select-none mb-5 hidden relative"
 >
+  <div
+    id="overlay-image-files"
+    class="absolute top-0 left-0 w-full h-full bg-gray-900/50 items-center justify-center z-10 hidden"
+  >
+    <p class="text-lg md:text-xl font-bold leading-tight animate-bounce">
+      {t.components.imageConverter.processInfo || "Processing..."}
+    </p>
+  </div>
   <div class="flex items-end justify-between mb-4">
     <h2 class="text-xl md:text-2xl font-bold leading-tight">
       {t.components.imageConverter.filesUploaded}
@@ -53,34 +61,24 @@ const { t } = Astro.props;
     id="content-files-uploaded"
     class="relative flex flex-col gap-4 max-h-100 overflow-y-auto mb-4"
   >
-    <div
-      id="overlay-image-files"
-      class="absolute hidden z-10 top-0 left-0 bg-neutral-700/80 w-full h-full rounded-2xl justify-center items-center"
-    >
-      <p class="text-lg md:text-xl font-bold leading-tight animate-bounce">
-        {t.components.imageConverter.processInfo}
-      </p>
-    </div>
   </div>
   <div class="flex flex-wrap items-center justify-between gap-2">
     <button
       id="compress-and-download"
       class="cursor-pointer mt-5 px-4 py-2 bg-neutral-700 hover:bg-neutral-600 text-neutral-200 rounded transition-colors text-sm"
     >
-      {t.components.imageConverter.DownloadAsZip}
+      {t.general.downloadZip}
     </button>
 
     <div class="flex items-center gap-2">
-      <label for="all-images">Todo:</label>
+      <label for="all-images">{t.general.all}:</label>
       <select
         name="all-images"
         id="all-images"
-        class="cursor-pointer px-3 py-1 bg-neutral-900/60 border border-neutral-700 rounded-lg text-neutral-200 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50"
+        class="cursor-pointer px-3 py-1 bg-neutral-900/60 border border-neutral-700 rounded text-neutral-200 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50"
         onchange="window.changeAllImageFormats(this.value)"
       >
-        <option value="" selected disabled
-          >{t.components.imageConverter.selectFormat || "Select"}</option
-        >
+        <option value="" selected disabled>{t.general.select}</option>
         <option value="jpeg">JPEG</option>
         <option value="png">PNG</option>
         <option value="webp">WEBP</option>
@@ -91,7 +89,7 @@ const { t } = Astro.props;
   </div>
 </div>
 
-<astro-greet data-translations={JSON.stringify(t)}></astro-greet>
+<astro-greet data-translations={JSON.stringify(t.general)}></astro-greet>
 
 <script>
   // Cambia todos los selects de formato de imagen al valor global
@@ -105,24 +103,14 @@ const { t } = Astro.props;
     });
   };
 
-  interface ImageConverterMessages {
-    dropFiles?: string;
-    filesUploaded?: string;
-    totalFiles?: string;
-    processInfo?: string;
-    selectFormat?: string;
-    Download?: string;
-    delete?: string;
-    downloadNotImplemented?: string;
-    downloadAllNotImplemented?: string;
-  }
+  const outputFormats = ["jpg", "jpeg", "png", "webp", "tiff", "avif"];
 
-  let jsonMessages: ImageConverterMessages = {};
+  let jsonMessages = {} as any;
 
   class AstroGreet extends HTMLElement {
     connectedCallback() {
       const t = JSON.parse(this.getAttribute("data-translations") || "{}");
-      jsonMessages = t.components.imageConverter || {};
+      jsonMessages = t || {};
     }
   }
 
@@ -196,6 +184,10 @@ const { t } = Astro.props;
     contentFilesUploaded.innerHTML = "";
     currentFiles.forEach((file: File, index: number) => {
       const fileType = file.name.split(".").pop() || "file";
+
+      // Solo permitir tipos de imagen comunes
+      if (outputFormats.includes(fileType.toLowerCase()) === false) return;
+
       const fileName = file.name;
       const fileSize = (file.size / 1024).toFixed(2) + " KB";
       const newElement = generateElement(fileType, fileName, fileSize, index);
@@ -225,28 +217,35 @@ const { t } = Astro.props;
     size: string,
     index: number
   ): string {
-    const outputFormats = ["jpeg", "png", "webp", "tiff", "avif"];
     return `
-      <div class="bg-neutral-900/40 rounded-2xl border border-neutral-800 p-4 flex flex-col md:flex-row md:items-center gap-4 justify-between">
-        <div class="flex items-center gap-4">
-          <div class="w-10 min-w-10 h-10 min-h-10 bg-neutral-700/50 rounded-lg flex items-center justify-center">
-            <span class="text-sm text-neutral-400">${type.toUpperCase()}</span>
+      <div class="bg-neutral-900/40 rounded-2xl border border-neutral-800 p-4 flex flex-col gap-4 justify-between">
+        <div class="flex flex-col md:flex-row md:items-center gap-4 justify-between flex-wrap">
+          <div class="flex items-center gap-4 flex-1 min-w-0">
+            <div class="w-10 min-w-10 h-10 min-h-10 bg-neutral-700/50 rounded flex items-center justify-center">
+              <span class="text-sm text-neutral-400">${type.toUpperCase()}</span>
+            </div>
+            <div class="min-w-0">
+              <p class="font-medium truncate max-w-[180px] md:max-w-[300px] lg:max-w-[400px] xl:max-w-[600px]" title="${name}">${name}</p>
+              <p class="text-sm text-neutral-400">${size}</p>
+            </div>
           </div>
-          <div>
-            <p style="word-break: break-word;overflow-wrap: anywhere;" class="font-medium">${name}</p>
-            <p class="text-sm text-neutral-400">${size}</p>
+          <div class="flex items-center gap-2">
+            <label for="format-select-${index}">${jsonMessages.format}:</label>
+            <select class="cursor-pointer px-3 py-1 bg-neutral-900/60 border border-neutral-700 rounded text-neutral-200 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50 w-full md:w-auto" id="format-select-${index}">
+              <option value="" disabled selected>${jsonMessages.select}</option>
+              ${outputFormats
+                .filter((f) => f !== "jpg")
+                .map((f) => `<option value="${f}">${f.toUpperCase()}</option>`)
+                .join("")}
+            </select>
           </div>
         </div>
-        <div class="flex items-center gap-3 flex-wrap justify-end">
-          <select class="cursor-pointer px-3 py-1 bg-neutral-900/60 border border-neutral-700 rounded-lg text-neutral-200 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50" id="format-select-${index}">
-            <option value="" disabled selected>${jsonMessages.selectFormat || "Select"}</option>
-            ${outputFormats.map((f) => `<option value="${f}">${f.toUpperCase()}</option>`).join("")}
-          </select>
-          <button class="cursor-pointer px-3 py-1 bg-neutral-700 hover:bg-neutral-600 text-neutral-200 rounded transition-colors text-sm" onclick="window.downloadImage(${index})">
-            ${jsonMessages.Download || "Download"}
+        <div class="flex items-center gap-3 flex-wrap w-full md:w-auto">
+          <button class="cursor-pointer min-w-25 px-3 py-1 bg-neutral-700 hover:bg-neutral-600 text-neutral-200 rounded transition-colors text-sm w-full md:w-auto" onclick="window.downloadImage(${index})">
+            ${jsonMessages.download}
           </button>
-          <button title="${jsonMessages.delete || "Delete"}" class="cursor-pointer px-3 py-1 bg-red-600/20 hover:bg-red-600/30 text-red-400 rounded-lg transition-colors text-sm" onclick="window.removeFileUploaded(${index})">
-            ${jsonMessages.delete || "Delete"}
+          <button title="${jsonMessages.delete}" class="cursor-pointer min-w-25 px-3 py-1 bg-red-600/20 hover:bg-red-600/30 text-red-400 rounded transition-colors text-sm w-full md:w-auto" onclick="window.removeFileUploaded(${index})">
+            ${jsonMessages.delete}
           </button>
         </div>
       </div>
@@ -277,6 +276,11 @@ const { t } = Astro.props;
     }
 
     try {
+      if (overlay) {
+        overlay.classList.remove("hidden");
+        overlay.classList.add("flex");
+      }
+
       const formData = new FormData();
       formData.append("file", file);
       formData.append("format", format);
@@ -310,6 +314,10 @@ const { t } = Astro.props;
       );
     } finally {
       // Ocultar overlay o manejar estado si es necesario
+      if (overlay) {
+        overlay.classList.add("hidden");
+        overlay.classList.remove("flex");
+      }
     }
   };
 
@@ -342,6 +350,11 @@ const { t } = Astro.props;
 
       formData.append("asZip", "true");
 
+      if (overlay) {
+        overlay.classList.remove("hidden");
+        overlay.classList.add("flex");
+      }
+
       const response = await fetch("/api/images/convert", {
         method: "POST",
         body: formData,
@@ -371,6 +384,10 @@ const { t } = Astro.props;
       );
     } finally {
       // Ocultar overlay o manejar estado si es necesario
+      if (overlay) {
+        overlay.classList.add("hidden");
+        overlay.classList.remove("flex");
+      }
     }
   }
 </script>
