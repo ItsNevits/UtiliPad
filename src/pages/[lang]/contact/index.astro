@@ -265,7 +265,6 @@ const FagQuestions = getTranslation(lang, "pages.contact.faq.items");
   class AstroGreet extends HTMLElement {
     connectedCallback() {
       const t = JSON.parse(this.getAttribute("data-translations") || "{}");
-      console.log(t);
       jsonMessages = t || {};
     }
   }

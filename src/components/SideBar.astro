@@ -5,17 +5,12 @@ import { getTranslation } from "@i18n/index";
 const lang = Astro.params.lang as Language;
 const arrayCategories = getTranslation(lang, "components.sidebar.categories");
 
-console.log(arrayCategories);
-
 const categories =
   Array.isArray(arrayCategories) &&
   arrayCategories.map((cat: any) => ({
     ...cat,
     href: `/${lang}${cat.href}`,
   }));
-
-console.log(lang);
-console.log(categories);
 
 // Obtener la URL actual para marcar la categoría activa
 const currentPath = Astro.url.pathname;
