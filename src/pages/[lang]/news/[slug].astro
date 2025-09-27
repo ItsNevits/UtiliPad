@@ -1,16 +1,14 @@
 ---
 export const prerender = true;
-import { getCollection } from "astro:content";
 import Hero from "@components/shared/Hero.astro";
 import MainLayout from "src/Layouts/MainLayout.astro";
 import BreadCrumbs from "@components/shared/BreadCrumbs.astro";
-import type { Language } from "../../../types/language.type";
-import es from "../../../i18n/es";
-import en from "../../../i18n/en";
 
-const lang = Astro.currentLocale as Language;
-const translations = { es, en };
-const t = translations[lang];
+import { getCollection } from "astro:content";
+import type { Language } from "@@types/language.type";
+import { getTranslation } from "@i18n/index";
+
+const lang = Astro.params.lang as Language;
 
 export async function getStaticPaths() {
   const news = await getCollection("news");
@@ -40,10 +38,13 @@ const { entry } = Astro.props;
 const { Content } = await entry.render();
 ---
 
-<MainLayout lang={lang} t={t}>
+<MainLayout>
   <BreadCrumbs
     links={[
-      { href: `/${lang}/news`, name: "Noticias" },
+      {
+        href: `/${lang}/news`,
+        name: getTranslation(lang, "common.breadCrumbsOptions.news"),
+      },
       {
         href: `/${lang}/news/${entry.id.replace(/\\/g, "/").replace(`${lang}/`, "")}`,
         name: entry.data.title,

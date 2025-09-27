@@ -1,17 +1,19 @@
 ---
 import { getTranslatedTools } from "../../utils/tools";
-import type { Language } from "../../types/language.type";
+
+import type { Language } from "@@types/language.type";
+import { getTranslation } from "@i18n/index";
+
+const lang = Astro.params.lang as Language;
 
 interface Props {
   categoryId?: string;
-  lang: Language;
-  t: any;
 }
 
-const { categoryId = "all", lang, t: translations } = Astro.props;
+const { categoryId = "all" } = Astro.props;
 
 // Obtener herramientas con traducciones aplicadas
-const translatedTools = getTranslatedTools(categoryId, translations);
+const translatedTools = getTranslatedTools(categoryId, lang);
 
 // Mapear las herramientas al formato esperado por el HTML
 const tools = translatedTools.map((tool) => ({
@@ -30,7 +32,7 @@ const tools = translatedTools.map((tool) => ({
     tools.map((tool) => (
       <div
         id={tool.title}
-        class="sequence-item-tool opacity-0 flex flex-col justify-between group rounded-2xl border border-neutral-800 bg-neutral-800/50 p-4 hover:border-emerald-600/60 hover:shadow-[0_0_0_1px_rgba(16,185,129,0.25)] transition"
+        class="sequence-item-tool flex flex-col justify-between group rounded-2xl border border-neutral-800 bg-neutral-800/50 p-4 hover:border-emerald-600/60 hover:shadow-[0_0_0_1px_rgba(16,185,129,0.25)] transition"
       >
         <div class="flex items-start justify-between gap-2">
           <h2 class="font-semibold leading-snug">{tool.title}</h2>
@@ -52,43 +54,20 @@ const tools = translatedTools.map((tool) => ({
               tool.isAvailable && "hover:underline",
             ]}
           >
-            {translations.tools.actions.open}
+            {getTranslation(lang, "tools.actions.open")}
           </a>
           <span
             class="shortcut text-xs text-neutral-400 hidden xl:inline"
-            data-mac-text={translations.tools.actions.searchShortcut}
-            data-win-text={translations.tools.actions.searchShortcutWin}
+            data-mac-text={getTranslation(lang, "tools.actions.searchShortcut")}
+            data-win-text={getTranslatedTools(
+              lang,
+              "tools.actions.searchShortcutWin"
+            )}
           >
-            {translations.tools.actions.searchShortcut}
+            {getTranslation(lang, "tools.actions.searchShortcut")}
           </span>
         </div>
       </div>
     ))
   }
 </div>
-
-<script>
-  import { animateSequenceItems } from "../../animate/timeline";
-
-  const initWindowsOrMac = () => {
-    const isMac = navigator.userAgent.indexOf("Mac OS X") != -1;
-    document.querySelectorAll(".shortcut").forEach((el) => {
-      const macText = el.getAttribute("data-mac-text") || "⌘K to search";
-      const winText = el.getAttribute("data-win-text") || "Ctrl+K to search";
-      el.textContent = isMac ? macText : winText;
-    });
-  };
-
-  const initSequenceAnimation = () => {
-    animateSequenceItems(".sequence-item-tool");
-  };
-
-  const init = () => {
-    initSequenceAnimation();
-    initWindowsOrMac();
-  };
-
-  // Múltiples listeners para asegurar la ejecución
-  document.addEventListener("astro:page-load", init);
-  document.addEventListener("DOMContentLoaded", init);
-</script>

@@ -1,4 +1,9 @@
 ---
+import type { Language } from "@@types/language.type";
+import { getTranslation } from "@i18n/index";
+
+const lang = Astro.params.lang as Language;
+
 interface BreadcrumbLink {
   href: string;
   name: string;
@@ -14,7 +19,10 @@ const { links } = Astro.props;
 
 <nav class="mb-6 select-none" aria-label="Breadcrumb">
   <ol class="flex items-center space-x-2 text-sm text-neutral-400">
-    <li><a href="/" class="hover:text-emerald-400">Inicio</a></li>
+    <li>
+      <a href="/" class="hover:text-emerald-400"
+        >{getTranslation(lang, "common.breadCrumbsOptions.home")}</a>
+    </li>
     {
       links.map(({ href, name, isActive }, index) => (
         <li class="flex items-center">

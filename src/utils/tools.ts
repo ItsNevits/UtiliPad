@@ -1,9 +1,10 @@
 import { TOOLS_CATEGORIES, type Tool } from "@constants/tools";
+import { getTranslation } from "@i18n/index";
 
 /**
  * Obtiene las herramientas con traducciones aplicadas
  */
-export const getTranslatedTools = (categoryId: string, translations: any) => {
+export const getTranslatedTools = (categoryId: string, lang: string) => {
   let tools: Tool[];
 
   if (categoryId === "all") {
@@ -15,14 +16,20 @@ export const getTranslatedTools = (categoryId: string, translations: any) => {
     tools = category ? category.tools : [];
   }
 
+  const itemsRaw = getTranslation(lang, "tools.items");
+  const badgesRaw = getTranslation(lang, "tools.badges");
+  const items: Record<string, { name: string; description: string }> =
+    typeof itemsRaw === "object" && itemsRaw !== null ? itemsRaw : {};
+  const badges: Record<string, string> =
+    typeof badgesRaw === "object" && badgesRaw !== null ? badgesRaw : {};
+
   // Aplicar traducciones
   return tools
     .map((tool) => ({
       ...tool,
-      name: translations.tools.items[tool.id]?.name || tool.name,
-      description:
-        translations.tools.items[tool.id]?.description || tool.description,
-      translatedBadge: translations.tools.badges[tool.bagde] || tool.bagde,
+      name: items[tool.id]?.name || tool.name,
+      description: items[tool.id]?.description || tool.description,
+      translatedBadge: badges?.[tool.bagde as string] || tool.bagde,
     }))
     .sort((a, b) => a.name.localeCompare(b.name));
 };
@@ -55,13 +62,16 @@ export const fetchTopProcessCounts = async () => {
 /**
  * Obtiene las categorías con traducciones aplicadas
  */
-export const getTranslatedCategories = (translations: any) => {
+export const getTranslatedCategories = (lang: string) => {
   return TOOLS_CATEGORIES.map((category) => ({
     ...category,
-    name: translations.tools.categories[category.id] || category.name,
-    title: translations.tools.categoryTitles[category.id] || category.title,
+    name:
+      getTranslation(lang, `tools.categories.${category.id}`) || category.name,
+    title:
+      getTranslation(lang, `tools.categoryTitles.${category.id}`) ||
+      category.title,
     description:
-      translations.tools.categoryDescriptions[category.id] ||
+      getTranslation(lang, `tools.categoryDescriptions.${category.id}`) ||
       category.description,
   }));
 };

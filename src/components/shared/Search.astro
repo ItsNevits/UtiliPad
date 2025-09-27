@@ -1,17 +1,12 @@
 ---
-import type { Language } from "../../types/language.type";
+import type { Language } from "@@types/language.type";
+import { getTranslation } from "@i18n/index";
 
-interface Props {
-  lang: Language;
-  t: any;
-}
+const lang = Astro.params.lang as Language;
 
-const { lang, t } = Astro.props;
-
-// Preparar los datos de herramientas para el cliente
 const toolsData = {
-  items: t.tools.items,
-  categories: t.tools.categories,
+  items: getTranslation(lang, "tools.items"),
+  categories: getTranslation(lang, "tools.categories"),
   lang: lang,
 };
 ---
@@ -20,7 +15,7 @@ const toolsData = {
   <label class="relative block">
     <input
       id="search-input"
-      placeholder={t.components.search.placeholder}
+      placeholder={getTranslation(lang, "components.search.placeholder")}
       class="w-full rounded-xl bg-neutral-800/80 border border-neutral-700 px-4 py-2 text-sm placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
       autocomplete="off"
     />
@@ -37,7 +32,7 @@ const toolsData = {
   >
     <div class="p-3">
       <div class="text-xs text-neutral-400 mb-2">
-        {t.components.search.results}
+        {getTranslation(lang, "components.search.results")}
       </div>
       <div id="results-container">
         <!-- Los resultados se insertan aquí -->
@@ -46,7 +41,7 @@ const toolsData = {
         id="no-results"
         class="text-sm text-neutral-500 text-center py-8 hidden"
       >
-        {t.components.search.noResults}
+        {getTranslation(lang, "components.search.noResults")}
       </div>
     </div>
   </div>

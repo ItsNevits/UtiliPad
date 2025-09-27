@@ -1,23 +1,18 @@
 ---
-import Hero from "@components/shared/Hero.astro";
-import type { Language } from "../../../types/language.type";
-import en from "src/i18n/en";
-import es from "src/i18n/es";
 import MainLayout from "src/Layouts/MainLayout.astro";
+import Hero from "@components/shared/Hero.astro";
 
-export function getStaticPaths() {
-  return [{ params: { lang: "es" } }, { params: { lang: "en" } }];
-}
+import type { Language } from "@@types/language.type";
+import { getTranslation } from "@i18n/index";
 
 const lang = Astro.params.lang as Language;
-const translations = { es, en };
-const t = translations[lang];
+const privacyContent = getTranslation(lang, "pages.privacy.content");
 ---
 
-<MainLayout lang={lang} t={t}>
+<MainLayout>
   <Hero
-    title={t.sites.privacy.hero.title}
-    description={t.sites.privacy.hero.description}
+    title={getTranslation(lang, "pages.privacy.title")}
+    description={getTranslation(lang, "pages.privacy.description")}
   />
 
   <div
@@ -25,25 +20,31 @@ const t = translations[lang];
   >
     <div>
       {
-        t.sites.privacy.content.map((section) => (
-          <div class="mb-6 last:mb-0">
-            <h2 class="text-xl md:text-2xl font-bold leading-tight mb-4">
-              {section.title}
-            </h2>
-            {section.paragraphs.length > 1 ? (
-              <ul class="list-disc list-inside mb-4">
-                {section.paragraphs.map((paragraph) => (
-                  <li class="mb-2 text-neutral-400" set:html={paragraph} />
-                ))}
-              </ul>
-            ) : (
-              <p
-                class="mb-4 text-neutral-400"
-                set:html={section.paragraphs[0]}
-              />
-            )}
-          </div>
-        ))
+        Array.isArray(privacyContent) &&
+          privacyContent.map((section) => (
+            <div class="mb-6 last:mb-0">
+              <h2 class="text-xl md:text-2xl font-bold leading-tight mb-4">
+                {section.title}
+              </h2>
+              {Array.isArray(section.paragraphs) &&
+              section.paragraphs.length > 1 ? (
+                <ul class="list-disc list-inside mb-4">
+                  {section.paragraphs.map((paragraph: string) => (
+                    <li class="mb-2 text-neutral-400" set:html={paragraph} />
+                  ))}
+                </ul>
+              ) : (
+                <p
+                  class="mb-4 text-neutral-400"
+                  set:html={
+                    Array.isArray(section.paragraphs)
+                      ? section.paragraphs[0]
+                      : ""
+                  }
+                />
+              )}
+            </div>
+          ))
       }
     </div>
   </div>

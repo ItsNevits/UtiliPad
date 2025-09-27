@@ -2,11 +2,10 @@
 import BoxIcon from "@assets/icons/box.svg";
 import Image from "astro/components/Image.astro";
 
-interface Props {
-  t: any;
-}
+import type { Language } from "@@types/language.type";
+import { getTranslation } from "@i18n/index";
 
-const { t } = Astro.props;
+const lang = Astro.params.lang as Language;
 ---
 
 <div class="bg-neutral-800/50 rounded-xl p-6 select-none mb-5">
@@ -23,7 +22,8 @@ const { t } = Astro.props;
       height={35}
       loading={"lazy"}
     />
-    <span class="text-neutral-400">{t.components.imageConverter.dropFiles}</span
+    <span class="text-neutral-400"
+      >{getTranslation(lang, "components.imageConverter.dropFiles")}</span
     >
     <input
       type="file"
@@ -44,16 +44,22 @@ const { t } = Astro.props;
     class="absolute top-0 left-0 w-full h-full bg-gray-900/50 items-center justify-center z-10 hidden"
   >
     <p class="text-lg md:text-xl font-bold leading-tight animate-bounce">
-      {t.components.imageConverter.processInfo || "Processing..."}
+      {
+        getTranslation(lang, "components.imageConverter.processInfo") ||
+          "Processing..."
+      }
     </p>
   </div>
   <div class="flex items-end justify-between mb-4">
     <h2 class="text-xl md:text-2xl font-bold leading-tight">
-      {t.components.imageConverter.filesUploaded}
+      {
+        getTranslation(lang, "components.imageConverter.uploadedFiles") ||
+          "Uploaded Files"
+      }
     </h2>
     <span class="text-neutral-400 text-sm">
-      {t.components.imageConverter.totalFiles}: <span id="total-files-uploaded"
-        >0</span
+      {getTranslation(lang, "components.imageConverter.totalFiles")}: <span
+        id="total-files-uploaded">0</span
       >
     </span>
   </div>
@@ -67,18 +73,20 @@ const { t } = Astro.props;
       id="compress-and-download"
       class="cursor-pointer mt-5 px-4 py-2 bg-neutral-700 hover:bg-neutral-600 text-neutral-200 rounded transition-colors text-sm"
     >
-      {t.general.downloadZip}
+      {getTranslation(lang, "common.downloadZip") || "Download all as ZIP"}
     </button>
 
     <div class="flex items-center gap-2">
-      <label for="all-images">{t.general.all}:</label>
+      <label for="all-images">{getTranslation(lang, "common.all")}:</label>
       <select
         name="all-images"
         id="all-images"
         class="cursor-pointer px-3 py-1 bg-neutral-900/60 border border-neutral-700 rounded text-neutral-200 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50"
         onchange="window.changeAllImageFormats(this.value)"
       >
-        <option value="" selected disabled>{t.general.select}</option>
+        <option value="" selected disabled
+          >{getTranslation(lang, "common.select")}</option
+        >
         <option value="jpeg">JPEG</option>
         <option value="png">PNG</option>
         <option value="webp">WEBP</option>
@@ -89,7 +97,8 @@ const { t } = Astro.props;
   </div>
 </div>
 
-<astro-greet data-translations={JSON.stringify(t.general)}></astro-greet>
+<astro-greet data-translations={JSON.stringify(getTranslation(lang, "common"))}
+></astro-greet>
 
 <script>
   import { fetchIncrementProcessCountByToolId } from "@utils/tools";
@@ -311,7 +320,7 @@ const { t } = Astro.props;
       URL.revokeObjectURL(url);
     } catch (err: any) {
       alert(
-        jsonMessages.downloadNotImplemented ||
+        jsonMessages.noImplemented ||
           "Error al convertir la imagen: " + err.message
       );
     } finally {
@@ -400,7 +409,7 @@ const { t } = Astro.props;
       URL.revokeObjectURL(url);
     } catch (err: any) {
       alert(
-        jsonMessages.downloadAllNotImplemented ||
+        jsonMessages.noImplemented ||
           "Error al comprimir y descargar: " + err.message
       );
     } finally {

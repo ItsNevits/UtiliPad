@@ -1,17 +1,21 @@
 ---
-import type { Language } from "../types/language.type";
+import type { Language } from "@@types/language.type";
+import { getTranslation } from "@i18n/index";
 
-interface Props {
-  lang: Language;
-  t: any;
-}
+const lang = Astro.params.lang as Language;
+const arrayCategories = getTranslation(lang, "components.sidebar.categories");
 
-const { lang, t } = Astro.props;
+console.log(arrayCategories);
 
-const categories = t.components.sidebar.categories.map((cat: any) => ({
-  ...cat,
-  href: `/${lang}${cat.href}`,
-}));
+const categories =
+  Array.isArray(arrayCategories) &&
+  arrayCategories.map((cat: any) => ({
+    ...cat,
+    href: `/${lang}${cat.href}`,
+  }));
+
+console.log(lang);
+console.log(categories);
 
 // Obtener la URL actual para marcar la categoría activa
 const currentPath = Astro.url.pathname;
@@ -22,29 +26,30 @@ const currentPath = Astro.url.pathname;
 >
   <div class="sticky space-y-2">
     <h3 class="text-xs uppercase tracking-wider text-neutral-400">
-      {t.components.sidebar.title}
+      {getTranslation(lang, "components.sidebar.title")}
       <span class="xl:hidden">:</span>
     </h3>
     <ul
       class="flex xl:block gap-2 overflow-x-auto xl:overflow-x-visible w-[90vw] pb-2"
     >
       {
-        categories.map((category: any) => (
-          <li class="flex-shrink-0">
-            <a
-              href={category.href}
-              class={`block px-3 py-2 rounded-lg transition-colors duration-200 whitespace-nowrap ${
-                currentPath.includes(category.href.split("/").pop() || "")
-                  ? "bg-neutral-800 text-white"
-                  : "text-neutral-300 hover:bg-neutral-900 hover:text-white"
-              }`}
-            >
-              <span class="inline-flex items-center gap-2">
-                {category.label}
-              </span>
-            </a>
-          </li>
-        ))
+        Array.isArray(categories) &&
+          categories.map((category: any) => (
+            <li class="flex-shrink-0">
+              <a
+                href={category.href}
+                class={`block px-3 py-2 rounded-lg transition-colors duration-200 whitespace-nowrap ${
+                  currentPath.includes(category.href.split("/").pop() || "")
+                    ? "bg-neutral-800 text-white"
+                    : "text-neutral-300 hover:bg-neutral-900 hover:text-white"
+                }`}
+              >
+                <span class="inline-flex items-center gap-2">
+                  {category.label}
+                </span>
+              </a>
+            </li>
+          ))
       }
     </ul>
   </div>

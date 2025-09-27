@@ -1,13 +1,9 @@
 ---
 import { getRelativeLocaleUrl } from "astro:i18n";
-import type { Language } from "../types/language.type";
+import type { Language } from "@@types/language.type";
+import { getTranslation } from "@i18n/index";
 
-interface Props {
-  lang: Language;
-  t: any;
-}
-
-const { lang, t } = Astro.props;
+const lang = Astro.params.lang as Language;
 ---
 
 <footer class="border-t border-neutral-800 py-8 select-none">
@@ -15,22 +11,25 @@ const { lang, t } = Astro.props;
     class="mx-auto max-w-7xl px-4 text-sm text-neutral-400 flex flex-col md:flex-row items-center justify-between gap-4"
   >
     <p>
-      {t.components.footer.madeWith}
+      {getTranslation(lang, "components.footer.madeWith")}
       <span class="text-red-500">❤︎</span>
-      {t.components.footer.and} Astro.js
+      {getTranslation(lang, "components.footer.and")} Astro.js
     </p>
     <div class="flex items-center gap-4">
       <a
         href={getRelativeLocaleUrl(lang, "privacy")}
-        class="hover:text-neutral-200">{t.components.footer.privacy}</a
+        class="hover:text-neutral-200"
+        >{getTranslation(lang, "components.footer.privacy")}</a
       >
       <a
         href={getRelativeLocaleUrl(lang, "terms")}
-        class="hover:text-neutral-200">{t.components.footer.terms}</a
+        class="hover:text-neutral-200"
+        >{getTranslation(lang, "components.footer.terms")}</a
       >
       <a
         href={getRelativeLocaleUrl(lang, "contact")}
-        class="hover:text-neutral-200">{t.components.footer.contact}</a
+        class="hover:text-neutral-200"
+        >{getTranslation(lang, "components.footer.contact")}</a
       >
     </div>
   </div>

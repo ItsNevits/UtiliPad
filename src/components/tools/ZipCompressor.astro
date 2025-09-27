@@ -2,11 +2,10 @@
 import BoxIcon from "@assets/icons/box.svg";
 import Image from "astro/components/Image.astro";
 
-interface Props {
-  t: any;
-}
+import type { Language } from "@@types/language.type";
+import { getTranslation } from "@i18n/index";
 
-const { t } = Astro.props;
+const lang = Astro.params.lang as Language;
 ---
 
 <div class="bg-neutral-800/50 rounded-xl p-6 select-none mb-5">
@@ -23,7 +22,9 @@ const { t } = Astro.props;
       height={35}
       loading={"lazy"}
     />
-    <span class="text-neutral-400">{t.components.zipCompressor.dropFiles}</span>
+    <span class="text-neutral-400"
+      >{getTranslation(lang, "components.zipCompressor.dropFiles")}</span
+    >
 
     <input type="file" class="hidden" id="zip-file-input" multiple />
   </div>
@@ -35,12 +36,12 @@ const { t } = Astro.props;
 >
   <div class="flex items-end justify-between mb-4">
     <h2 class="text-xl md:text-2xl font-bold leading-tight">
-      {t.components.zipCompressor.filesUploaded}
+      {getTranslation(lang, "components.zipCompressor.filesUploaded")}
     </h2>
 
     <span class="text-neutral-400 text-sm"
-      >{t.components.zipCompressor.totalFiles}: <span id="total-files-uploaded"
-        >0</span
+      >{getTranslation(lang, "components.zipCompressor.totalFiles")}: <span
+        id="total-files-uploaded">0</span
       ></span
     >
   </div>
@@ -54,7 +55,7 @@ const { t } = Astro.props;
       class="absolute hidden z-10 top-0 left-0 bg-neutral-700/80 w-full h-full rounded-2xl justify-center items-center"
     >
       <p class="text-lg md:text-xl font-bold leading-tight animate-bounce">
-        {t.components.zipCompressor.processInfo}
+        {getTranslation(lang, "components.zipCompressor.processInfo")}
       </p>
     </div>
   </div>
@@ -62,13 +63,13 @@ const { t } = Astro.props;
   <!-- Information -->
   <div class="flex flex-col justify-between md:flex-row gap-2">
     <span class="text-neutral-400 text-sm"
-      >{t.components.zipCompressor.previousSize}: <span
+      >{getTranslation(lang, "components.zipCompressor.previousSize")}: <span
         id="total-files-prev-sizes">0 KB</span
       ></span
     >
 
     <span class="text-neutral-400 text-sm"
-      >{t.components.zipCompressor.compressSize}: <span
+      >{getTranslation(lang, "components.zipCompressor.compressSize")}: <span
         id="total-files-next-sizes">0 KB</span
       ></span
     >
@@ -78,11 +79,14 @@ const { t } = Astro.props;
     id="compress-and-download"
     class="cursor-pointer mt-5 px-4 py-2 bg-neutral-700 hover:bg-neutral-600 text-neutral-200 rounded transition-colors text-sm"
   >
-    {t.components.zipCompressor.compressAndDownload}
+    {getTranslation(lang, "components.zipCompressor.compressAndDownload")}
   </button>
 </div>
 
-<astro-greet data-translations={JSON.stringify(t)}></astro-greet>
+<astro-greet
+  data-translations={JSON.stringify(
+    getTranslation(lang, "components.zipCompressor")
+  )}></astro-greet>
 
 <script>
   import { fetchIncrementProcessCountByToolId } from "@utils/tools";
@@ -93,7 +97,7 @@ const { t } = Astro.props;
   class AstroGreet extends HTMLElement {
     connectedCallback() {
       const t = JSON.parse(this.getAttribute("data-translations") || "{}");
-      jsonMessages = t.components.zipCompressor;
+      jsonMessages = t;
     }
   }
 

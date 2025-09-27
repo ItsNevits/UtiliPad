@@ -1,8 +1,9 @@
 ---
 import { getToolById } from "@constants/tools";
-interface Props {
-  t: any;
-}
+import type { Language } from "@@types/language.type";
+import { getTranslation } from "@i18n/index";
+
+const lang = Astro.params.lang as Language;
 
 interface Process {
   id: number;
@@ -14,8 +15,6 @@ interface ProcessItem {
   success: boolean;
   topProcesses: Process[];
 }
-
-const { t } = Astro.props;
 
 const process = [] as { name: string; progress: number }[];
 
@@ -39,12 +38,16 @@ try {
   class="rounded-2xl border border-neutral-800 bg-neutral-800/50"
 >
   <div class="p-4 border-b border-neutral-700">
-    <h3 class="font-semibold">{t.components.processSummary.title}</h3>
+    <h3 class="font-semibold">
+      {getTranslation(lang, "components.processSummary.title")}
+    </h3>
   </div>
   <ul class="p-4 space-y-4">
     {
       process.length === 0 && (
-        <li class="text-sm text-neutral-400">{t.general.noData}</li>
+        <li class="text-sm text-neutral-400">
+          {getTranslation(lang, "common.noData")}
+        </li>
       )
     }
     {

@@ -1,23 +1,34 @@
 ---
-import Hero from "@components/shared/Hero.astro";
-import type { Language } from "../../../types/language.type";
-import en from "src/i18n/en";
-import es from "src/i18n/es";
 import MainLayout from "src/Layouts/MainLayout.astro";
+import Hero from "@components/shared/Hero.astro";
 
-export function getStaticPaths() {
-  return [{ params: { lang: "es" } }, { params: { lang: "en" } }];
-}
+import type { Language } from "@@types/language.type";
+import { getTranslation } from "@i18n/index";
 
 const lang = Astro.params.lang as Language;
-const translations = { es, en };
-const t = translations[lang];
+
+const ContactInfoOptions = getTranslation(
+  lang,
+  "pages.contact.contactInfo.options"
+);
+
+const ContactInfoHelpWith = getTranslation(
+  lang,
+  "pages.contact.contactInfo.helpWith.items"
+);
+
+const FormSubjectOptions = getTranslation(
+  lang,
+  "pages.contact.form.fields.subject.options"
+);
+
+const FagQuestions = getTranslation(lang, "pages.contact.faq.items");
 ---
 
-<MainLayout lang={lang} t={t}>
+<MainLayout>
   <Hero
-    title={t.sites.contact.hero.title}
-    description={t.sites.contact.hero.description}
+    title={getTranslation(lang, "pages.contact.title")}
+    description={getTranslation(lang, "pages.contact.description")}
   />
 
   <div class="mt-5 flex flex-col xl:flex-row gap-5">
@@ -26,44 +37,63 @@ const t = translations[lang];
       class="overflow-hidden rounded-2xl border border-neutral-800 p-6 space-y-6 flex-1 bg-neutral-800/50 select-none"
     >
       <h2 class="text-xl font-semibold text-neutral-200">
-        {t.sites.contact.contactInfo.title}
+        {getTranslation(lang, "pages.contact.contactInfo.title")}
       </h2>
 
       <div class="space-y-4">
         {
-          t.sites.contact.contactInfo.options.map((option) => (
-            <div class="flex items-center gap-3">
-              <div class="w-8 h-8 bg-emerald-500/20 rounded-lg flex items-center justify-center">
-                <span class="text-emerald-400">{option.icon}</span>
+          Array.isArray(ContactInfoOptions) &&
+            ContactInfoOptions.length > 0 &&
+            ContactInfoOptions.map((option) => (
+              <div class="flex items-center gap-3">
+                <div class="w-8 h-8 bg-emerald-500/20 rounded-lg flex items-center justify-center">
+                  <span class="text-emerald-400">{option.icon}</span>
+                </div>
+                <div>
+                  <p class="text-sm text-neutral-400">{option.title}</p>
+                  <a
+                    href={option.href}
+                    target={
+                      option.href.startsWith("http") ? "_blank" : undefined
+                    }
+                    class="text-neutral-200 hover:text-emerald-400 transition-colors"
+                  >
+                    {option.description}
+                  </a>
+                </div>
               </div>
-              <div>
-                <p class="text-sm text-neutral-400">{option.title}</p>
-                <a
-                  href={option.href}
-                  target={option.href.startsWith("http") ? "_blank" : undefined}
-                  class="text-neutral-200 hover:text-emerald-400 transition-colors"
-                >
-                  {option.description}
-                </a>
-              </div>
-            </div>
-          ))
+            ))
         }
 
         <div class="flex items-center gap-3">
           <div
             class="w-8 h-8 bg-emerald-500/20 rounded-lg flex items-center justify-center"
           >
-            <span class="text-emerald-400"
-              >{t.sites.contact.contactInfo.responseTime.icon}</span
-            >
+            <span class="text-emerald-400">
+              {
+                getTranslation(
+                  lang,
+                  "pages.contact.contactInfo.responseTime.icon"
+                )
+              }
+            </span>
           </div>
           <div>
             <p class="text-sm text-neutral-400">
-              {t.sites.contact.contactInfo.responseTime.title}
+              {
+                getTranslation(
+                  lang,
+                  "pages.contact.contactInfo.responseTime.title"
+                )
+              }
             </p>
             <p class="text-neutral-200">
-              {t.sites.contact.contactInfo.responseTime.description}
+              {
+                getTranslation(
+                  lang,
+                  "pages.contact.contactInfo.responseTime.description"
+                )
+              }
             </p>
           </div>
         </div>
@@ -71,13 +101,13 @@ const t = translations[lang];
 
       <div class="border-t border-neutral-700 pt-6">
         <h3 class="text-lg font-medium text-neutral-200 mb-3">
-          {t.sites.contact.contactInfo.helpWith.title}
+          {getTranslation(lang, "pages.contact.contactInfo.helpWith.title")}
         </h3>
         <ul class="space-y-2 text-sm text-neutral-400">
           {
-            t.sites.contact.contactInfo.helpWith.items.map((item) => (
-              <li>• {item}</li>
-            ))
+            Array.isArray(ContactInfoHelpWith) &&
+              ContactInfoHelpWith.length > 0 &&
+              ContactInfoHelpWith.map((item) => <li>• {item}</li>)
           }
         </ul>
       </div>
@@ -88,7 +118,7 @@ const t = translations[lang];
       class="overflow-hidden rounded-2xl border border-neutral-800 bg-neutral-800/50 p-6 flex-1"
     >
       <h2 class="text-xl font-semibold text-neutral-200 mb-6">
-        {t.sites.contact.form.title}
+        {getTranslation(lang, "pages.contact.form.title")}
       </h2>
 
       <form id="contact-form" class="space-y-4">
@@ -97,7 +127,7 @@ const t = translations[lang];
             for="name"
             class="block text-sm font-medium text-neutral-300 mb-2"
           >
-            {t.sites.contact.form.fields.name.label}
+            {getTranslation(lang, "pages.contact.form.fields.name.label")}
           </label>
           <input
             type="text"
@@ -105,7 +135,10 @@ const t = translations[lang];
             name="name"
             required
             class="w-full px-4 py-3 bg-neutral-900/60 border border-neutral-700 rounded-lg text-neutral-200 placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50"
-            placeholder={t.sites.contact.form.fields.name.placeholder}
+            placeholder={getTranslation(
+              lang,
+              "pages.contact.form.fields.name.placeholder"
+            )}
           />
         </div>
 
@@ -114,7 +147,7 @@ const t = translations[lang];
             for="email"
             class="block text-sm font-medium text-neutral-300 mb-2"
           >
-            {t.sites.contact.form.fields.email.label}
+            {getTranslation(lang, "pages.contact.form.fields.email.label")}
           </label>
           <input
             type="email"
@@ -122,7 +155,10 @@ const t = translations[lang];
             name="email"
             required
             class="w-full px-4 py-3 bg-neutral-900/60 border border-neutral-700 rounded-lg text-neutral-200 placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50"
-            placeholder={t.sites.contact.form.fields.email.placeholder}
+            placeholder={getTranslation(
+              lang,
+              "pages.contact.form.fields.email.placeholder"
+            )}
           />
         </div>
 
@@ -131,7 +167,7 @@ const t = translations[lang];
             for="subject"
             class="block text-sm font-medium text-neutral-300 mb-2"
           >
-            {t.sites.contact.form.fields.subject.label}
+            {getTranslation(lang, "pages.contact.form.fields.subject.label")}
           </label>
           <select
             id="subject"
@@ -140,9 +176,11 @@ const t = translations[lang];
             class="w-full px-4 py-3 bg-neutral-900/60 border border-neutral-700 rounded-lg text-neutral-200 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50"
           >
             {
-              t.sites.contact.form.fields.subject.options.map((option) => (
-                <option value={option.value}>{option.label}</option>
-              ))
+              Array.isArray(FormSubjectOptions) &&
+                FormSubjectOptions.length > 0 &&
+                FormSubjectOptions.map((option) => (
+                  <option value={option.value}>{option.label}</option>
+                ))
             }
           </select>
         </div>
@@ -152,7 +190,7 @@ const t = translations[lang];
             for="message"
             class="block text-sm font-medium text-neutral-300 mb-2"
           >
-            {t.sites.contact.form.fields.message.label}
+            {getTranslation(lang, "pages.contact.form.fields.message.label")}
           </label>
           <textarea
             id="message"
@@ -160,15 +198,19 @@ const t = translations[lang];
             rows="6"
             required
             class="w-full px-4 py-3 bg-neutral-900/60 border border-neutral-700 rounded-lg text-neutral-200 placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50 resize-none"
-            placeholder={t.sites.contact.form.fields.message.placeholder}
-          ></textarea>
+            placeholder={getTranslation(
+              lang,
+              "pages.contact.form.fields.message.placeholder"
+            )}></textarea>
         </div>
 
         <button
           type="submit"
           class="cursor-pointer w-full px-6 py-3 bg-neutral-700 hover:bg-neutral-600 text-neutral-200 rounded transition-colors font-medium focus:outline-none focus:ring-2 focus:ring-emerald-500/50 disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          <span id="submit-text">{t.sites.contact.form.submit.default}</span>
+          <span id="submit-text"
+            >{getTranslation(lang, "pages.contact.form.submit.default")}</span
+          >
         </button>
       </form>
 
@@ -181,38 +223,59 @@ const t = translations[lang];
     class="overflow-hidden rounded-2xl border border-neutral-800 bg-neutral-800/50 p-6 mt-5"
   >
     <h2 class="text-xl font-semibold text-neutral-200 mb-6">
-      {t.sites.contact.faq.title}
+      {getTranslation(lang, "pages.contact.faq.title")}
     </h2>
 
     <div class="space-y-4">
       {
-        t.sites.contact.faq.items.map((faqItem) => (
-          <details class="group">
-            <summary class="cursor-pointer text-neutral-300 hover:text-neutral-100 font-medium">
-              {faqItem.question}
-            </summary>
-            <div class="mt-2 text-sm text-neutral-400 pl-4">
-              {faqItem.answer.split("\n").map((line) => (
-                <p>{line.startsWith("●") ? line : `● ${line}`}</p>
-              ))}
-            </div>
-          </details>
-        ))
+        Array.isArray(FagQuestions) &&
+          FagQuestions.length > 0 &&
+          FagQuestions.map((faqItem) => (
+            <details class="group">
+              <summary class="cursor-pointer text-neutral-300 hover:text-neutral-100 font-medium">
+                {faqItem.question}
+              </summary>
+              <div class="mt-2 text-sm text-neutral-400 pl-4">
+                {faqItem.answer.split("\n").map((line: string) => (
+                  <p>{line.startsWith("●") ? line : `● ${line}`}</p>
+                ))}
+              </div>
+            </details>
+          ))
       }
     </div>
   </div>
+
+  <astro-greet
+    data-translations={JSON.stringify(
+      getTranslation(lang, "pages.contact.form.submit")
+    )}></astro-greet>
 </MainLayout>
 
-<script define:vars={{ t, lang }}>
-  const form = document.getElementById("contact-form");
-  const submitText = document.getElementById("submit-text");
-  const formStatus = document.getElementById("form-status");
-  const submitButton = form.querySelector('button[type="submit"]');
+<script>
+  const form = document.getElementById("contact-form") as HTMLFormElement;
+  const submitText = document.getElementById("submit-text") as HTMLSpanElement;
+  const formStatus = document.getElementById("form-status") as HTMLDivElement;
+  const submitButton = form.querySelector(
+    'button[type="submit"]'
+  ) as HTMLButtonElement;
+
+  let jsonMessages = {} as any;
+
+  class AstroGreet extends HTMLElement {
+    connectedCallback() {
+      const t = JSON.parse(this.getAttribute("data-translations") || "{}");
+      console.log(t);
+      jsonMessages = t || {};
+    }
+  }
+
+  customElements.define("astro-greet", AstroGreet);
 
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
     submitButton.disabled = true;
-    submitText.textContent = t.sites.contact.form.submit.sending;
+    submitText.textContent = jsonMessages.sending;
     formStatus.classList.add("hidden");
 
     const formData = new FormData(form);
@@ -226,18 +289,18 @@ const t = translations[lang];
       });
       const result = await response.json();
       if (result.success) {
-        formStatus.innerHTML = `<span class='text-emerald-400'>${t.sites.contact.form.submit.success}</span>`;
+        formStatus.innerHTML = `<span class='text-emerald-400'>${jsonMessages.success}</span>`;
         form.reset();
       } else {
-        formStatus.innerHTML = `<span class='text-red-400'>${t.sites.contact.form.submit.error}<br>${result.error || ""}</span>`;
+        formStatus.innerHTML = `<span class='text-red-400'>${jsonMessages.error}<br>${result.error || ""}</span>`;
       }
       formStatus.classList.remove("hidden");
     } catch (error) {
-      formStatus.innerHTML = `<span class='text-red-400'>${t.sites.contact.form.submit.error}</span>`;
+      formStatus.innerHTML = `<span class='text-red-400'>${jsonMessages.error}</span>`;
       formStatus.classList.remove("hidden");
     } finally {
       submitButton.disabled = false;
-      submitText.textContent = t.sites.contact.form.submit.default;
+      submitText.textContent = jsonMessages.default;
     }
   });
 </script>
