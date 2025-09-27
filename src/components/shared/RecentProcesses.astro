@@ -1,15 +1,8 @@
 ---
-import type { Language } from "../../types/language.type";
-import es from "../../i18n/es";
-import en from "../../i18n/en";
+import type { Language } from "@@types/language.type";
+import { getTranslation } from "@i18n/index";
 
-interface Props {
-  lang?: Language;
-}
-
-const { lang = "es" } = Astro.props;
-const translations = { es, en };
-const t = translations[lang];
+const lang = Astro.params.lang as Language;
 
 const recents = [] as any[];
 ---
@@ -17,7 +10,7 @@ const recents = [] as any[];
 <div class="mt-8 select-none">
   <div class="flex items-center justify-between mb-2">
     <h2 class="text-sm uppercase tracking-wider text-neutral-400">
-      {t.components.recent.title}
+      {getTranslation(lang, "components.recent.title")}
     </h2>
   </div>
   <div
@@ -26,7 +19,7 @@ const recents = [] as any[];
     {
       recents.length === 0 && (
         <div class="px-4 py-3 text-sm text-neutral-500">
-          {t.components.recent.noRecent}
+          {getTranslation(lang, "components.recent.noRecent")}
         </div>
       )
     }

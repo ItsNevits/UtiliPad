@@ -2,14 +2,9 @@
 export const prerender = false;
 
 import MainLayout from "../../../Layouts/MainLayout.astro";
-import Hero from "../../../components/shared/Hero.astro";
-import Tools from "../../../components/shared/Tools.astro";
-import BreadCrumbs from "../../../components/shared/BreadCrumbs.astro";
-import { TOOLS_CATEGORIES, getToolById } from "../../../constants/tools";
-import type { Language } from "../../../types/language.type";
-import es from "../../../i18n/es";
-import en from "../../../i18n/en";
-import { getTranslatedCategories } from "../../../utils/tools";
+import Hero from "@components/shared/Hero.astro";
+import Tools from "@components/shared/Tools.astro";
+import BreadCrumbs from "@components/shared/BreadCrumbs.astro";
 
 // Importar componentes de herramientas
 import TextAnalyzer from "@components/tools/TextAnalyzer.astro";
@@ -17,6 +12,15 @@ import JsonFormatter from "@components/tools/JsonFormatter.astro";
 import ZipCompressor from "@components/tools/ZipCompressor.astro";
 import QrGenerator from "@components/tools/QrGenerator.astro";
 import ImageConverter from "@components/tools/ImageConverter.astro";
+
+import { TOOLS_CATEGORIES, getToolById } from "../../../constants/tools";
+import type { Language } from "@@types/language.type";
+import { getTranslatedCategories } from "@utils/tools";
+
+// Obtener los parámetros de la URL
+const { categoryId } = Astro.params;
+// Obtener idioma
+const lang = Astro.params.lang as Language;
 
 // Mapeo de componentes
 const COMPONENT_MAP = {
@@ -32,13 +36,8 @@ const COMPONENT_MAP = {
   ImageConverter: ImageConverter,
 };
 
-// Obtener los parámetros de la URL
-const { categoryId, lang } = Astro.params;
-
 // Configurar traducciones
-const translations = { es, en };
-const t = translations[lang as Language];
-const translatedCategories = getTranslatedCategories(t);
+const translatedCategories = getTranslatedCategories(lang);
 
 // Obtener el parámetro de query 'tool' si existe
 const toolId = Astro.url.searchParams.get("tool");
@@ -55,21 +54,21 @@ if (!originalCategory) {
 const category =
   translatedCategories.find((cat) => cat.id === categoryId) || originalCategory;
 
+import { getTranslation } from "@i18n/index";
+
 // Obtener traducciones de herramientas
 const getTranslatedToolName = (toolId: string, tool?: any) => {
-  const toolTranslations = t.tools.items as Record<
-    string,
-    { name: string; description: string }
-  >;
-  return toolTranslations[toolId]?.name || tool?.name || toolId;
+  return (
+    getTranslation(lang, `tools.items.${toolId}.name`) || tool?.name || toolId
+  );
 };
 
 const getTranslatedToolDescription = (toolId: string, tool?: any) => {
-  const toolTranslations = t.tools.items as Record<
-    string,
-    { name: string; description: string }
-  >;
-  return toolTranslations[toolId]?.description || tool?.description || "";
+  return (
+    getTranslation(lang, `tools.items.${toolId}.description`) ||
+    tool?.description ||
+    ""
+  );
 };
 
 // Si hay un toolId específico, buscar la herramienta
@@ -115,20 +114,24 @@ if (selectedTool) {
     selectedTool
   );
   breadcrumbs.push(
-    { href: `/${lang}/${categoryId}`, name: category.name, isActive: false },
+    {
+      href: `/${lang}/category/${categoryId}`,
+      name: category.name,
+      isActive: false,
+    },
     { href: selectedTool.href, name: translatedToolName, isActive: true }
   );
 } else {
   // Para categoría: Inicio > Categoría
   breadcrumbs.push({
-    href: `/${lang}/${categoryId}`,
+    href: `/${lang}/category/${categoryId}`,
     name: category.name,
     isActive: true,
   });
 }
 ---
 
-<MainLayout lang={lang as Language} t={t}>
+<MainLayout>
   <BreadCrumbs links={breadcrumbs} />
 
   <!-- Hero -->
@@ -138,18 +141,18 @@ if (selectedTool) {
     selectedTool ? (
       <div class="py-5 select-none">
         {ToolComponent ? (
-          <ToolComponent t={t} />
+          <ToolComponent />
         ) : (
           <div class="bg-neutral-900/40 rounded-2xl border border-neutral-800 p-6">
-            <span>{t.tools.messages.notImplemented}</span>
+            <span>{getTranslation(lang, "tools.messages.notImplemented")}</span>
           </div>
         )}
 
         <div class="mt-8">
           <h3 class="text-lg font-semibold mb-4">
             {lang === "es"
-              ? `${t.tools.messages.otherToolsPrefix} ${category.name.toLowerCase()}`
-              : `${t.tools.messages.otherToolsPrefix} ${category.name.toLowerCase()} ${t.tools.messages.otherToolsSuffix}`}
+              ? `${getTranslation(lang, "tools.messages.otherToolsPrefix")} ${category.name.toLowerCase()}`
+              : `${getTranslation(lang, "tools.messages.otherToolsPrefix")} ${category.name.toLowerCase()} ${getTranslation(lang, "tools.messages.otherToolsSuffix")}`}
           </h3>
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {originalCategory.tools
@@ -171,14 +174,14 @@ if (selectedTool) {
               (tool) => tool.id !== selectedTool.id && tool.isAvailable
             ).length === 0 && (
               <p class="text-sm text-neutral-400 col-span-full">
-                {t.tools.messages.noMoreTools}
+                {getTranslation(lang, "tools.messages.noMoreTools")}
               </p>
             )}
           </div>
         </div>
       </div>
     ) : (
-      <Tools categoryId={categoryId} lang={lang as Language} t={t} />
+      <Tools categoryId={categoryId} />
     )
   }
 </MainLayout>

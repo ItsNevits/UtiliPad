@@ -1,13 +1,9 @@
 ---
 import { getCollection } from "astro:content";
-import type { Language } from "../../types/language.type";
+import type { Language } from "@@types/language.type";
+import { getTranslation } from "@i18n/index";
 
-interface Props {
-  lang: Language;
-  t: any;
-}
-
-const { lang, t } = Astro.props;
+const lang = Astro.params.lang as Language;
 
 // Obtener todas las noticias y filtrar por idioma
 const allNews = await getCollection("news", ({ data }) => !data.draft);
@@ -28,11 +24,14 @@ const sortedNews = news.sort(
   <div
     class="p-4 border-b border-neutral-700 flex items-center justify-between"
   >
-    <h3 class="font-semibold">{t.components.news.title}</h3>
+    <h3 class="font-semibold">
+      {getTranslation(lang, "components.news.title")}
+    </h3>
     <a
       title="Ver todas las novedades"
       class="text-neutral-400 text-sm hover:underline"
-      href={`/${lang}/news`}>{t.components.news.seeMore}</a
+      href={`/${lang}/news`}
+      >{getTranslation(lang, "components.news.seeMore")}</a
     >
   </div>
   <ul class="p-4 space-y-3 text-sm text-neutral-300">

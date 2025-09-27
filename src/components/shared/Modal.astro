@@ -1,9 +1,8 @@
 ---
-interface Props {
-  t: any;
-}
+import type { Language } from "@@types/language.type";
+import { getTranslation } from "@i18n/index";
 
-const { t } = Astro.props;
+const lang = Astro.params.lang as Language;
 ---
 
 <div
@@ -63,9 +62,9 @@ const { t } = Astro.props;
             <!-- Información adicional se insertará aquí -->
           </div>
           <div class="text-xs">
-            {t.components.modal.press}
+            {getTranslation(lang, "components.modal.press")}{" "}
             <kbd class="px-2 py-1 bg-neutral-700 rounded">Esc</kbd> para
-            {t.components.modal.toClose}
+            {getTranslation(lang, "components.modal.close")}
           </div>
         </div>
       </div>

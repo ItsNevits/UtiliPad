@@ -2,11 +2,10 @@
 import AboutUsImage from "@assets/images/about-us.jpg";
 import Picture from "astro/components/Picture.astro";
 
-interface Props {
-  t: any;
-}
+import type { Language } from "@@types/language.type";
+import { getTranslation } from "@i18n/index";
 
-const { t } = Astro.props;
+const lang = Astro.params.lang as Language;
 ---
 
 <div
@@ -17,16 +16,18 @@ const { t } = Astro.props;
   >
     <Picture
       src={AboutUsImage}
-      alt={t.components.aboutUs.alt}
+      alt={getTranslation(lang, "components.aboutUs.alt")}
       class="object-cover object-top w-full h-full"
       formats={["avif", "webp", "png"]}
       loading={"lazy"}
     />
   </div>
   <div class="p-4 bg-neutral-800/50">
-    <h3 class="font-semibold">{t.components.aboutUs.title}</h3>
+    <h3 class="font-semibold">
+      {getTranslation(lang, "components.aboutUs.title")}
+    </h3>
     <p class="text-sm text-neutral-400 mt-1">
-      {t.components.aboutUs.description}
+      {getTranslation(lang, "components.aboutUs.description")}
     </p>
   </div>
 </div>

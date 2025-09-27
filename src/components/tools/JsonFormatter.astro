@@ -2,11 +2,10 @@
 import ExpandIcon from "@assets/icons/expand.svg";
 import { Picture } from "astro:assets";
 
-interface Props {
-  t: any;
-}
+import type { Language } from "@@types/language.type";
+import { getTranslation } from "@i18n/index";
 
-const { t } = Astro.props;
+const lang = Astro.params.lang as Language;
 ---
 
 <div class="bg-neutral-800/50 rounded-xl p-6 select-none">
@@ -15,22 +14,22 @@ const { t } = Astro.props;
     <div class="space-y-4">
       <div class="flex items-center justify-between">
         <label class="block text-sm font-medium text-neutral-300">
-          {t.components.jsonFormatter.inputTitle}
+          {getTranslation(lang, "components.jsonFormatter.inputTitle")}
         </label>
         <div class="flex gap-2">
           <button
             id="paste-btn"
-            title={t.components.jsonFormatter.paste}
+            title={getTranslation(lang, "components.jsonFormatter.paste")}
             class="cursor-pointer text-xs px-3 py-1 bg-neutral-700 hover:bg-neutral-600 text-neutral-200 rounded transition-colors"
           >
-            {t.components.jsonFormatter.paste}
+            {getTranslation(lang, "components.jsonFormatter.paste")}
           </button>
           <button
             id="clear-btn"
-            title={t.components.jsonFormatter.clear}
+            title={getTranslation(lang, "components.jsonFormatter.clear")}
             class="cursor-pointer text-xs px-3 py-1 bg-neutral-700 hover:bg-neutral-600 text-neutral-200 rounded transition-colors"
           >
-            {t.components.jsonFormatter.clear}
+            {getTranslation(lang, "components.jsonFormatter.clear")}
           </button>
         </div>
       </div>
@@ -52,23 +51,23 @@ const { t } = Astro.props;
             value="2"
             class="w-16 px-2 py-1 bg-neutral-700 border border-neutral-600 rounded text-xs"
           />
-          {t.components.jsonFormatter.indentSpaces}
+          {getTranslation(lang, "components.jsonFormatter.indentSpaces")}
         </label>
 
         <div class="flex flex-wrap gap-2">
           <button
             id="format-btn"
-            title={t.components.jsonFormatter.format}
+            title={getTranslation(lang, "components.jsonFormatter.format")}
             class="cursor-pointer px-4 py-2 bg-neutral-700 hover:bg-neutral-600 text-neutral-200 rounded transition-colors text-sm"
           >
-            {t.components.jsonFormatter.format}
+            {getTranslation(lang, "components.jsonFormatter.format")}
           </button>
           <button
             id="minify-btn"
-            title={t.components.jsonFormatter.minify}
+            title={getTranslation(lang, "components.jsonFormatter.minify")}
             class="cursor-pointer px-4 py-2 bg-neutral-700 hover:bg-neutral-600 text-neutral-200 rounded transition-colors text-sm"
           >
-            {t.components.jsonFormatter.minify}
+            {getTranslation(lang, "components.jsonFormatter.minify")}
           </button>
         </div>
       </div>
@@ -81,22 +80,22 @@ const { t } = Astro.props;
     <div class="space-y-4">
       <div class="flex items-center justify-between">
         <label class="block text-sm font-medium text-neutral-300">
-          {t.components.jsonFormatter.outputTitle}
+          {getTranslation(lang, "components.jsonFormatter.outputTitle")}
         </label>
         <div class="flex gap-2">
           <button
             id="copy-btn"
-            title={t.components.jsonFormatter.copy}
+            title={getTranslation(lang, "components.jsonFormatter.copy")}
             class="cursor-pointer text-xs px-3 py-1 bg-neutral-700 hover:bg-neutral-600 text-neutral-200 rounded transition-colors"
           >
-            {t.components.jsonFormatter.copy}
+            {getTranslation(lang, "components.jsonFormatter.copy")}
           </button>
           <button
             id="download-btn"
-            title={t.components.jsonFormatter.download}
+            title={getTranslation(lang, "common.download")}
             class="cursor-pointer text-xs px-3 py-1 bg-neutral-700 hover:bg-neutral-600 text-neutral-200 rounded transition-colors"
           >
-            {t.components.jsonFormatter.download}
+            {getTranslation(lang, "common.download")}
           </button>
         </div>
       </div>
@@ -130,7 +129,7 @@ const { t } = Astro.props;
       <div class="grid grid-cols-2 gap-4 text-sm">
         <div class="bg-neutral-900/60 rounded-lg p-3">
           <div class="text-neutral-400">
-            {t.components.jsonFormatter.originalSize}
+            {getTranslation(lang, "components.jsonFormatter.originalSize")}
           </div>
           <div id="original-size" class="font-mono text-neutral-300">
             0 bytes
@@ -138,7 +137,7 @@ const { t } = Astro.props;
         </div>
         <div class="bg-neutral-900/60 rounded-lg p-3">
           <div class="text-neutral-400">
-            {t.components.jsonFormatter.formattedSize}
+            {getTranslation(lang, "components.jsonFormatter.formattedSize")}
           </div>
           <div id="formatted-size" class="font-mono text-neutral-300">
             0 bytes
@@ -149,7 +148,10 @@ const { t } = Astro.props;
   </div>
 </div>
 
-<astro-greet data-translations={JSON.stringify(t)}></astro-greet>
+<astro-greet
+  data-translations={JSON.stringify(
+    getTranslation(lang, "components.jsonFormatter")
+  )}></astro-greet>
 
 <script>
   import JSONFormatter from "json-formatter-js";
@@ -161,7 +163,7 @@ const { t } = Astro.props;
   class AstroGreet extends HTMLElement {
     connectedCallback() {
       const t = JSON.parse(this.getAttribute("data-translations") || "{}");
-      jsonMessages = t.components.jsonFormatter;
+      jsonMessages = t;
     }
   }
 

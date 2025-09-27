@@ -1,19 +1,15 @@
 ---
-import type { Language } from "../types/language.type";
+import type { Language } from "@@types/language.type";
+import { getTranslation } from "@i18n/index";
 
-interface Props {
-  lang: Language;
-  t: any;
-}
-
-const { lang, t } = Astro.props;
+const lang = Astro.params.lang as Language;
 ---
 
 <div class="relative">
   <button
     id="language-toggle"
     class="cursor-pointer flex items-center gap-2 px-3 py-2 rounded-lg bg-neutral-800/50 border border-neutral-700 hover:bg-neutral-700/50 transition-colors"
-    aria-label={t.components.language.changeLanguage}
+    aria-label={getTranslation(lang, "components.language.changeLanguage")}
   >
     <svg
       width="16"
@@ -61,7 +57,7 @@ const { lang, t } = Astro.props;
         >
           es
         </span>
-        {t.languageOptions.es}
+        {getTranslation(lang, "common.languageOptions.es")}
       </button>
       <button
         data-lang="en"
@@ -72,7 +68,7 @@ const { lang, t } = Astro.props;
         >
           en
         </span>
-        {t.languageOptions.en}
+        {getTranslation(lang, "common.languageOptions.en")}
       </button>
     </div>
   </div>

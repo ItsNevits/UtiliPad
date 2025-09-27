@@ -1,20 +1,22 @@
 ---
-interface Props {
-  t: any;
-}
+import type { Language } from "@@types/language.type";
+import { getTranslation } from "@i18n/index";
 
-const { t } = Astro.props;
+const lang = Astro.params.lang as Language;
 ---
 
 <div class="bg-neutral-800/50 rounded-xl p-6 select-none mb-4">
   <label for="qr-input" class="block text-sm font-medium text-neutral-300 mb-2"
-    >{t.components.qrGenerator.inputTitle}</label
+    >{getTranslation(lang, "components.qrGenerator.inputTitle")}</label
   >
   <input
     id="qr-input"
     type="text"
     class="w-full mb-3 px-4 py-3 bg-neutral-900/60 border border-neutral-700 rounded-lg text-neutral-200 placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50"
-    placeholder={t.components.qrGenerator.inputPlaceholder}
+    placeholder={getTranslation(
+      lang,
+      "components.qrGenerator.inputPlaceholder"
+    )}
   />
 
   <button
@@ -22,7 +24,7 @@ const { t } = Astro.props;
     type="button"
     class="text-sm text-neutral-300 cursor-pointer w-full flex items-center justify-center gap-2 md:w-fit px-6 py-2 bg-neutral-700 hover:bg-neutral-600 rounded transition-colors font-medium focus:outline-none focus:ring-2 focus:ring-emerald-500/50 disabled:opacity-50 disabled:cursor-not-allowed"
   >
-    {t.components.qrGenerator.generate}
+    {getTranslation(lang, "components.qrGenerator.generate")}
   </button>
 </div>
 
@@ -32,11 +34,11 @@ const { t } = Astro.props;
 >
   <div>
     <span class="text-sm font-medium text-neutral-300 mb-2">
-      {t.components.qrGenerator.qrCodeTitle}
+      {getTranslation(lang, "components.qrGenerator.qrCodeTitle")}
     </span>
 
     <div class="text-xs text-neutral-400 mb-2">
-      {t.components.qrGenerator.qrCodeDescription}
+      {getTranslation(lang, "components.qrGenerator.qrCodeDescription")}
     </div>
     <div
       id="qr-code"
@@ -52,7 +54,7 @@ const { t } = Astro.props;
           type="button"
           class="text-sm text-neutral-300 cursor-pointer w-full flex items-center justify-center gap-2 md:w-fit px-6 py-2 bg-neutral-700 hover:bg-neutral-600 rounded transition-colors font-medium focus:outline-none focus:ring-2 focus:ring-emerald-500/50 disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          {t.components.qrGenerator.download} PNG
+          {getTranslation(lang, "common.download")} PNG
         </button>
 
         <button
@@ -60,7 +62,7 @@ const { t } = Astro.props;
           type="button"
           class="text-sm text-neutral-300 cursor-pointer w-full flex items-center justify-center gap-2 md:w-fit px-6 py-2 bg-neutral-700 hover:bg-neutral-600 rounded transition-colors font-medium focus:outline-none focus:ring-2 focus:ring-emerald-500/50 disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          {t.components.qrGenerator.download} SVG
+          {getTranslation(lang, "common.download")} SVG
         </button>
 
         <button
@@ -68,7 +70,9 @@ const { t } = Astro.props;
           type="button"
           class="text-sm text-neutral-300 cursor-pointer w-full flex items-center justify-center gap-2 md:w-fit px-6 py-2 bg-neutral-700 hover:bg-neutral-600 rounded transition-colors font-medium focus:outline-none focus:ring-2 focus:ring-emerald-500/50 disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          <span class="hidden sm:inline">{t.components.qrGenerator.share}</span>
+          <span class="hidden sm:inline"
+            >{getTranslation(lang, "components.qrGenerator.share")}</span
+          >
         </button>
       </div>
     </div>
