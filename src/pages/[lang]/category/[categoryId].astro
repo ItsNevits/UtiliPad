@@ -12,6 +12,7 @@ import JsonFormatter from "@components/tools/JsonFormatter.astro";
 import ZipCompressor from "@components/tools/ZipCompressor.astro";
 import QrGenerator from "@components/tools/QrGenerator.astro";
 import ImageConverter from "@components/tools/ImageConverter.astro";
+import FileConverter from "@components/tools/FileConverter.astro";
 
 import { TOOLS_CATEGORIES, getToolById } from "../../../constants/tools";
 import type { Language } from "@@types/language.type";
@@ -26,6 +27,7 @@ const lang = Astro.params.lang as Language;
 const COMPONENT_MAP = {
   // Files Components
   ZipCompressor: ZipCompressor,
+  FileConverter: FileConverter,
 
   // Text Components
   TextAnalyzer: TextAnalyzer,

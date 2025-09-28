@@ -10,6 +10,7 @@ export default {
     text: "Text",
     news: "News",
   },
+  processedError: "An error occurred during processing",
   all: "All",
   download: "Download",
   downloadZip: "Download all as ZIP",
@@ -20,4 +21,10 @@ export default {
   noData: "No data available",
   noImplemented: "Not implemented yet",
   format: "Format",
+  dropFilesOrSelect: "Drop files here or click to select",
+  processInfo: "Processing information...",
+  uploadedFiles: "Files uploaded",
+  totalFiles: "Total files",
+  unsupportedFiles: "Unsupported files",
+  supportedFormats: "Supported formats: ",
 };
