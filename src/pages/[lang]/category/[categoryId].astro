@@ -13,6 +13,7 @@ import ZipCompressor from "@components/tools/ZipCompressor.astro";
 import QrGenerator from "@components/tools/QrGenerator.astro";
 import ImageConverter from "@components/tools/ImageConverter.astro";
 import FileConverter from "@components/tools/FileConverter.astro";
+import PasswordGenerator from "@components/tools/PasswordGenerator.astro";
 
 import { TOOLS_CATEGORIES, getToolById } from "../../../constants/tools";
 import type { Language } from "@@types/language.type";
@@ -33,6 +34,7 @@ const COMPONENT_MAP = {
   TextAnalyzer: TextAnalyzer,
   JsonFormatter: JsonFormatter,
   QrGenerator: QrGenerator,
+  PasswordGenerator: PasswordGenerator,
 
   // Images Components
   ImageConverter: ImageConverter,

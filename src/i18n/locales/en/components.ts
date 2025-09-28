@@ -134,4 +134,11 @@ export default {
     DownloadAsZip: "Download as ZIP",
     Download: "Download",
   },
+  passwordGenerator: {
+    generatedPasswordLabel: "Generated Password",
+    LengthLabel: "Length",
+    valuesBetween:
+      "Value must be between 5 and 128. Use 14 characters or more to generate a strong password.",
+    tip: "Tip: Use a mix of all character types for best security.",
+  },
 };

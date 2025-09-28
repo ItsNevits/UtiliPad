@@ -52,6 +52,10 @@ export default {
       name: "Convertidor de imágenes",
       description: "Convierte entre JPG, PNG, WebP, etc.",
     },
+    "password-generator": {
+      name: "Generador de contraseñas",
+      description: "Genera contraseñas seguras y aleatorias",
+    },
   },
   badges: {
     Nuevo: "Nuevo",

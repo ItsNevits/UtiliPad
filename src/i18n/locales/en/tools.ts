@@ -52,6 +52,10 @@ export default {
       name: "Image Converter",
       description: "Convert between JPG, PNG, WebP, etc.",
     },
+    "password-generator": {
+      name: "Password Generator",
+      description: "Generate secure and random passwords",
+    },
   },
   badges: {
     Nuevo: "New",
