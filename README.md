@@ -37,7 +37,7 @@ pnpm dev
 ## 🖼️ Preview
 
 <p align="center">
-  <img src="https://www.utilipad.com/og/og-home-1236x853.png" alt="UtiliPad Screenshot" width="853"/>
+  <img src="https://www.utilipad.com/og/og-home-1157x851.png" alt="UtiliPad Screenshot" width="853"/>
 </p>
 
 ---
