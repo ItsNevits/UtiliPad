@@ -39,26 +39,25 @@ export default {
   },
   aboutUs: {
     title: "Sobre mí",
-    description:
-      "I just like to collaborate with the community and create useful things.",
+    description: "Me gusta colaborar con la comunidad y crear cosas útiles.",
     alt: "Sobre mí",
   },
   processSummary: {
-    title: "Processed Tasks",
+    title: "Procesos realizados",
     items: {
-      filesConverted: "Files converted",
-      imagesProcessed: "Images processed",
-      urlDownloads: "URL downloads",
+      filesConverted: "Archivos convertidos",
+      imagesProcessed: "Imágenes procesadas",
+      urlDownloads: "Descargas por URL",
     },
   },
   news: {
-    title: "News",
-    seeMore: "see more",
-    seeMoreTitle: "See all news",
+    title: "Novedades",
+    seeMore: "ver más",
+    seeMoreTitle: "Ver todas las novedades",
   },
   modal: {
-    press: "Press",
-    toClose: "to close",
+    press: "Presiona",
+    toClose: "para cerrar",
   },
   jsonFormatter: {
     // ==== BUTTONS ====
