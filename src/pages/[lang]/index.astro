@@ -1,8 +1,9 @@
 ---
+export const prerender = true;
+
 import MainLayout from "src/Layouts/MainLayout.astro";
 import Hero from "@components/shared/Hero.astro";
 import Tools from "@components/shared/Tools.astro";
-import RecentProcesses from "@components/shared/RecentProcesses.astro";
 
 import type { Language } from "@@types/language.type";
 import { getTranslation } from "@i18n/index";
