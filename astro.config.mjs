@@ -31,5 +31,44 @@ export default defineConfig({
   }),
 
   site: "https://utilipad.com",
-  integrations: [sitemap(), db()],
+  integrations: [
+    sitemap({
+      customPages: [
+        // Categorías
+        "https://utilipad.com/es/category/files",
+        "https://utilipad.com/en/category/files",
+
+        "https://utilipad.com/es/category/images",
+        "https://utilipad.com/en/category/images",
+
+        "https://utilipad.com/es/category/text",
+        "https://utilipad.com/en/category/text",
+
+        // Herramientas de archivos
+        "https://utilipad.com/es/category/files?tool=zip-files",
+        "https://utilipad.com/en/category/files?tool=zip-files",
+
+        "https://utilipad.com/es/category/files?tool=file-converter",
+        "https://utilipad.com/en/category/files?tool=file-converter",
+
+        // Herramientas de imágenes
+        "https://utilipad.com/es/category/images?tool=image-converter",
+        "https://utilipad.com/en/category/images?tool=image-converter",
+
+        // Herramientas de texto
+        "https://utilipad.com/es/category/text?tool=json-formatter",
+        "https://utilipad.com/en/category/text?tool=json-formatter",
+
+        "https://utilipad.com/es/category/text?tool=text-analyzer",
+        "https://utilipad.com/en/category/text?tool=text-analyzer",
+
+        "https://utilipad.com/es/category/text?tool=qr-generator",
+        "https://utilipad.com/en/category/text?tool=qr-generator",
+
+        "https://utilipad.com/es/category/text?tool=password-generator",
+        "https://utilipad.com/en/category/text?tool=password-generator",
+      ],
+    }),
+    db(),
+  ],
 });
