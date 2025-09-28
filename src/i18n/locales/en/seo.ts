@@ -4,7 +4,7 @@ export default {
     "Online utility suite: JSON formatter and validator, text analyzer, image compressor/resizer, and more. Fast, free, and no sign-up required.",
   pages: {
     contact: {
-      title: "Contacto — UtiliPad",
+      title: "Contact — UtiliPad",
       description:
         "Has any questions or suggestions? Feel free to reach out to me!",
     },
