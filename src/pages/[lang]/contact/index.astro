@@ -25,7 +25,10 @@ const FormSubjectOptions = getTranslation(
 const FagQuestions = getTranslation(lang, "pages.contact.faq.items");
 ---
 
-<MainLayout>
+<MainLayout
+  title={getTranslation(lang, "seo.pages.contact.title")}
+  description={getTranslation(lang, "seo.pages.contact.description")}
+>
   <Hero
     title={getTranslation(lang, "pages.contact.title")}
     description={getTranslation(lang, "pages.contact.description")}

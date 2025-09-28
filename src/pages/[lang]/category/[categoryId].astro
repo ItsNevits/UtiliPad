@@ -129,9 +129,29 @@ if (selectedTool) {
     isActive: true,
   });
 }
+
+// SEO title y description con reemplazo de placeholders
+const titleSeo = selectedTool
+  ? getTranslation(lang, "seo.pages.tool.title")?.replace(
+      "{tool}",
+      getTranslatedToolName(selectedTool.id, selectedTool)
+    )
+  : getTranslation(lang, "seo.pages.category.title")?.replace(
+      "{category}",
+      category.name
+    );
+const descriptionSeo = selectedTool
+  ? getTranslation(lang, "seo.pages.tool.description")?.replace(
+      "{tool}",
+      getTranslatedToolName(selectedTool.id, selectedTool)
+    )
+  : getTranslation(lang, "seo.pages.category.description")?.replace(
+      "{category}",
+      category.name
+    );
 ---
 
-<MainLayout>
+<MainLayout title={titleSeo} description={descriptionSeo}>
   <BreadCrumbs links={breadcrumbs} />
 
   <!-- Hero -->

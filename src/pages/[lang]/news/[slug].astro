@@ -38,7 +38,10 @@ const { entry } = Astro.props;
 const { Content } = await entry.render();
 ---
 
-<MainLayout>
+<MainLayout
+  title={getTranslation(lang, "seo.pages.news.title")}
+  description={getTranslation(lang, "seo.pages.news.description")}
+>
   <BreadCrumbs
     links={[
       {
