@@ -1,7 +1,7 @@
 ---
 title: Convertidor de Archivos
 author: Equipo de Desarrollo
-date: 2025-09-26
+date: 2025-09-28
 tags: ["Archivo", "Convertidor", "Formato", "Herramienta"]
 draft: false
 ---
