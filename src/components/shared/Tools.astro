@@ -23,6 +23,13 @@ const tools = translatedTools.map((tool) => ({
   isAvailable: tool.isAvailable,
   href: tool.href,
 }));
+
+// ordenar herramientas: disponibles primero, luego por título
+tools.sort((a, b) => {
+  if (a.isAvailable && !b.isAvailable) return -1;
+  if (!a.isAvailable && b.isAvailable) return 1;
+  return a.title.localeCompare(b.title);
+});
 ---
 
 <div
