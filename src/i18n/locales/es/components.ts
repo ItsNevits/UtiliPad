@@ -38,10 +38,10 @@ export default {
     current: "Español",
   },
   aboutUs: {
-    title: "About me",
+    title: "Sobre mí",
     description:
       "I just like to collaborate with the community and create useful things.",
-    alt: "About me",
+    alt: "Sobre mí",
   },
   processSummary: {
     title: "Processed Tasks",
