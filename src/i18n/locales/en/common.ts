@@ -27,4 +27,8 @@ export default {
   totalFiles: "Total files",
   unsupportedFiles: "Unsupported files",
   supportedFormats: "Supported formats: ",
+  lengthLabel: "Length",
+  include: "Include",
+  minimumNumbers: "Minimum numbers",
+  minimunSpecialChars: "Special characters",
 };

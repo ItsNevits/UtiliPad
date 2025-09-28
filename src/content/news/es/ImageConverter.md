@@ -1,6 +1,6 @@
 ---
 title: Convertidor de imagenes
-author: Development Team
+author: Equipo de desarrollo
 date: 2025-09-26
 tags: ["Imagen", "Convertidor", "Compresor", "Formato", "Herramienta"]
 draft: false

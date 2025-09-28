@@ -120,6 +120,15 @@ export const TOOLS_CATEGORIES: Category[] = [
         isAvailable: true,
         component: "QrGenerator",
       },
+      {
+        id: "password-generator",
+        name: "Generador de contraseñas",
+        description: "Genera contraseñas seguras y aleatorias",
+        href: "/category/text?tool=password-generator",
+        bagde: "Nuevo",
+        isAvailable: true,
+        component: "PasswordGenerator",
+      },
     ],
   },
 ];

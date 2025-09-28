@@ -133,4 +133,11 @@ export default {
     DownloadAsZip: "Descargar como ZIP",
     Download: "Descargar",
   },
+  passwordGenerator: {
+    generatedPasswordLabel: "Contraseña generada",
+    LengthLabel: "Longitud",
+    valuesBetween:
+      "El valor debe estar entre 5 y 128. Usa 14 caracteres o más para generar una contraseña fuerte.",
+    tip: "Consejo: Usa una mezcla de todos los tipos de caracteres para mayor seguridad.",
+  },
 };
