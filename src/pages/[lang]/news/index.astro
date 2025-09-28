@@ -24,7 +24,10 @@ const sortedNews = news.sort(
 );
 ---
 
-<MainLayout>
+<MainLayout
+  title={getTranslation(lang, "seo.pages.news.title")}
+  description={getTranslation(lang, "seo.pages.news.description")}
+>
   <Hero
     title={getTranslation(lang, "pages.news.title")}
     description={getTranslation(lang, "pages.news.description")}

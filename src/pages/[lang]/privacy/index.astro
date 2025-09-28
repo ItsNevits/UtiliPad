@@ -9,7 +9,10 @@ const lang = Astro.params.lang as Language;
 const privacyContent = getTranslation(lang, "pages.privacy.content");
 ---
 
-<MainLayout>
+<MainLayout
+  title={getTranslation(lang, "seo.pages.privacy.title")}
+  description={getTranslation(lang, "seo.pages.privacy.description")}
+>
   <Hero
     title={getTranslation(lang, "pages.privacy.title")}
     description={getTranslation(lang, "pages.privacy.description")}

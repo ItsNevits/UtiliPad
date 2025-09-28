@@ -9,7 +9,10 @@ const lang = Astro.params.lang as Language;
 const termsContent = getTranslation(lang, "pages.terms.content");
 ---
 
-<MainLayout>
+<MainLayout
+  title={getTranslation(lang, "seo.pages.terms.title")}
+  description={getTranslation(lang, "seo.pages.terms.description")}
+>
   <Hero
     title={getTranslation(lang, "pages.terms.title")}
     description={getTranslation(lang, "pages.terms.description")}

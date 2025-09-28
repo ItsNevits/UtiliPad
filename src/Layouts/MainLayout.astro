@@ -10,6 +10,16 @@ import type { Language } from "@@types/language.type";
 import { getTranslation } from "@i18n/index";
 
 const lang = Astro.params.lang as Language;
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = getTranslation(lang, "seo.title"),
+  description = getTranslation(lang, "seo.description"),
+}: Props = Astro.props;
 ---
 
 <!doctype html>
@@ -21,22 +31,16 @@ const lang = Astro.params.lang as Language;
     <link rel="sitemap" href="/sitemap-index.xml" />
 
     <!-- SEO Básico -->
-    <title>{getTranslation(lang, "seo.title")}</title>
-    <meta
-      name="description"
-      content={getTranslation(lang, "seo.description")}
-    />
+    <title>{title}</title>
+    <meta name="description" content={description} />
     <meta name="robots" content="index, follow, max-image-preview:large" />
     <link rel="canonical" href={"https://utilipad.com"} />
 
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content={"https://utilipad.com"} />
-    <meta property="og:title" content={getTranslation(lang, "seo.title")} />
-    <meta
-      property="og:description"
-      content={getTranslation(lang, "seo.description")}
-    />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
     <meta
       property="og:image"
       content="https://utilipad.com/og/og-home-1200x630.jpg"
@@ -48,11 +52,8 @@ const lang = Astro.params.lang as Language;
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content={getTranslation(lang, "seo.title")} />
-    <meta
-      name="twitter:description"
-      content={getTranslation(lang, "seo.description")}
-    />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
     <meta
       name="twitter:image"
       content="https://utilipad.com/og/og-home-1200x630.jpg"
