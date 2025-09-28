@@ -38,27 +38,27 @@ export default {
     current: "English",
   },
   aboutUs: {
-    title: "Sobre mí",
+    title: "About me",
     description:
-      "Solo me gusta colaborar con la comunidad y crear cosas útiles.",
-    alt: "Sobre mí",
+      "I just like to collaborate with the community and create useful things.",
+    alt: "About me",
   },
   processSummary: {
-    title: "Procesos realizados",
+    title: "Processed Tasks",
     items: {
-      filesConverted: "Archivos convertidos",
-      imagesProcessed: "Imágenes procesadas",
-      urlDownloads: "Descargas por URL",
+      filesConverted: "Files converted",
+      imagesProcessed: "Images processed",
+      urlDownloads: "URL downloads",
     },
   },
   news: {
-    title: "Novedades",
-    seeMore: "ver más",
-    seeMoreTitle: "Ver todas las novedades",
+    title: "News",
+    seeMore: "see more",
+    seeMoreTitle: "See all news",
   },
   modal: {
-    press: "Presiona",
-    toClose: "para cerrar",
+    press: "Press",
+    toClose: "to close",
   },
   jsonFormatter: {
     // ==== BUTTONS ====
