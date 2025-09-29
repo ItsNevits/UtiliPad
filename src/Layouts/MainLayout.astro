@@ -39,17 +39,10 @@ const currentUrl = `${baseUrl}${Astro.url.pathname}`;
 const alternateUrl = Astro.url.pathname.replace(/^\/(es|en)/, '');
 const esUrl = `${baseUrl}/es${alternateUrl}`;
 const enUrl = `${baseUrl}/en${alternateUrl}`;
-
-// Map language codes to proper locale codes
-const localeMap = {
-  'es': 'es-ES',
-  'en': 'en-US'
-};
-const htmlLang = localeMap[lang] || 'es-ES';
 ---
 
 <!doctype html>
-<html lang={htmlLang}>
+<html lang={lang}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -79,7 +72,7 @@ const htmlLang = localeMap[lang] || 'es-ES';
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:site_name" content="UtiliPad" />
-    <meta property="og:locale" content={htmlLang.replace('-', '_')} />
+    <meta property="og:locale" content={lang} />
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
@@ -112,7 +105,7 @@ const htmlLang = localeMap[lang] || 'es-ES';
     <meta name="theme-color" content="#10b981" />
 
     <!-- JSON-LD  -->
-    <script type="application/ld+json" set:html={JSON.stringify(generateJSONLD(Astro.url.pathname, baseUrl, currentUrl, lang, htmlLang, finalTitle, finalDescription, pageData), null, 2)}>
+    <script type="application/ld+json" set:html={JSON.stringify(generateJSONLD(Astro.url.pathname, baseUrl, currentUrl, lang, finalTitle, finalDescription, pageData), null, 2)}>
     </script>
 
     <!-- Verificación de Motores de Búsqueda -->
