@@ -74,52 +74,68 @@ const lang = Astro.params.lang as Language;
 </div>
 
 <script>
-  const textInput = document.getElementById(
-    "text-input"
-  ) as HTMLTextAreaElement;
-  const wordCount = document.getElementById("word-count") as HTMLElement;
-  const charCount = document.getElementById("char-count") as HTMLElement;
-  const charNoSpaces = document.getElementById("char-no-spaces") as HTMLElement;
-  const paragraphCount = document.getElementById(
-    "paragraph-count"
-  ) as HTMLElement;
-  const readingTime = document.getElementById("reading-time") as HTMLElement;
-  const uniqueWords = document.getElementById("unique-words") as HTMLElement;
+  document.addEventListener("astro:page-load", () => {
+    const textInput = document.getElementById(
+      "text-input"
+    ) as HTMLTextAreaElement;
+    const wordCount = document.getElementById("word-count") as HTMLElement;
+    const charCount = document.getElementById("char-count") as HTMLElement;
+    const charNoSpaces = document.getElementById(
+      "char-no-spaces"
+    ) as HTMLElement;
+    const paragraphCount = document.getElementById(
+      "paragraph-count"
+    ) as HTMLElement;
+    const readingTime = document.getElementById("reading-time") as HTMLElement;
+    const uniqueWords = document.getElementById("unique-words") as HTMLElement;
 
-  function updateStats() {
-    const text = textInput.value;
+    // si algun elemento no existe, salir
+    if (
+      !textInput ||
+      !wordCount ||
+      !charCount ||
+      !charNoSpaces ||
+      !paragraphCount ||
+      !uniqueWords
+    )
+      return;
 
-    // Contar palabras
-    const words = text.trim() === "" ? 0 : text.trim().split(/\s+/).length;
-    wordCount.textContent = words.toString();
+    function updateStats() {
+      const text = textInput.value;
 
-    // Contar caracteres
-    charCount.textContent = text.length.toString();
+      // Contar palabras
+      const words = text.trim() === "" ? 0 : text.trim().split(/\s+/).length;
+      wordCount.textContent = words.toString();
 
-    // Caracteres sin espacios
-    charNoSpaces.textContent = text.replace(/\s/g, "").length.toString();
+      // Contar caracteres
+      charCount.textContent = text.length.toString();
 
-    // Párrafos
-    const paragraphs =
-      text.trim() === ""
-        ? 0
-        : text.split(/\n\s*\n/).filter((p) => p.trim() !== "").length;
-    paragraphCount.textContent = paragraphs.toString();
+      // Caracteres sin espacios
+      charNoSpaces.textContent = text.replace(/\s/g, "").length.toString();
 
-    // Palabras únicas
-    const uniqueWordsSet = new Set(
-      text
-        .toLowerCase()
-        .replace(/[^\w\s]/g, "")
-        .split(/\s+/)
-        .filter((word) => word.length > 0)
-    );
-    uniqueWords.textContent = uniqueWordsSet.size.toString();
-  }
+      // Párrafos
+      const paragraphs =
+        text.trim() === ""
+          ? 0
+          : text.split(/\n\s*\n/).filter((p) => p.trim() !== "").length;
+      paragraphCount.textContent = paragraphs.toString();
 
-  // Actualizar estadísticas en tiempo real
-  textInput.addEventListener("input", updateStats);
+      // Palabras únicas
+      const uniqueWordsSet = new Set(
+        text
+          .toLowerCase()
+          .replace(/[^\w\s]/g, "")
+          .split(/\s+/)
+          .filter((word) => word.length > 0)
+      );
+      uniqueWords.textContent = uniqueWordsSet.size.toString();
+    }
 
-  // Inicializar
-  updateStats();
+    // Actualizar estadísticas en tiempo real
+    if (!textInput) return;
+    textInput.addEventListener("input", updateStats);
+
+    // Inicializar
+    updateStats();
+  });
 </script>

@@ -305,13 +305,6 @@ const toolsData = {
     });
   }
 
-  // Inicializar cuando el DOM esté listo
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", initializeSearch);
-  } else {
-    initializeSearch();
-  }
-
   // Reinicializar después de las transiciones de página de Astro
   document.addEventListener("astro:page-load", initializeSearch);
 </script>

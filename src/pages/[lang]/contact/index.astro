@@ -272,7 +272,8 @@ const FagQuestions = getTranslation(lang, "pages.contact.faq.items");
     }
   }
 
-  customElements.define("astro-greet", AstroGreet);
+  if (!customElements.get("astro-greet"))
+    customElements.define("astro-greet", AstroGreet);
 
   form.addEventListener("submit", async (e) => {
     e.preventDefault();

@@ -75,82 +75,97 @@ const lang = Astro.params.lang as Language;
 <script>
   import { modalStore, closeModal } from "../../stores/modal";
 
-  const modal = document.getElementById("global-modal") as HTMLElement;
-  const modalTitle = document.getElementById("modal-title") as HTMLElement;
-  const modalDescription = document.getElementById(
-    "modal-description"
-  ) as HTMLElement;
-  const modalContent = document.getElementById("modal-content") as HTMLElement;
-  const modalInfo = document.getElementById("modal-info") as HTMLElement;
-  const closeBtn = document.getElementById(
-    "close-modal-btn"
-  ) as HTMLButtonElement;
-  const copyBtn = document.getElementById(
-    "modal-copy-btn"
-  ) as HTMLButtonElement;
+  document.addEventListener("astro:page-load", () => {
+    const modal = document.getElementById("global-modal") as HTMLElement;
+    const modalTitle = document.getElementById("modal-title") as HTMLElement;
+    const modalDescription = document.getElementById(
+      "modal-description"
+    ) as HTMLElement;
+    const modalContent = document.getElementById(
+      "modal-content"
+    ) as HTMLElement;
+    const modalInfo = document.getElementById("modal-info") as HTMLElement;
+    const closeBtn = document.getElementById(
+      "close-modal-btn"
+    ) as HTMLButtonElement;
+    const copyBtn = document.getElementById(
+      "modal-copy-btn"
+    ) as HTMLButtonElement;
 
-  let currentOnCopy: (() => void) | undefined;
+    if (
+      !modal ||
+      !modalTitle ||
+      !modalDescription ||
+      !modalContent ||
+      !modalInfo ||
+      !closeBtn
+    ) {
+      return;
+    }
 
-  // Función para mostrar el modal
-  function showModal() {
-    modal.classList.remove("hidden");
-    requestAnimationFrame(() => {
-      modal.classList.remove("opacity-0");
-      modal.classList.add("opacity-100");
-    });
-    document.body.style.overflow = "hidden";
-  }
+    let currentOnCopy: (() => void) | undefined;
 
-  // Función para ocultar el modal
-  function hideModal() {
-    modal.classList.remove("opacity-100");
-    modal.classList.add("opacity-0");
+    // Función para mostrar el modal
+    function showModal() {
+      modal.classList.remove("hidden");
+      requestAnimationFrame(() => {
+        modal.classList.remove("opacity-0");
+        modal.classList.add("opacity-100");
+      });
+      document.body.style.overflow = "hidden";
+    }
 
-    setTimeout(() => {
-      modal.classList.add("hidden");
-      document.body.style.overflow = "auto";
-    }, 300);
-  }
+    // Función para ocultar el modal
+    function hideModal() {
+      modal.classList.remove("opacity-100");
+      modal.classList.add("opacity-0");
 
-  // Suscribirse a cambios en el store
-  modalStore.subscribe((state) => {
-    if (state.isOpen) {
-      // Actualizar contenido
-      modalTitle.textContent = state.title;
-      modalDescription.textContent = state.description;
+      setTimeout(() => {
+        modal.classList.add("hidden");
+        document.body.style.overflow = "auto";
+      }, 300);
+    }
 
-      // Limpiar contenido previo
-      modalContent.innerHTML = "";
-      modalInfo.innerHTML = "";
+    // Suscribirse a cambios en el store
+    modalStore.subscribe((state) => {
+      if (state.isOpen) {
+        // Actualizar contenido
+        modalTitle.textContent = state.title;
+        modalDescription.textContent = state.description;
 
-      // Insertar nuevo contenido
-      if (state.content) {
-        if (typeof state.content === "string") {
-          modalContent.innerHTML = state.content;
-        } else if (state.content instanceof HTMLElement) {
-          modalContent.appendChild(state.content);
-        } else {
-          // Para contenido JSON u otros objetos
-          const pre = document.createElement("pre");
-          pre.className = "text-sm text-neutral-300 whitespace-pre-wrap";
-          pre.textContent = JSON.stringify(state.content, null, 2);
-          modalContent.appendChild(pre);
+        // Limpiar contenido previo
+        modalContent.innerHTML = "";
+        modalInfo.innerHTML = "";
+
+        // Insertar nuevo contenido
+        if (state.content) {
+          if (typeof state.content === "string") {
+            modalContent.innerHTML = state.content;
+          } else if (state.content instanceof HTMLElement) {
+            modalContent.appendChild(state.content);
+          } else {
+            // Para contenido JSON u otros objetos
+            const pre = document.createElement("pre");
+            pre.className = "text-sm text-neutral-300 whitespace-pre-wrap";
+            pre.textContent = JSON.stringify(state.content, null, 2);
+            modalContent.appendChild(pre);
+          }
         }
+
+        showModal();
+      } else {
+        hideModal();
       }
+    });
 
-      showModal();
-    } else {
-      hideModal();
-    }
-  });
+    // Event listeners
+    closeBtn.addEventListener("click", closeModal);
 
-  // Event listeners
-  closeBtn.addEventListener("click", closeModal);
-
-  // Cerrar modal con Escape
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && !modal.classList.contains("hidden")) {
-      closeModal();
-    }
+    // Cerrar modal con Escape
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && !modal.classList.contains("hidden")) {
+        closeModal();
+      }
+    });
   });
 </script>

@@ -183,7 +183,7 @@ const descriptionSeo = selectedTool
               .filter((tool) => tool.id !== selectedTool.id && tool.isAvailable)
               .map((tool) => (
                 <a
-                  href={tool.href}
+                  href={`/${lang}${tool.href}`}
                   class="block p-4 bg-neutral-900/40 rounded-xl border border-neutral-800 hover:border-emerald-600/60 transition-colors"
                 >
                   <h4 class="font-medium mb-1">

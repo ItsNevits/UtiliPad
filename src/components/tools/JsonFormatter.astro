@@ -158,240 +158,226 @@ const lang = Astro.params.lang as Language;
   import { openModal } from "../../stores/modal";
   import { fetchIncrementProcessCountByToolId } from "@utils/tools";
 
-  let jsonMessages = {} as any;
+  function initJsonFormatter() {
+    let jsonMessages = {} as any;
+    let currentJsonData: any = null;
 
-  class AstroGreet extends HTMLElement {
-    connectedCallback() {
-      const t = JSON.parse(this.getAttribute("data-translations") || "{}");
-      jsonMessages = t;
+    // Initialize translations
+    class AstroGreet extends HTMLElement {
+      connectedCallback() {
+        jsonMessages = JSON.parse(
+          this.getAttribute("data-translations") || "{}"
+        );
+      }
     }
-  }
 
-  customElements.define("astro-greet", AstroGreet);
+    if (!customElements.get("astro-greet"))
+      customElements.define("astro-greet", AstroGreet);
 
-  const jsonInput = document.getElementById(
-    "json-input"
-  ) as HTMLTextAreaElement;
-  const jsonOutput = document.getElementById("json-output") as HTMLElement;
-  const jsonOutputText = document.getElementById(
-    "json-output-text"
-  ) as HTMLTextAreaElement;
-  const validationStatus = document.getElementById(
-    "validation-status"
-  ) as HTMLElement;
-  const originalSize = document.getElementById("original-size") as HTMLElement;
-  const formattedSize = document.getElementById(
-    "formatted-size"
-  ) as HTMLElement;
-  const indentSize = document.getElementById("indent-size") as HTMLInputElement;
+    // Get DOM elements
+    const elements = {
+      jsonInput: document.getElementById("json-input") as HTMLTextAreaElement,
+      jsonOutput: document.getElementById("json-output") as HTMLElement,
+      jsonOutputText: document.getElementById(
+        "json-output-text"
+      ) as HTMLTextAreaElement,
+      validationStatus: document.getElementById(
+        "validation-status"
+      ) as HTMLElement,
+      originalSize: document.getElementById("original-size") as HTMLElement,
+      formattedSize: document.getElementById("formatted-size") as HTMLElement,
+      indentSize: document.getElementById("indent-size") as HTMLInputElement,
+      formatBtn: document.getElementById("format-btn") as HTMLButtonElement,
+      minifyBtn: document.getElementById("minify-btn") as HTMLButtonElement,
+      pasteBtn: document.getElementById("paste-btn") as HTMLButtonElement,
+      clearBtn: document.getElementById("clear-btn") as HTMLButtonElement,
+      copyBtn: document.getElementById("copy-btn") as HTMLButtonElement,
+      downloadBtn: document.getElementById("download-btn") as HTMLButtonElement,
+      expandBtn: document.getElementById("expand-btn") as HTMLButtonElement,
+    };
 
-  // Botones
-  const formatBtn = document.getElementById("format-btn") as HTMLButtonElement;
-  const minifyBtn = document.getElementById("minify-btn") as HTMLButtonElement;
-  const pasteBtn = document.getElementById("paste-btn") as HTMLButtonElement;
-  const clearBtn = document.getElementById("clear-btn") as HTMLButtonElement;
-  const copyBtn = document.getElementById("copy-btn") as HTMLButtonElement;
-  const downloadBtn = document.getElementById(
-    "download-btn"
-  ) as HTMLButtonElement;
+    // Check if all elements exist
+    if (Object.values(elements).some((el) => !el)) return;
 
-  // Elementos del componente
-  const expandBtn = document.getElementById("expand-btn") as HTMLButtonElement;
+    // Utility functions
+    const updateSizes = (original: string, formatted: string) => {
+      elements.originalSize.textContent = `${new Blob([original]).size} bytes`;
+      elements.formattedSize.textContent = `${new Blob([formatted]).size} bytes`;
+    };
 
-  let currentJsonData: any = null;
+    const showValidationStatus = (isValid: boolean, message: string = "") => {
+      const status = isValid
+        ? `<span class="text-emerald-400">✓ ${jsonMessages.validJson}</span>`
+        : `<span class="text-red-400">✗ ${jsonMessages.invalidJson}: ${message}</span>`;
+      elements.validationStatus.innerHTML = status;
+    };
 
-  function updateSizes(original: string, formatted: string) {
-    originalSize.textContent = `${new Blob([original]).size} bytes`;
-    formattedSize.textContent = `${new Blob([formatted]).size} bytes`;
-  }
+    const clearOutput = () => {
+      elements.jsonOutput.innerHTML = "";
+      elements.jsonOutputText.value = "";
+      elements.validationStatus.innerHTML = "";
+      updateSizes("", "");
+      currentJsonData = null;
+    };
 
-  function showValidationStatus(isValid: boolean, message: string = "") {
-    if (isValid) {
-      validationStatus.innerHTML = `<span class="text-emerald-400">✓ ${jsonMessages.validJson}</span>`;
-    } else {
-      validationStatus.innerHTML = `<span class="text-red-400">✗ ${jsonMessages.invalidJson}: ${message}</span>`;
-    }
-  }
+    // Main functions
+    const formatJSON = () => {
+      const inputText = elements.jsonInput.value.trim();
 
-  // Función para abrir el modal con el JSON expandido
-  function openJsonModal() {
-    if (!currentJsonData) return;
+      if (!inputText) {
+        clearOutput();
+        showValidationStatus(false, jsonMessages.emptyInput);
+        return;
+      }
 
-    // Crear formateador para el modal con más niveles expandidos
-    const modalFormatter = new JSONFormatter(currentJsonData, 3, {
-      hoverPreviewEnabled: true,
-      hoverPreviewArrayCount: 50,
-      hoverPreviewFieldCount: 8,
-      theme: "dark",
-      animateOpen: true,
-      animateClose: true,
+      try {
+        const parsedJSON = JSON.parse(inputText);
+        const indent = parseInt(elements.indentSize.value) || 2;
+        currentJsonData = parsedJSON;
+
+        // Show formatted view
+        elements.jsonOutput.innerHTML = "";
+        elements.jsonOutput.classList.remove("hidden");
+        elements.jsonOutputText.classList.add("hidden");
+
+        const formatter = new JSONFormatter(parsedJSON, 1, {
+          hoverPreviewEnabled: false,
+          hoverPreviewArrayCount: 100,
+          hoverPreviewFieldCount: 5,
+          theme: "dark",
+        });
+
+        elements.jsonOutput.appendChild(formatter.render());
+
+        const formattedText = JSON.stringify(parsedJSON, null, indent);
+        elements.jsonOutputText.value = formattedText;
+
+        showValidationStatus(true);
+        updateSizes(inputText, formattedText);
+        fetchIncrementProcessCountByToolId("json-formatter");
+      } catch (error) {
+        showValidationStatus(false, (error as Error).message);
+        elements.jsonOutput.innerHTML = `<div class="text-red-400 p-4">${jsonMessages.errorParsing}</div>`;
+        elements.jsonOutputText.value = "";
+        updateSizes(inputText, "");
+        currentJsonData = null;
+      }
+    };
+
+    const minifyJSON = () => {
+      const inputText = elements.jsonInput.value.trim();
+      if (!inputText) return;
+
+      try {
+        const parsedJSON = JSON.parse(inputText);
+        const minified = JSON.stringify(parsedJSON);
+
+        elements.jsonOutput.classList.add("hidden");
+        elements.jsonOutputText.classList.remove("hidden");
+        elements.jsonOutputText.value = minified;
+
+        showValidationStatus(true);
+        updateSizes(inputText, minified);
+        fetchIncrementProcessCountByToolId("json-formatter");
+      } catch (error) {
+        showValidationStatus(false, (error as Error).message);
+      }
+    };
+
+    const openJsonModal = () => {
+      if (!currentJsonData) return;
+
+      const modalFormatter = new JSONFormatter(currentJsonData, 3, {
+        hoverPreviewEnabled: true,
+        hoverPreviewArrayCount: 50,
+        hoverPreviewFieldCount: 8,
+        theme: "dark",
+        animateOpen: true,
+        animateClose: true,
+      });
+
+      const container = document.createElement("div");
+      container.className =
+        "json-formatter-container w-full max-w-full overflow-hidden";
+      container.appendChild(modalFormatter.render());
+
+      openModal({
+        title: jsonMessages.modalTitle,
+        description: jsonMessages.modalDescription,
+        content: container,
+        onCopy: async () => {
+          try {
+            await navigator.clipboard.writeText(
+              JSON.stringify(currentJsonData, null, 2)
+            );
+          } catch (error) {
+            console.error("Error al copiar:", error);
+          }
+        },
+      });
+    };
+
+    // Event listeners
+    elements.formatBtn.addEventListener("click", formatJSON);
+    elements.minifyBtn.addEventListener("click", minifyJSON);
+    elements.expandBtn.addEventListener("click", openJsonModal);
+
+    elements.pasteBtn.addEventListener("click", async () => {
+      try {
+        elements.jsonInput.value = await navigator.clipboard.readText();
+        formatJSON();
+      } catch (error) {
+        console.error("Error al pegar:", error);
+      }
     });
 
-    // Crear elemento contenedor para el JSON
-    const container = document.createElement("div");
-    container.className =
-      "json-formatter-container w-full max-w-full overflow-hidden";
-    const renderedJson = modalFormatter.render();
-    container.appendChild(renderedJson);
+    elements.clearBtn.addEventListener("click", () => {
+      elements.jsonInput.value = "";
+      clearOutput();
+    });
 
-    // Información adicional
-    const formattedText = JSON.stringify(currentJsonData, null, 2);
-
-    // Abrir modal usando el store
-    openModal({
-      title: jsonMessages.modalTitle,
-      description: jsonMessages.modalDescription,
-      content: container,
-      onCopy: async () => {
+    elements.copyBtn.addEventListener("click", async () => {
+      if (elements.jsonOutputText.value) {
         try {
-          await navigator.clipboard.writeText(formattedText);
+          await navigator.clipboard.writeText(elements.jsonOutputText.value);
+          elements.copyBtn.textContent = `${jsonMessages.copy} ✓`;
+          setTimeout(() => {
+            elements.copyBtn.textContent = jsonMessages.copy;
+          }, 2000);
         } catch (error) {
           console.error("Error al copiar:", error);
         }
-      },
-    });
-  }
-
-  function formatJSON() {
-    const inputText = jsonInput.value.trim();
-
-    if (!inputText) {
-      jsonOutput.innerHTML = "";
-      jsonOutputText.value = "";
-      showValidationStatus(false, jsonMessages.emptyInput);
-      updateSizes("", "");
-      currentJsonData = null;
-      return;
-    }
-
-    try {
-      const parsedJSON = JSON.parse(inputText);
-      const indent = parseInt(indentSize.value) || 2;
-
-      // Guardar datos para el modal
-      currentJsonData = parsedJSON;
-
-      // Limpiar el contenedor
-      jsonOutput.innerHTML = "";
-      jsonOutput.classList.remove("hidden");
-      jsonOutputText.classList.add("hidden");
-
-      // Crear el formateador con json-formatter-js
-      const formatter = new JSONFormatter(parsedJSON, 1, {
-        hoverPreviewEnabled: false,
-        hoverPreviewArrayCount: 100,
-        hoverPreviewFieldCount: 5,
-        theme: "dark",
-      });
-
-      jsonOutput.appendChild(formatter.render());
-
-      // También generar versión de texto para copiar
-      const formattedText = JSON.stringify(parsedJSON, null, indent);
-      jsonOutputText.value = formattedText;
-
-      showValidationStatus(true);
-      updateSizes(inputText, formattedText);
-    } catch (error) {
-      showValidationStatus(false, (error as Error).message);
-      jsonOutput.innerHTML = `<div class="text-red-400 p-4">${jsonMessages.errorParsing}</div>`;
-      jsonOutputText.value = "";
-      updateSizes(inputText, "");
-      currentJsonData = null;
-    } finally {
-      // Incrementar el contador de uso del servicio
-      fetchIncrementProcessCountByToolId("json-formatter");
-    }
-  }
-
-  function minifyJSON() {
-    const inputText = jsonInput.value.trim();
-
-    if (!inputText) return;
-
-    try {
-      const parsedJSON = JSON.parse(inputText);
-      const minified = JSON.stringify(parsedJSON);
-
-      // Mostrar en modo texto para minificado
-      jsonOutput.classList.add("hidden");
-      jsonOutputText.classList.remove("hidden");
-      jsonOutputText.value = minified;
-
-      showValidationStatus(true);
-      updateSizes(inputText, minified);
-    } catch (error) {
-      showValidationStatus(false, (error as Error).message);
-    } finally {
-      // Incrementar el contador de uso del servicio
-      fetchIncrementProcessCountByToolId("json-formatter");
-    }
-  }
-
-  // Event listeners
-  formatBtn.addEventListener("click", formatJSON);
-  minifyBtn.addEventListener("click", minifyJSON);
-
-  pasteBtn.addEventListener("click", async () => {
-    try {
-      const text = await navigator.clipboard.readText();
-      jsonInput.value = text;
-      formatJSON();
-    } catch (error) {
-      console.error("Error al pegar:", error);
-    }
-  });
-
-  clearBtn.addEventListener("click", () => {
-    jsonInput.value = "";
-    jsonOutput.innerHTML = "";
-    jsonOutputText.value = "";
-    validationStatus.innerHTML = "";
-    updateSizes("", "");
-  });
-
-  copyBtn.addEventListener("click", async () => {
-    const textToCopy = jsonOutputText.value;
-    if (textToCopy) {
-      try {
-        await navigator.clipboard.writeText(textToCopy);
-        copyBtn.textContent = `${jsonMessages.copy} ✓`;
-        setTimeout(() => {
-          copyBtn.textContent = jsonMessages.copy;
-        }, 2000);
-      } catch (error) {
-        console.error("Error al copiar:", error);
       }
+    });
+
+    elements.downloadBtn.addEventListener("click", () => {
+      if (elements.jsonOutputText.value) {
+        const blob = new Blob([elements.jsonOutputText.value], {
+          type: "application/json",
+        });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "formatted.json";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      }
+    });
+
+    // Auto-format with debounce
+    let timeoutId: ReturnType<typeof setTimeout>;
+    elements.jsonInput.addEventListener("input", () => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(formatJSON, 500);
+    });
+
+    // Format on load if there's initial content
+    if (elements.jsonInput.value.trim()) {
+      formatJSON();
     }
-  });
-
-  downloadBtn.addEventListener("click", () => {
-    const content = jsonOutputText.value;
-    if (content) {
-      const blob = new Blob([content], { type: "application/json" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "formatted.json";
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-    }
-  });
-
-  // Event listeners del modal
-  expandBtn.addEventListener("click", openJsonModal);
-
-  // Formatear automáticamente al escribir (con debounce)
-  let timeoutId: ReturnType<typeof setTimeout>;
-  jsonInput.addEventListener("input", () => {
-    clearTimeout(timeoutId);
-    timeoutId = setTimeout(formatJSON, 500);
-  });
-
-  // Formatear al cargar si hay contenido inicial
-  if (jsonInput.value.trim()) {
-    formatJSON();
   }
+
+  document.addEventListener("astro:page-load", initJsonFormatter);
 </script>

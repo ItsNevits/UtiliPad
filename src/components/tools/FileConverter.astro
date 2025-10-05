@@ -128,185 +128,191 @@ const filesSupported = (await response.json()) as FilesSupported;
 <script>
   import { fetchIncrementProcessCountByToolId } from "@utils/tools";
 
-  // Variables para conversiones soportadas
-  let supportedConversions: Record<string, string[]> = {};
-  let outputFormats: string[] = [];
+  document.addEventListener("astro:page-load", () => {
+    // Variables para conversiones soportadas
+    let supportedConversions: Record<string, string[]> = {};
+    let outputFormats: string[] = [];
 
-  // Fetch supported conversions from API
-  fetch("/api/files/convert")
-    .then((res) => res.json())
-    .then((data) => {
-      supportedConversions = data;
-      // Llenar select global con todos los formatos posibles
-      const allFormats = new Set<string>();
-      Object.values(data).forEach((arr) =>
-        (arr as string[]).forEach((f: string) => allFormats.add(f))
-      );
-      outputFormats = Array.from(allFormats);
-      const allSelect = document.getElementById("all-files");
-      if (allSelect) {
-        allSelect.innerHTML =
-          `<option value="" selected disabled>${jsonMessages.select}</option>` +
-          outputFormats
-            .map(
-              (f: string) => `<option value="${f}">${f.toUpperCase()}</option>`
-            )
-            .join("");
-        allSelect.addEventListener("change", function () {
-          const format = (this as HTMLSelectElement).value;
-          currentFiles.forEach((file: File, idx: number) => {
-            const ext = file.name.split(".").pop()?.toLowerCase() || "";
-            const select = document.getElementById(
-              `format-select-${idx}`
-            ) as HTMLSelectElement | null;
-            if (
-              select &&
-              ext &&
-              supportedConversions[ext] &&
-              supportedConversions[ext].includes(format)
-            ) {
-              select.value = format;
-            }
+    // Fetch supported conversions from API
+    fetch("/api/files/convert")
+      .then((res) => res.json())
+      .then((data) => {
+        supportedConversions = data;
+        // Llenar select global con todos los formatos posibles
+        const allFormats = new Set<string>();
+        Object.values(data).forEach((arr) =>
+          (arr as string[]).forEach((f: string) => allFormats.add(f))
+        );
+        outputFormats = Array.from(allFormats);
+        const allSelect = document.getElementById("all-files");
+        if (allSelect) {
+          allSelect.innerHTML =
+            `<option value="" selected disabled>${jsonMessages.select}</option>` +
+            outputFormats
+              .map(
+                (f: string) =>
+                  `<option value="${f}">${f.toUpperCase()}</option>`
+              )
+              .join("");
+          allSelect.addEventListener("change", function () {
+            const format = (this as HTMLSelectElement).value;
+            currentFiles.forEach((file: File, idx: number) => {
+              const ext = file.name.split(".").pop()?.toLowerCase() || "";
+              const select = document.getElementById(
+                `format-select-${idx}`
+              ) as HTMLSelectElement | null;
+              if (
+                select &&
+                ext &&
+                supportedConversions[ext] &&
+                supportedConversions[ext].includes(format)
+              ) {
+                select.value = format;
+              }
+            });
           });
-        });
+        }
+      });
+
+    let jsonMessages = {} as any;
+
+    class AstroGreet extends HTMLElement {
+      connectedCallback() {
+        const t = JSON.parse(this.getAttribute("data-translations") || "{}");
+        jsonMessages = t || {};
       }
-    });
-
-  let jsonMessages = {} as any;
-
-  class AstroGreet extends HTMLElement {
-    connectedCallback() {
-      const t = JSON.parse(this.getAttribute("data-translations") || "{}");
-      jsonMessages = t || {};
     }
-  }
+    if (!customElements.get("astro-greet"))
+      customElements.define("astro-greet", AstroGreet);
 
-  customElements.define("astro-greet", AstroGreet);
+    const dropZone = document.getElementById(
+      "drop-zone"
+    ) as HTMLDivElement | null;
+    const fileInput = document.getElementById(
+      "files-file-input"
+    ) as HTMLInputElement | null;
+    const filesUploaded = document.getElementById(
+      "files-uploaded"
+    ) as HTMLDivElement | null;
+    const contentFilesUploaded = document.getElementById(
+      "content-files-uploaded"
+    ) as HTMLDivElement | null;
+    const compressButton = document.getElementById(
+      "compress-and-download"
+    ) as HTMLButtonElement | null;
+    const overlay = document.getElementById(
+      "overlay-image-files"
+    ) as HTMLDivElement | null;
 
-  const dropZone = document.getElementById(
-    "drop-zone"
-  ) as HTMLDivElement | null;
-  const fileInput = document.getElementById(
-    "files-file-input"
-  ) as HTMLInputElement | null;
-  const filesUploaded = document.getElementById(
-    "files-uploaded"
-  ) as HTMLDivElement | null;
-  const contentFilesUploaded = document.getElementById(
-    "content-files-uploaded"
-  ) as HTMLDivElement | null;
-  const compressButton = document.getElementById(
-    "compress-and-download"
-  ) as HTMLButtonElement | null;
-  const overlay = document.getElementById(
-    "overlay-image-files"
-  ) as HTMLDivElement | null;
-
-  let currentFiles: File[] = [];
-
-  if (dropZone && fileInput) {
-    dropZone.addEventListener("click", () => {
-      fileInput.click();
-    });
-
-    dropZone.addEventListener("dragover", (event) => {
-      event.preventDefault();
-      dropZone.classList.add("border-blue-500");
-    });
-
-    dropZone.addEventListener("dragleave", () => {
-      dropZone.classList.remove("border-blue-500");
-    });
-
-    dropZone.addEventListener("drop", (event: DragEvent) => {
-      event.preventDefault();
-      dropZone.classList.remove("border-blue-500");
-      if (!event.dataTransfer) return;
-      const files = event.dataTransfer.files;
-      handleFiles(files);
-    });
-  }
-
-  if (fileInput) {
-    fileInput.addEventListener("change", () => {
-      const files = fileInput.files;
-      handleFiles(files);
-    });
-  }
-
-  function handleFiles(files: FileList | null) {
-    if (!files || files.length === 0) return;
-    const newFiles = Array.from(files);
-    currentFiles = [...currentFiles, ...newFiles];
-    updateUI();
-  }
-
-  function updateUI() {
-    if (!filesUploaded || !contentFilesUploaded) return;
-    if (currentFiles.length === 0) {
-      filesUploaded.classList.add("hidden");
+    // Si algun elemento no existe, salir
+    if (!dropZone || !fileInput || !filesUploaded || !contentFilesUploaded)
       return;
-    }
-    filesUploaded.classList.remove("hidden");
-    contentFilesUploaded.innerHTML = "";
-    let supportedCount = 0;
-    currentFiles.forEach((file: File, index: number) => {
-      const fileType = file.name.split(".").pop() || "file";
-      // Solo permitir archivos soportados
-      if (!supportedConversions[fileType.toLowerCase()]) return;
-      supportedCount++;
-      const fileName = file.name;
-      const fileSize = (file.size / 1024).toFixed(2) + " KB";
-      const newElement = generateElement(fileType, fileName, fileSize, index);
-      contentFilesUploaded.appendChild(
-        document.createRange().createContextualFragment(newElement)
-      );
-    });
-    // Ocultar/mostrar elementos según si hay archivos soportados
-    const totalFilesSpan = document.getElementById(
-      "total-files-uploaded"
-    ) as HTMLSpanElement | null;
-    const totalFilesContainer = totalFilesSpan
-      ? totalFilesSpan.parentElement
-      : null;
-    const compressButtonDiv = compressButton?.parentElement;
-    const allFilesSelect = document.getElementById(
-      "all-files"
-    ) as HTMLSelectElement | null;
-    const allFilesDiv = allFilesSelect ? allFilesSelect.parentElement : null;
-    if (supportedCount === 0) {
-      contentFilesUploaded.innerHTML = `<div class=\"text-center text-red-400 py-8\">${jsonMessages.unsupportedFiles || "Ningún archivo es soportado para conversión."}</div>`;
-      if (totalFilesContainer) totalFilesContainer.style.display = "none";
-      if (compressButtonDiv) compressButtonDiv.style.display = "none";
-      if (allFilesDiv) allFilesDiv.style.display = "none";
-    } else {
-      if (totalFilesContainer) totalFilesContainer.style.display = "";
-      if (compressButtonDiv) compressButtonDiv.style.display = "";
-      if (allFilesDiv) allFilesDiv.style.display = "";
-      if (totalFilesSpan)
-        totalFilesSpan.textContent = currentFiles.length.toString();
-    }
-    updateFileInput();
-  }
 
-  function updateFileInput() {
-    if (!fileInput) return;
-    const dt = new DataTransfer();
-    currentFiles.forEach((file) => dt.items.add(file));
-    fileInput.files = dt.files;
-  }
+    let currentFiles: File[] = [];
 
-  function generateElement(
-    type: string,
-    name: string,
-    size: string,
-    index: number
-  ): string {
-    const ext = type.toLowerCase();
-    const options = (supportedConversions[ext] || [])
-      .map((f: string) => `<option value="${f}">${f.toUpperCase()}</option>`)
-      .join("");
-    return `
+    if (dropZone && fileInput) {
+      dropZone.addEventListener("click", () => {
+        fileInput.click();
+      });
+
+      dropZone.addEventListener("dragover", (event) => {
+        event.preventDefault();
+        dropZone.classList.add("border-blue-500");
+      });
+
+      dropZone.addEventListener("dragleave", () => {
+        dropZone.classList.remove("border-blue-500");
+      });
+
+      dropZone.addEventListener("drop", (event: DragEvent) => {
+        event.preventDefault();
+        dropZone.classList.remove("border-blue-500");
+        if (!event.dataTransfer) return;
+        const files = event.dataTransfer.files;
+        handleFiles(files);
+      });
+    }
+
+    if (fileInput) {
+      fileInput.addEventListener("change", () => {
+        const files = fileInput.files;
+        handleFiles(files);
+      });
+    }
+
+    function handleFiles(files: FileList | null) {
+      if (!files || files.length === 0) return;
+      const newFiles = Array.from(files);
+      currentFiles = [...currentFiles, ...newFiles];
+      updateUI();
+    }
+
+    function updateUI() {
+      if (!filesUploaded || !contentFilesUploaded) return;
+      if (currentFiles.length === 0) {
+        filesUploaded.classList.add("hidden");
+        return;
+      }
+      filesUploaded.classList.remove("hidden");
+      contentFilesUploaded.innerHTML = "";
+      let supportedCount = 0;
+      currentFiles.forEach((file: File, index: number) => {
+        const fileType = file.name.split(".").pop() || "file";
+        // Solo permitir archivos soportados
+        if (!supportedConversions[fileType.toLowerCase()]) return;
+        supportedCount++;
+        const fileName = file.name;
+        const fileSize = (file.size / 1024).toFixed(2) + " KB";
+        const newElement = generateElement(fileType, fileName, fileSize, index);
+        contentFilesUploaded.appendChild(
+          document.createRange().createContextualFragment(newElement)
+        );
+      });
+      // Ocultar/mostrar elementos según si hay archivos soportados
+      const totalFilesSpan = document.getElementById(
+        "total-files-uploaded"
+      ) as HTMLSpanElement | null;
+      const totalFilesContainer = totalFilesSpan
+        ? totalFilesSpan.parentElement
+        : null;
+      const compressButtonDiv = compressButton?.parentElement;
+      const allFilesSelect = document.getElementById(
+        "all-files"
+      ) as HTMLSelectElement | null;
+      const allFilesDiv = allFilesSelect ? allFilesSelect.parentElement : null;
+      if (supportedCount === 0) {
+        contentFilesUploaded.innerHTML = `<div class=\"text-center text-red-400 py-8\">${jsonMessages.unsupportedFiles || "Ningún archivo es soportado para conversión."}</div>`;
+        if (totalFilesContainer) totalFilesContainer.style.display = "none";
+        if (compressButtonDiv) compressButtonDiv.style.display = "none";
+        if (allFilesDiv) allFilesDiv.style.display = "none";
+      } else {
+        if (totalFilesContainer) totalFilesContainer.style.display = "";
+        if (compressButtonDiv) compressButtonDiv.style.display = "";
+        if (allFilesDiv) allFilesDiv.style.display = "";
+        if (totalFilesSpan)
+          totalFilesSpan.textContent = currentFiles.length.toString();
+      }
+      updateFileInput();
+    }
+
+    function updateFileInput() {
+      if (!fileInput) return;
+      const dt = new DataTransfer();
+      currentFiles.forEach((file) => dt.items.add(file));
+      fileInput.files = dt.files;
+    }
+
+    function generateElement(
+      type: string,
+      name: string,
+      size: string,
+      index: number
+    ): string {
+      const ext = type.toLowerCase();
+      const options = (supportedConversions[ext] || [])
+        .map((f: string) => `<option value="${f}">${f.toUpperCase()}</option>`)
+        .join("");
+      return `
       <div class="bg-neutral-900/40 rounded-2xl border border-neutral-800 p-4 flex flex-col gap-4 justify-between">
         <div class="flex flex-col md:flex-row md:items-center gap-4 justify-between flex-wrap">
           <div class="flex items-center gap-4 flex-1 min-w-0">
@@ -336,142 +342,146 @@ const filesSupported = (await response.json()) as FilesSupported;
         </div>
       </div>
     `;
-  }
-
-  function removeFileUploaded(index: number) {
-    currentFiles.splice(index, 1);
-    updateUI();
-  }
-
-  (window as any).removeFileUploaded = removeFileUploaded;
-
-  // Descargar archivo convertido
-  (window as any).downloadFile = async function (index: number) {
-    const file = currentFiles[index];
-    if (!file) return;
-    const formatSelect = document.getElementById(
-      `format-select-${index}`
-    ) as HTMLSelectElement | null;
-    const format = formatSelect?.value;
-    if (!format) {
-      alert(jsonMessages.selectFormat || "Selecciona un formato");
-      return;
     }
-    try {
+
+    function removeFileUploaded(index: number) {
+      currentFiles.splice(index, 1);
+      updateUI();
+    }
+
+    (window as any).removeFileUploaded = removeFileUploaded;
+
+    // Descargar archivo convertido
+    (window as any).downloadFile = async function (index: number) {
+      const file = currentFiles[index];
+      if (!file) return;
+      const formatSelect = document.getElementById(
+        `format-select-${index}`
+      ) as HTMLSelectElement | null;
+      const format = formatSelect?.value;
+      if (!format) {
+        alert(jsonMessages.selectFormat || "Selecciona un formato");
+        return;
+      }
+      try {
+        if (overlay) {
+          overlay.classList.remove("hidden");
+          overlay.classList.add("flex");
+        }
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("format", format);
+        const response = await fetch("/api/files/convert", {
+          method: "POST",
+          body: formData,
+        });
+        if (!response.ok) {
+          const errorText = await response.text();
+          throw new Error(errorText);
+        }
+        const outputBuffer = await response.arrayBuffer();
+        const blob = new Blob([outputBuffer], {
+          type: `application/${format}`,
+        });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `${file.name.split(".")[0]}.${format}`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      } catch (err) {
+        let msg = "";
+        if (typeof err === "object" && err && "message" in err) {
+          msg = (err as any).message;
+        } else {
+          msg = String(err);
+        }
+        alert(
+          jsonMessages.processedError || "Error al convertir el archivo: " + msg
+        );
+      } finally {
+        if (overlay) {
+          overlay.classList.add("hidden");
+          overlay.classList.remove("flex");
+          fetchIncrementProcessCountByToolId("file-converter");
+        }
+      }
+    };
+
+    if (compressButton) {
+      compressButton.addEventListener("click", compressAndDownload);
+    }
+
+    async function compressAndDownload() {
+      if (currentFiles.length === 0) return;
       if (overlay) {
         overlay.classList.remove("hidden");
         overlay.classList.add("flex");
       }
-      const formData = new FormData();
-      formData.append("file", file);
-      formData.append("format", format);
-      const response = await fetch("/api/files/convert", {
-        method: "POST",
-        body: formData,
-      });
-      if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(errorText);
-      }
-      const outputBuffer = await response.arrayBuffer();
-      const blob = new Blob([outputBuffer], { type: `application/${format}` });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = `${file.name.split(".")[0]}.${format}`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-    } catch (err) {
-      let msg = "";
-      if (typeof err === "object" && err && "message" in err) {
-        msg = (err as any).message;
-      } else {
-        msg = String(err);
-      }
-      alert(
-        jsonMessages.processedError || "Error al convertir el archivo: " + msg
-      );
-    } finally {
-      if (overlay) {
-        overlay.classList.add("hidden");
-        overlay.classList.remove("flex");
-        fetchIncrementProcessCountByToolId("file-converter");
-      }
-    }
-  };
-
-  if (compressButton) {
-    compressButton.addEventListener("click", compressAndDownload);
-  }
-
-  async function compressAndDownload() {
-    if (currentFiles.length === 0) return;
-    if (overlay) {
-      overlay.classList.remove("hidden");
-      overlay.classList.add("flex");
-    }
-    try {
-      let filesWhitoutFormat: string[] = [];
-      const formats = currentFiles.map((_, idx) => {
-        const select = document.getElementById(
-          `format-select-${idx}`
-        ) as HTMLSelectElement | null;
-        if (select && !select.value) {
-          filesWhitoutFormat.push(currentFiles[idx].name);
+      try {
+        let filesWhitoutFormat: string[] = [];
+        const formats = currentFiles.map((_, idx) => {
+          const select = document.getElementById(
+            `format-select-${idx}`
+          ) as HTMLSelectElement | null;
+          if (select && !select.value) {
+            filesWhitoutFormat.push(currentFiles[idx].name);
+          }
+          return select && select.value ? select.value : "";
+        });
+        if (filesWhitoutFormat.length > 0) {
+          alert(
+            (jsonMessages.selectFormatForAll ||
+              "Selecciona un formato para los siguientes archivos:") +
+              "\n- " +
+              filesWhitoutFormat.join("\n- ")
+          );
+          return;
         }
-        return select && select.value ? select.value : "";
-      });
-      if (filesWhitoutFormat.length > 0) {
+        const formData = new FormData();
+        currentFiles.forEach((file, idx) => {
+          formData.append("files[]", file, file.name);
+          formData.append("formats[]", formats[idx]);
+        });
+        formData.append("asZip", "true");
+        const response = await fetch("/api/files/convert", {
+          method: "POST",
+          body: formData,
+        });
+        if (!response.ok) {
+          const errorText = await response.text();
+          throw new Error(errorText);
+        }
+        const zipBuffer = await response.arrayBuffer();
+        const blob = new Blob([zipBuffer], { type: "application/zip" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "files.zip";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      } catch (err) {
+        let msg = "";
+        if (typeof err === "object" && err && "message" in err) {
+          msg = (err as any).message;
+        } else {
+          msg = String(err);
+        }
         alert(
-          (jsonMessages.selectFormatForAll ||
-            "Selecciona un formato para los siguientes archivos:") +
-            "\n- " +
-            filesWhitoutFormat.join("\n- ")
+          jsonMessages.processedError ||
+            "Error al comprimir y descargar: " + msg
         );
-        return;
-      }
-      const formData = new FormData();
-      currentFiles.forEach((file, idx) => {
-        formData.append("files[]", file, file.name);
-        formData.append("formats[]", formats[idx]);
-      });
-      formData.append("asZip", "true");
-      const response = await fetch("/api/files/convert", {
-        method: "POST",
-        body: formData,
-      });
-      if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(errorText);
-      }
-      const zipBuffer = await response.arrayBuffer();
-      const blob = new Blob([zipBuffer], { type: "application/zip" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "files.zip";
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-    } catch (err) {
-      let msg = "";
-      if (typeof err === "object" && err && "message" in err) {
-        msg = (err as any).message;
-      } else {
-        msg = String(err);
-      }
-      alert(
-        jsonMessages.processedError || "Error al comprimir y descargar: " + msg
-      );
-    } finally {
-      if (overlay) {
-        overlay.classList.add("hidden");
-        overlay.classList.remove("flex");
-        fetchIncrementProcessCountByToolId("file-converter");
+      } finally {
+        if (overlay) {
+          overlay.classList.add("hidden");
+          overlay.classList.remove("flex");
+          fetchIncrementProcessCountByToolId("file-converter");
+        }
       }
     }
-  }
+  });
 </script>
