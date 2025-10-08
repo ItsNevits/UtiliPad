@@ -437,53 +437,12 @@ const filesSupported = (await response.json()) as FilesSupported;
 ></astro-greet>
 
 <script>
-  import { fetchIncrementProcessCountByToolId } from "@utils/tools";
+  import { actions } from "astro:actions";
 
-  document.addEventListener("astro:page-load", () => {
+  document.addEventListener("astro:page-load", async () => {
     // Variables para conversiones soportadas
     let supportedConversions: Record<string, string[]> = {};
     let outputFormats: string[] = [];
-
-    // Fetch supported conversions from API
-    fetch("/api/files/convert")
-      .then((res) => res.json())
-      .then((data) => {
-        supportedConversions = data;
-        // Llenar select global con todos los formatos posibles
-        const allFormats = new Set<string>();
-        Object.values(data).forEach((arr) =>
-          (arr as string[]).forEach((f: string) => allFormats.add(f))
-        );
-        outputFormats = Array.from(allFormats);
-        const allSelect = document.getElementById("all-files");
-        if (allSelect) {
-          allSelect.innerHTML =
-            `<option value="" selected disabled>${jsonMessages.select}</option>` +
-            outputFormats
-              .map(
-                (f: string) =>
-                  `<option value="${f}">${f.toUpperCase()}</option>`
-              )
-              .join("");
-          allSelect.addEventListener("change", function () {
-            const format = (this as HTMLSelectElement).value;
-            currentFiles.forEach((file: File, idx: number) => {
-              const ext = file.name.split(".").pop()?.toLowerCase() || "";
-              const select = document.getElementById(
-                `format-select-${idx}`
-              ) as HTMLSelectElement | null;
-              if (
-                select &&
-                ext &&
-                supportedConversions[ext] &&
-                supportedConversions[ext].includes(format)
-              ) {
-                select.value = format;
-              }
-            });
-          });
-        }
-      });
 
     let jsonMessages = {} as any;
 
@@ -495,6 +454,51 @@ const filesSupported = (await response.json()) as FilesSupported;
     }
     if (!customElements.get("astro-greet"))
       customElements.define("astro-greet", AstroGreet);
+
+    const { data, error } = await actions.getSupportedConversions({});
+
+    if (error) {
+      console.error("Error fetching supported conversions:", error);
+      return;
+    }
+
+    // Asignar las conversiones soportadas
+    supportedConversions = data;
+
+    // Llenar select global con todos los formatos posibles
+    const allFormats = new Set<string>();
+    Object.values(data).forEach((arr) =>
+      (arr as string[]).forEach((f: string) => allFormats.add(f))
+    );
+    outputFormats = Array.from(allFormats);
+    const allSelect = document.getElementById("all-files");
+    if (allSelect) {
+      allSelect.innerHTML =
+        `<option value="" selected disabled>${jsonMessages.select}</option>` +
+        outputFormats
+          .map(
+            (f: string) => `<option value="${f}">${f.toUpperCase()}</option>`
+          )
+          .join("");
+
+      allSelect.addEventListener("change", function () {
+        const format = (this as HTMLSelectElement).value;
+        currentFiles.forEach((file: File, idx: number) => {
+          const ext = file.name.split(".").pop()?.toLowerCase() || "";
+          const select = document.getElementById(
+            `format-select-${idx}`
+          ) as HTMLSelectElement | null;
+          if (
+            select &&
+            ext &&
+            supportedConversions[ext] &&
+            supportedConversions[ext].includes(format)
+          ) {
+            select.value = format;
+          }
+        });
+      });
+    }
 
     const dropZone = document.getElementById(
       "drop-zone"
@@ -682,22 +686,26 @@ const filesSupported = (await response.json()) as FilesSupported;
         const formData = new FormData();
         formData.append("file", file);
         formData.append("format", format);
-        const response = await fetch("/api/files/convert", {
-          method: "POST",
-          body: formData,
-        });
-        if (!response.ok) {
-          const errorText = await response.text();
-          throw new Error(errorText);
+
+        const { data: result, error } = await actions.convertFiles(formData);
+
+        if (error) {
+          throw new Error(error.message);
         }
-        const outputBuffer = await response.arrayBuffer();
-        const blob = new Blob([outputBuffer], {
-          type: `application/${format}`,
+
+        if (!result) {
+          throw new Error("No result received");
+        }
+
+        // Convertir array de números de vuelta a Uint8Array
+        const buffer = new Uint8Array(result.buffer);
+        const blob = new Blob([buffer], {
+          type: result.contentType || `application/${format}`,
         });
         const url = URL.createObjectURL(blob);
         const a = document.createElement("a");
         a.href = url;
-        a.download = `${file.name.split(".")[0]}.${format}`;
+        a.download = result.filename || `${file.name.split(".")[0]}.${format}`;
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
@@ -716,7 +724,10 @@ const filesSupported = (await response.json()) as FilesSupported;
         if (overlay) {
           overlay.classList.add("hidden");
           overlay.classList.remove("flex");
-          fetchIncrementProcessCountByToolId("file-converter");
+
+          actions.createUpdateProcessCount({
+            process_name: "file-converter",
+          });
         }
       }
     };
@@ -757,20 +768,24 @@ const filesSupported = (await response.json()) as FilesSupported;
           formData.append("formats[]", formats[idx]);
         });
         formData.append("asZip", "true");
-        const response = await fetch("/api/files/convert", {
-          method: "POST",
-          body: formData,
-        });
-        if (!response.ok) {
-          const errorText = await response.text();
-          throw new Error(errorText);
+
+        const { data: result, error } = await actions.convertFiles(formData);
+
+        if (error) {
+          throw new Error(error.message);
         }
-        const zipBuffer = await response.arrayBuffer();
+
+        if (!result) {
+          throw new Error("No result received");
+        }
+
+        // Convertir array de números de vuelta a Uint8Array
+        const zipBuffer = new Uint8Array(result.buffer);
         const blob = new Blob([zipBuffer], { type: "application/zip" });
         const url = URL.createObjectURL(blob);
         const a = document.createElement("a");
         a.href = url;
-        a.download = "files.zip";
+        a.download = result.filename || "files.zip";
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
@@ -790,7 +805,10 @@ const filesSupported = (await response.json()) as FilesSupported;
         if (overlay) {
           overlay.classList.add("hidden");
           overlay.classList.remove("flex");
-          fetchIncrementProcessCountByToolId("file-converter");
+
+          actions.createUpdateProcessCount({
+            process_name: "file-converter",
+          });
         }
       }
     }

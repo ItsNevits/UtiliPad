@@ -1,15 +1,13 @@
-export const prerender = false;
-
+import { defineAction } from "astro:actions";
+import { z } from "astro:schema";
 import JSZip from "jszip";
 import mammoth from "mammoth";
 import * as XLSX from "xlsx";
 import { Document, Packer, Paragraph, TextRun } from "docx";
 import { marked } from "marked";
 import { jsPDF } from "jspdf";
-import { PDFDocument } from "pdf-lib";
-import type { APIRoute } from "astro";
 
-// Supported conversions (serverless-friendly)
+// Conversiones soportadas (serverless-friendly)
 const supportedConversions = {
   docx: ["html", "txt", "pdf"],
   xlsx: ["csv", "json", "html"],
@@ -22,21 +20,23 @@ const supportedConversions = {
   html: ["pdf"],
 };
 
-export const GET: APIRoute = async () => {
-  // Return supported conversions
-  return new Response(JSON.stringify(supportedConversions), {
-    status: 200,
-    headers: { "Content-Type": "application/json" },
-  });
-};
+export const getSupportedConversions = defineAction({
+  accept: "json",
+  input: z.object({}),
+  handler: async () => {
+    return supportedConversions;
+  },
+});
 
-export const POST: APIRoute = async ({ request }) => {
-  try {
-    const formData = await request.formData();
+export const convertFiles = defineAction({
+  accept: "form",
+  input: z.any(), // FormData no tiene schema estricto
+  handler: async (formData) => {
     const files: Blob[] = [];
     const formats: string[] = [];
     let isZip = false;
-    for (const entry of formData.entries()) {
+
+    for (const entry of (formData as FormData).entries()) {
       const [key, value] = entry;
       if (key === "files[]" && value instanceof Blob) {
         files.push(value);
@@ -48,17 +48,21 @@ export const POST: APIRoute = async ({ request }) => {
         isZip = true;
       }
     }
-    // Fallback for single file
+
+    // Fallback para archivo único
     if (!isZip && files.length === 0) {
-      const file = formData.get("file");
-      const format = formData.get("format") || "pdf";
+      const file = (formData as FormData).get("file");
+      const format = ((formData as FormData).get("format") as string) || "pdf";
+
       if (!file || !(file instanceof Blob)) {
-        return new Response("No file uploaded", { status: 400 });
+        throw new Error("No file uploaded");
       }
+
       const arrayBuffer = await file.arrayBuffer();
       const buffer = Buffer.from(arrayBuffer);
       const name = (file as any).name as string | undefined;
       const ext = name?.split(".").pop()?.toLowerCase() || "";
+
       if (
         typeof ext !== "string" ||
         !(ext in supportedConversions) ||
@@ -66,8 +70,9 @@ export const POST: APIRoute = async ({ request }) => {
           ext as keyof typeof supportedConversions
         ].includes(format as string)
       ) {
-        return new Response("Conversion not supported", { status: 400 });
+        throw new Error("Conversion not supported");
       }
+
       let resultBuffer: Buffer | null = null;
       let contentType = "application/octet-stream";
       let outName = `converted.${format}`;
@@ -95,7 +100,6 @@ export const POST: APIRoute = async ({ request }) => {
       else if (ext === "md" && format === "docx") {
         const markdown = buffer.toString("utf-8");
         const html = await marked(markdown);
-        // Convert HTML to paragraphs (simple approach)
         const textContent = html.replace(/<[^>]+>/g, "\n").split("\n").filter(line => line.trim());
         const doc = new Document({
           sections: [{
@@ -125,7 +129,6 @@ export const POST: APIRoute = async ({ request }) => {
       else if (ext === "html" && format === "pdf") {
         const html = buffer.toString("utf-8");
         const doc = new jsPDF();
-        // Extract text from HTML (simple approach - removes tags)
         const text = html.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
         const lines = doc.splitTextToSize(text, 180);
         doc.text(lines, 10, 10);
@@ -138,7 +141,6 @@ export const POST: APIRoute = async ({ request }) => {
       else if (ext === "docx" && format === "pdf") {
         const { value: html } = await mammoth.convertToHtml({ buffer });
         const doc = new jsPDF();
-        // Extract text from HTML
         const text = html.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
         const lines = doc.splitTextToSize(text, 180);
         doc.text(lines, 10, 10);
@@ -155,12 +157,12 @@ export const POST: APIRoute = async ({ request }) => {
         outName = `${name?.split(".")[0]}.html`;
       } else if (ext === "docx" && format === "txt") {
         const { value } = await mammoth.convertToHtml({ buffer });
-        // Strip HTML tags for TXT
         const text = value.replace(/<[^>]+>/g, "");
         resultBuffer = Buffer.from(text, "utf-8");
         contentType = "text/plain";
         outName = `${name?.split(".")[0]}.txt`;
       }
+
       // XLSX/XLS/ODS → CSV/JSON/HTML
       else if (
         ["xlsx", "xls", "ods"].includes(ext) &&
@@ -186,13 +188,12 @@ export const POST: APIRoute = async ({ request }) => {
           outName = `${name?.split(".")[0]}.html`;
         }
       }
+
       // CSV/JSON → XLSX
       else if (ext === "csv" && format === "xlsx") {
         const csvText = buffer.toString("utf-8");
-        // Leer CSV como libro y obtener la hoja
         const wbFromCsv = XLSX.read(csvText, { type: "string" });
         const ws = wbFromCsv.Sheets[wbFromCsv.SheetNames[0]];
-        // Convertir a JSON y luego a hoja nueva para asegurar formato
         const aoa = XLSX.utils.sheet_to_json(ws, {
           header: 1,
           raw: false,
@@ -209,7 +210,6 @@ export const POST: APIRoute = async ({ request }) => {
       } else if (ext === "json" && format === "xlsx") {
         let json = JSON.parse(buffer.toString("utf-8"));
         if (!Array.isArray(json)) json = [json];
-        // Serializar campos anidados
         const serialized = json.map((row: any) => {
           const newRow: Record<string, any> = {};
           for (const key in row) {
@@ -236,7 +236,6 @@ export const POST: APIRoute = async ({ request }) => {
         const wbFromCsv = XLSX.read(csvText, { type: "string" });
         const ws = wbFromCsv.Sheets[wbFromCsv.SheetNames[0]];
         let json = XLSX.utils.sheet_to_json(ws);
-        // Deserializar campos que sean JSON string
         json = json.map((row: any) => {
           const newRow: Record<string, any> = {};
           for (const key in row) {
@@ -262,7 +261,6 @@ export const POST: APIRoute = async ({ request }) => {
       } else if (ext === "json" && format === "csv") {
         let json = JSON.parse(buffer.toString("utf-8"));
         if (!Array.isArray(json)) json = [json];
-        // Serializar campos anidados
         const serialized = json.map((row: any) => {
           const newRow: Record<string, any> = {};
           for (const key in row) {
@@ -281,20 +279,20 @@ export const POST: APIRoute = async ({ request }) => {
         contentType = "text/csv";
         outName = `${name?.split(".")[0]}.csv`;
       }
+
       if (!resultBuffer) {
-        return new Response("Conversion not supported or not implemented", {
-          status: 400,
-        });
+        throw new Error("Conversion not supported or not implemented");
       }
-      return new Response(new Uint8Array(resultBuffer), {
-        status: 200,
-        headers: {
-          "Content-Type": contentType,
-          "Content-Disposition": `attachment; filename=${outName}`,
-        },
-      });
+
+      return {
+        type: "single",
+        buffer: Array.from(new Uint8Array(resultBuffer)),
+        contentType,
+        filename: outName,
+      };
     }
-    // ZIP logic
+
+    // Lógica ZIP
     if (isZip && files.length > 0) {
       const zip = new JSZip();
       for (let i = 0; i < files.length; i++) {
@@ -302,6 +300,7 @@ export const POST: APIRoute = async ({ request }) => {
         const format = formats[i];
         const name = (file as any).name || `file_${i + 1}`;
         const ext = name.split(".").pop()?.toLowerCase() || "";
+
         if (
           typeof ext !== "string" ||
           !(ext in supportedConversions) ||
@@ -311,6 +310,7 @@ export const POST: APIRoute = async ({ request }) => {
         ) {
           continue; // skip unsupported
         }
+
         const arrayBuffer = await file.arrayBuffer();
         const buffer = Buffer.from(arrayBuffer);
         let resultBuffer: Buffer | null = null;
@@ -394,6 +394,7 @@ export const POST: APIRoute = async ({ request }) => {
           resultBuffer = Buffer.from(text, "utf-8");
           outName = `${name.split(".")[0]}.txt`;
         }
+
         // XLSX/XLS/ODS → CSV/JSON/HTML
         else if (
           ["xlsx", "xls", "ods"].includes(ext) &&
@@ -416,6 +417,7 @@ export const POST: APIRoute = async ({ request }) => {
             outName = `${name.split(".")[0]}.html`;
           }
         }
+
         // CSV/JSON → XLSX
         else if (ext === "csv" && format === "xlsx") {
           const csvText = buffer.toString("utf-8");
@@ -435,7 +437,6 @@ export const POST: APIRoute = async ({ request }) => {
         } else if (ext === "json" && format === "xlsx") {
           let json = JSON.parse(buffer.toString("utf-8"));
           if (!Array.isArray(json)) json = [json];
-          // Serializar campos anidados
           const serialized = json.map((row: any) => {
             const newRow: Record<string, any> = {};
             for (const key in row) {
@@ -460,7 +461,6 @@ export const POST: APIRoute = async ({ request }) => {
           const wbFromCsv = XLSX.read(csvText, { type: "string" });
           const ws = wbFromCsv.Sheets[wbFromCsv.SheetNames[0]];
           let json = XLSX.utils.sheet_to_json(ws);
-          // Deserializar campos que sean JSON string
           json = json.map((row: any) => {
             const newRow: Record<string, any> = {};
             for (const key in row) {
@@ -485,7 +485,6 @@ export const POST: APIRoute = async ({ request }) => {
         } else if (ext === "json" && format === "csv") {
           let json = JSON.parse(buffer.toString("utf-8"));
           if (!Array.isArray(json)) json = [json];
-          // Serializar campos anidados
           const serialized = json.map((row: any) => {
             const newRow: Record<string, any> = {};
             for (const key in row) {
@@ -503,26 +502,20 @@ export const POST: APIRoute = async ({ request }) => {
           resultBuffer = Buffer.from(csv, "utf-8");
           outName = `${name.split(".")[0]}.csv`;
         }
+
         if (resultBuffer) {
           zip.file(outName, new Uint8Array(resultBuffer));
         }
       }
+
       const zipBuffer = await zip.generateAsync({ type: "uint8array" });
-      return new Response(
-        new Blob([zipBuffer.slice().buffer], { type: "application/zip" }),
-        {
-          status: 200,
-          headers: {
-            "Content-Type": "application/zip",
-            "Content-Disposition": "attachment; filename=files.zip",
-          },
-        }
-      );
+      return {
+        type: "zip",
+        buffer: Array.from(zipBuffer),
+        filename: "files.zip",
+      };
     }
-    return new Response("No files to process", { status: 400 });
-  } catch (err: any) {
-    return new Response("Error processing file(s): " + err.message, {
-      status: 500,
-    });
-  }
-};
+
+    throw new Error("No files to process");
+  },
+});

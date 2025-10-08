@@ -2,6 +2,7 @@
 import { getToolById } from "@constants/tools";
 import type { Language } from "@@types/language.type";
 import { getTranslation } from "@i18n/index";
+import { actions } from "astro:actions";
 
 const lang = Astro.params.lang as Language;
 
@@ -18,19 +19,19 @@ interface ProcessItem {
 
 const process = [] as { name: string; progress: number }[];
 
-try {
-  const response = await fetch(`${Astro.site?.href}api/process-count/top`);
-  const data = (await response.json()) as ProcessItem;
+const { data } = await Astro.callAction(actions.mostUsedTool, {});
 
-  if (data && data.success && data.topProcesses) {
-    data.topProcesses.forEach((p) => {
+if (data) {
+  const { success, topProcesses } = data;
+  if (success && topProcesses) {
+    topProcesses.forEach((p) => {
       const tool = getToolById(p.process_name);
       if (tool) {
         process.push({ name: tool.name, progress: p.count });
       }
     });
   }
-} catch (error) {}
+}
 ---
 
 <div

@@ -5,7 +5,7 @@ import { Picture } from "astro:assets";
 import type { Language } from "@@types/language.type";
 import { getTranslation } from "@i18n/index";
 
-import "../../styles/tools/JsonFormatter.css";
+import "../../../styles/tools/JsonFormatter.css";
 
 const lang = Astro.params.lang as Language;
 ---
@@ -157,8 +157,8 @@ const lang = Astro.params.lang as Language;
 
 <script>
   import JSONFormatter from "json-formatter-js";
-  import { openModal } from "../../stores/modal";
-  import { fetchIncrementProcessCountByToolId } from "@utils/tools";
+  import { openModal } from "../../../stores/modal";
+  import { actions } from "astro:actions";
 
   document.addEventListener("astro:page-load", () => {
     let jsonMessages = {} as any;
@@ -283,7 +283,8 @@ const lang = Astro.params.lang as Language;
 
         showValidationStatus(true);
         updateSizes(inputText, formattedText);
-        fetchIncrementProcessCountByToolId("json-formatter");
+
+        actions.createUpdateProcessCount({ process_name: "json-formatter" });
       } catch (error) {
         showValidationStatus(false, (error as Error).message);
         elements.jsonOutput.innerHTML = `<div class="text-red-400 p-4">${jsonMessages.errorParsing}</div>`;
@@ -307,7 +308,7 @@ const lang = Astro.params.lang as Language;
 
         showValidationStatus(true);
         updateSizes(inputText, minified);
-        fetchIncrementProcessCountByToolId("json-formatter");
+        actions.createUpdateProcessCount({ process_name: "json-formatter" });
       } catch (error) {
         showValidationStatus(false, (error as Error).message);
       }

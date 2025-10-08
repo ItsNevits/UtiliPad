@@ -1,17 +1,18 @@
-export const prerender = false;
-
+import { defineAction } from "astro:actions";
+import { z } from "astro:schema";
 import sharp from "sharp";
 import JSZip from "jszip";
-import type { APIRoute } from "astro";
 
-export const POST: APIRoute = async ({ request }) => {
-  try {
-    const formData = await request.formData();
-    // Detect if multiple files are sent (for ZIP)
+export const convertImages = defineAction({
+  accept: "form",
+  input: z.any(), // FormData no tiene schema estricto
+  handler: async (formData) => {
+    // Detectar si son múltiples archivos (para ZIP)
     const files: Blob[] = [];
     const formats: string[] = [];
     let isZip = false;
-    for (const entry of formData.entries()) {
+
+    for (const entry of (formData as FormData).entries()) {
       const [key, value] = entry;
       if (key === "files[]" && value instanceof Blob) {
         files.push(value);
@@ -23,16 +24,20 @@ export const POST: APIRoute = async ({ request }) => {
         isZip = true;
       }
     }
-    // Fallback for single file (old API)
+
+    // Fallback para archivo único (API antigua)
     if (!isZip && files.length === 0) {
-      const file = formData.get("file");
-      const format = formData.get("format") || "jpeg";
+      const file = (formData as FormData).get("file");
+      const format = ((formData as FormData).get("format") as string) || "jpeg";
+
       if (!file || !(file instanceof Blob)) {
-        return new Response("No file uploaded", { status: 400 });
+        throw new Error("No file uploaded");
       }
+
       const arrayBuffer = await file.arrayBuffer();
       const buffer = Buffer.from(arrayBuffer);
       let outputBuffer: Buffer;
+
       switch (format) {
         case "png":
           outputBuffer = await sharp(buffer).png().toBuffer();
@@ -51,15 +56,16 @@ export const POST: APIRoute = async ({ request }) => {
           outputBuffer = await sharp(buffer).jpeg().toBuffer();
           break;
       }
-      return new Response(new Uint8Array(outputBuffer), {
-        status: 200,
-        headers: {
-          "Content-Type": `image/${format}`,
-          "Content-Disposition": `attachment; filename=converted.${format}`,
-        },
-      });
+
+      return {
+        type: "single",
+        buffer: Array.from(new Uint8Array(outputBuffer)),
+        format,
+        filename: `converted.${format}`,
+      };
     }
-    // ZIP logic
+
+    // Lógica ZIP
     if (isZip && files.length > 0) {
       const zip = new JSZip();
       for (let i = 0; i < files.length; i++) {
@@ -69,6 +75,7 @@ export const POST: APIRoute = async ({ request }) => {
         const arrayBuffer = await file.arrayBuffer();
         const buffer = Buffer.from(arrayBuffer);
         let outputBuffer: Buffer;
+
         switch (format) {
           case "png":
             outputBuffer = await sharp(buffer).png().toBuffer();
@@ -87,27 +94,21 @@ export const POST: APIRoute = async ({ request }) => {
             outputBuffer = await sharp(buffer).jpeg().toBuffer();
             break;
         }
+
         zip.file(
           `${name.split(".")[0]}.${format}`,
           new Uint8Array(outputBuffer)
         );
       }
+
       const zipBuffer = await zip.generateAsync({ type: "uint8array" });
-      return new Response(
-        new Blob([zipBuffer.slice().buffer], { type: "application/zip" }),
-        {
-          status: 200,
-          headers: {
-            "Content-Type": "application/zip",
-            "Content-Disposition": "attachment; filename=images.zip",
-          },
-        }
-      );
+      return {
+        type: "zip",
+        buffer: Array.from(zipBuffer),
+        filename: "images.zip",
+      };
     }
-    return new Response("No files to process", { status: 400 });
-  } catch (err: any) {
-    return new Response("Error processing image(s): " + err.message, {
-      status: 500,
-    });
-  }
-};
+
+    throw new Error("No files to process");
+  },
+});

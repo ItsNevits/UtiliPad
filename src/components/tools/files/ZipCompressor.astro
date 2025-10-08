@@ -89,7 +89,7 @@ const lang = Astro.params.lang as Language;
   )}></astro-greet>
 
 <script>
-  import { fetchIncrementProcessCountByToolId } from "@utils/tools";
+  import { actions } from "astro:actions";
   import JSZip from "jszip";
 
   document.addEventListener("astro:page-load", () => {
@@ -319,7 +319,7 @@ const lang = Astro.params.lang as Language;
         overlay.classList.add("hidden");
         overlay.classList.remove("flex");
         // Incrementar el contador de uso del servicio
-        fetchIncrementProcessCountByToolId("zip-compressor");
+        actions.createUpdateProcessCount({ process_name: "zip-compressor" });
       }
     }
 

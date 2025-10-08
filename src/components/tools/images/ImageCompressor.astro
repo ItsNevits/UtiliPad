@@ -232,8 +232,8 @@ const lang = Astro.params.lang as Language;
   )}></astro-greet>
 
 <script>
+  import { actions } from "astro:actions";
   import imageCompression from "browser-image-compression";
-  import { fetchIncrementProcessCountByToolId } from "@utils/tools";
 
   document.addEventListener("astro:page-load", () => {
     let messages = {} as any;
@@ -429,7 +429,7 @@ const lang = Astro.params.lang as Language;
       compressBtn.textContent = messages.compress;
 
       // Track usage
-      fetchIncrementProcessCountByToolId("image-compress");
+      actions.createUpdateProcessCount({ process_name: "image-compress" });
     });
 
     function createResultCard(

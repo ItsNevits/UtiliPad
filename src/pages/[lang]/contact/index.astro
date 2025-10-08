@@ -256,6 +256,8 @@ const FagQuestions = getTranslation(lang, "pages.contact.faq.items");
 </MainLayout>
 
 <script>
+  import { actions } from "astro:actions";
+
   const form = document.getElementById("contact-form") as HTMLFormElement;
   const submitText = document.getElementById("submit-text") as HTMLSpanElement;
   const formStatus = document.getElementById("form-status") as HTMLDivElement;
@@ -282,24 +284,25 @@ const FagQuestions = getTranslation(lang, "pages.contact.faq.items");
     formStatus.classList.add("hidden");
 
     const formData = new FormData(form);
-    const data = Object.fromEntries(formData);
+    const data = Object.fromEntries(formData) as {
+      name: string;
+      email: string;
+      subject: string;
+      message: string;
+    };
 
     try {
-      const response = await fetch("/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
-      const result = await response.json();
-      if (result.success) {
+      const { data: result, error } = await actions.sendContactEmail(data);
+
+      if (error) {
+        formStatus.innerHTML = `<span class='text-red-400'>${jsonMessages.error}<br>${error.message || ""}</span>`;
+      } else if (result?.success) {
         formStatus.innerHTML = `<span class='text-emerald-400'>${jsonMessages.success}</span>`;
         form.reset();
-      } else {
-        formStatus.innerHTML = `<span class='text-red-400'>${jsonMessages.error}<br>${result.error || ""}</span>`;
       }
       formStatus.classList.remove("hidden");
-    } catch (error) {
-      formStatus.innerHTML = `<span class='text-red-400'>${jsonMessages.error}</span>`;
+    } catch (error: any) {
+      formStatus.innerHTML = `<span class='text-red-400'>${jsonMessages.error}<br>${error?.message || ""}</span>`;
       formStatus.classList.remove("hidden");
     } finally {
       submitButton.disabled = false;

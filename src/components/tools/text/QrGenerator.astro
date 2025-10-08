@@ -80,8 +80,8 @@ const lang = Astro.params.lang as Language;
 </div>
 
 <script>
+  import { actions } from "astro:actions";
   import QRCode from "qr-code-styling";
-  import { fetchIncrementProcessCountByToolId } from "@utils/tools";
 
   document.addEventListener("astro:page-load", () => {
     const generateQrButton = document.getElementById(
@@ -175,7 +175,7 @@ const lang = Astro.params.lang as Language;
         console.error("Error generando el código QR:", error);
       } finally {
         // Incrementar el contador de uso del servicio
-        fetchIncrementProcessCountByToolId("qr-generator");
+        actions.createUpdateProcessCount({ process_name: "qr-generator" });
       }
     }
 

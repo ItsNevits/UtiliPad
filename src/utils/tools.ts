@@ -35,28 +35,25 @@ export const getTranslatedTools = (categoryId: string, lang: string) => {
 };
 
 /**
+ * DEPRECATED: Usar actions.createUpdateProcessCount directamente
  * Llama al API de process-count para una herramienta específica
  */
 export const fetchIncrementProcessCountByToolId = async (toolId: string) => {
-  const response = await fetch(`/api/process-count`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ process_name: toolId }),
-  });
-  if (!response.ok)
-    throw new Error("Error al incrementar el conteo de procesos");
-  return await response.json();
+  // Esta función ya no se usa, mantenerla por compatibilidad
+  // Se debe usar: actions.createUpdateProcessCount({ process_name: toolId })
+  console.warn("fetchIncrementProcessCountByToolId is deprecated, use actions.createUpdateProcessCount instead");
+  throw new Error("Use actions.createUpdateProcessCount instead");
 };
 
 /**
+ * DEPRECATED: Usar actions.mostUsedTool directamente
  * Llama al API de process-count/top para obtener el ranking de herramientas
  */
 export const fetchTopProcessCounts = async () => {
-  const response = await fetch(`/api/process-count/top`);
-  if (!response.ok) throw new Error("Error al obtener el ranking de procesos");
-  return await response.json();
+  // Esta función ya no se usa, mantenerla por compatibilidad
+  // Se debe usar: actions.mostUsedTool({})
+  console.warn("fetchTopProcessCounts is deprecated, use actions.mostUsedTool instead");
+  throw new Error("Use actions.mostUsedTool instead");
 };
 
 /**

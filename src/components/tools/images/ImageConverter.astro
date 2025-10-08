@@ -101,7 +101,7 @@ const lang = Astro.params.lang as Language;
 ></astro-greet>
 
 <script>
-  import { fetchIncrementProcessCountByToolId } from "@utils/tools";
+  import { actions } from "astro:actions";
 
   document.addEventListener("astro:page-load", () => {
     // Cambia todos los selects de formato de imagen al valor global
@@ -302,23 +302,24 @@ const lang = Astro.params.lang as Language;
         formData.append("file", file);
         formData.append("format", format);
 
-        const response = await fetch("/api/images/convert", {
-          method: "POST",
-          body: formData,
-        });
+        const { data, error } = await actions.convertImages(formData);
 
-        if (!response.ok) {
-          const errorText = await response.text();
-          throw new Error(errorText);
+        if (error) {
+          throw new Error(error.message);
         }
 
-        const outputBuffer = await response.arrayBuffer();
-        const blob = new Blob([outputBuffer], { type: `image/${format}` });
+        if (!data) {
+          throw new Error("No result received");
+        }
+
+        // Convertir array de números de vuelta a Uint8Array
+        const buffer = new Uint8Array(data.buffer);
+        const blob = new Blob([buffer], { type: `image/${format}` });
         const url = URL.createObjectURL(blob);
         const a = document.createElement("a");
 
         a.href = url;
-        a.download = `${file.name.split(".")[0]}.${format}`;
+        a.download = data.filename || `${file.name.split(".")[0]}.${format}`;
         document.body.appendChild(a);
         a.click();
 
@@ -335,7 +336,7 @@ const lang = Astro.params.lang as Language;
           overlay.classList.add("hidden");
           overlay.classList.remove("flex");
 
-          fetchIncrementProcessCountByToolId("image-converter");
+          actions.createUpdateProcessCount({ process_name: "image-convert" });
         }
       }
     };
@@ -386,28 +387,24 @@ const lang = Astro.params.lang as Language;
 
         formData.append("asZip", "true");
 
-        if (overlay) {
-          overlay.classList.remove("hidden");
-          overlay.classList.add("flex");
+        const { data, error } = await actions.convertImages(formData);
+
+        if (error) {
+          throw new Error(error.message);
         }
 
-        const response = await fetch("/api/images/convert", {
-          method: "POST",
-          body: formData,
-        });
-
-        if (!response.ok) {
-          const errorText = await response.text();
-          throw new Error(errorText);
+        if (!data) {
+          throw new Error("No result received");
         }
 
-        const zipBuffer = await response.arrayBuffer();
+        // Convertir array de números de vuelta a Uint8Array
+        const zipBuffer = new Uint8Array(data.buffer);
         const blob = new Blob([zipBuffer], { type: "application/zip" });
         const url = URL.createObjectURL(blob);
         const a = document.createElement("a");
 
         a.href = url;
-        a.download = "images.zip";
+        a.download = data.filename || "images.zip";
         document.body.appendChild(a);
         a.click();
 
@@ -424,7 +421,7 @@ const lang = Astro.params.lang as Language;
           overlay.classList.add("hidden");
           overlay.classList.remove("flex");
 
-          fetchIncrementProcessCountByToolId("image-converter");
+          actions.createUpdateProcessCount({ process_name: "image-converter" });
         }
       }
     }
