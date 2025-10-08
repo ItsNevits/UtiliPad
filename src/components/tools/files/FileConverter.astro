@@ -4,10 +4,17 @@ import Image from "astro/components/Image.astro";
 import type { Language } from "@@types/language.type";
 import type { FilesSupported } from "@interfaces/files/ConvertSupporterFiles";
 import { getTranslation } from "@i18n/index";
+import { actions } from "astro:actions";
 const lang = Astro.params.lang as Language;
 
-const response = await fetch(`${Astro.site?.href}api/files/convert`);
-const filesSupported = (await response.json()) as FilesSupported;
+const { data } = await Astro.callAction(actions.getSupportedConversions, {});
+
+let filesSupported;
+if (data) {
+  filesSupported = data as FilesSupported;
+} else {
+  filesSupported = {} as FilesSupported;
+}
 ---
 
 <div class="bg-neutral-800/50 rounded-xl p-6 select-none mb-5">
