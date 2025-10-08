@@ -1,5 +1,5 @@
 ---
-export const prerender = true;
+export const prerender = false;
 
 import MainLayout from "src/Layouts/MainLayout.astro";
 import Hero from "@components/shared/Hero.astro";
@@ -9,10 +9,6 @@ import type { Language } from "@@types/language.type";
 import { getTranslation } from "@i18n/index";
 
 const lang = Astro.params.lang as Language;
-
-export function getStaticPaths() {
-  return [{ params: { lang: "es" } }, { params: { lang: "en" } }];
-}
 ---
 
 <MainLayout>
