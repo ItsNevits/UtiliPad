@@ -5,6 +5,8 @@ import { Picture } from "astro:assets";
 import type { Language } from "@@types/language.type";
 import { getTranslation } from "@i18n/index";
 
+import "../../styles/tools/JsonFormatter.css";
+
 const lang = Astro.params.lang as Language;
 ---
 
@@ -158,11 +160,12 @@ const lang = Astro.params.lang as Language;
   import { openModal } from "../../stores/modal";
   import { fetchIncrementProcessCountByToolId } from "@utils/tools";
 
-  function initJsonFormatter() {
+  document.addEventListener("astro:page-load", () => {
     let jsonMessages = {} as any;
     let currentJsonData: any = null;
+    let currentFormatter: any = null; // Track current formatter instance
 
-    // Initialize translations
+    // Initialize translations - Define custom element BEFORE using it
     class AstroGreet extends HTMLElement {
       connectedCallback() {
         jsonMessages = JSON.parse(
@@ -171,8 +174,18 @@ const lang = Astro.params.lang as Language;
       }
     }
 
-    if (!customElements.get("astro-greet"))
+    // Always define the custom element (it's safe to redefine)
+    if (!customElements.get("astro-greet")) {
       customElements.define("astro-greet", AstroGreet);
+    }
+
+    // Wait for custom element to be ready
+    const astroGreetElement = document.querySelector("astro-greet");
+    if (astroGreetElement) {
+      jsonMessages = JSON.parse(
+        astroGreetElement.getAttribute("data-translations") || "{}"
+      );
+    }
 
     // Get DOM elements
     const elements = {
@@ -199,6 +212,19 @@ const lang = Astro.params.lang as Language;
     // Check if all elements exist
     if (Object.values(elements).some((el) => !el)) return;
 
+    // Clean up function for the formatter
+    const cleanupFormatter = () => {
+      if (elements.jsonOutput) {
+        // Remove all children completely
+        while (elements.jsonOutput.firstChild) {
+          elements.jsonOutput.removeChild(elements.jsonOutput.firstChild);
+        }
+        // Reset innerHTML as backup
+        elements.jsonOutput.innerHTML = "";
+      }
+      currentFormatter = null;
+    };
+
     // Utility functions
     const updateSizes = (original: string, formatted: string) => {
       elements.originalSize.textContent = `${new Blob([original]).size} bytes`;
@@ -213,7 +239,7 @@ const lang = Astro.params.lang as Language;
     };
 
     const clearOutput = () => {
-      elements.jsonOutput.innerHTML = "";
+      cleanupFormatter(); // Use the proper cleanup function
       elements.jsonOutputText.value = "";
       elements.validationStatus.innerHTML = "";
       updateSizes("", "");
@@ -235,19 +261,22 @@ const lang = Astro.params.lang as Language;
         const indent = parseInt(elements.indentSize.value) || 2;
         currentJsonData = parsedJSON;
 
+        // Clean up previous formatter instance completely
+        cleanupFormatter();
+
         // Show formatted view
-        elements.jsonOutput.innerHTML = "";
         elements.jsonOutput.classList.remove("hidden");
         elements.jsonOutputText.classList.add("hidden");
 
-        const formatter = new JSONFormatter(parsedJSON, 1, {
+        // Create new formatter instance
+        currentFormatter = new JSONFormatter(parsedJSON, 1, {
           hoverPreviewEnabled: false,
           hoverPreviewArrayCount: 100,
           hoverPreviewFieldCount: 5,
           theme: "dark",
         });
 
-        elements.jsonOutput.appendChild(formatter.render());
+        elements.jsonOutput.appendChild(currentFormatter.render());
 
         const formattedText = JSON.stringify(parsedJSON, null, indent);
         elements.jsonOutputText.value = formattedText;
@@ -377,7 +406,14 @@ const lang = Astro.params.lang as Language;
     if (elements.jsonInput.value.trim()) {
       formatJSON();
     }
-  }
 
-  document.addEventListener("astro:page-load", initJsonFormatter);
+    // Cleanup on page leave (important for View Transitions)
+    document.addEventListener(
+      "astro:before-preparation",
+      () => {
+        cleanupFormatter();
+      },
+      { once: true }
+    );
+  });
 </script>
