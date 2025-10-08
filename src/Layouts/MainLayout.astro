@@ -15,14 +15,12 @@ const lang = Astro.params.lang as Language;
 interface Props {
   title?: string;
   description?: string;
-  pageType?: string;
   pageData?: Record<string, string>;
 }
 
 const {
   title,
   description,
-  pageType,
   pageData = {},
 }: Props = Astro.props;
 
