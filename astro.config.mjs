@@ -30,45 +30,49 @@ export default defineConfig({
     },
   }),
 
-  site: "https://utilipad.com",
+  site: "https://www.utilipad.com",
 
   integrations: [
     sitemap({
       customPages: [
+        // Páginas principales
+        "https://www.utilipad.com/es/",
+        "https://www.utilipad.com/en/",
+
         // Categorías
-        "https://utilipad.com/es/category/files",
-        "https://utilipad.com/en/category/files",
+        "https://www.utilipad.com/es/category/files",
+        "https://www.utilipad.com/en/category/files",
 
-        "https://utilipad.com/es/category/images",
-        "https://utilipad.com/en/category/images",
+        "https://www.utilipad.com/es/category/images",
+        "https://www.utilipad.com/en/category/images",
 
-        "https://utilipad.com/es/category/text",
-        "https://utilipad.com/en/category/text",
+        "https://www.utilipad.com/es/category/text",
+        "https://www.utilipad.com/en/category/text",
 
         // Herramientas - URLs nuevas SEO-friendly
-        "https://utilipad.com/es/tools/zip-files",
-        "https://utilipad.com/en/tools/zip-files",
+        "https://www.utilipad.com/es/tools/zip-files",
+        "https://www.utilipad.com/en/tools/zip-files",
 
-        "https://utilipad.com/es/tools/file-converter",
-        "https://utilipad.com/en/tools/file-converter",
+        "https://www.utilipad.com/es/tools/file-converter",
+        "https://www.utilipad.com/en/tools/file-converter",
 
-        "https://utilipad.com/es/tools/image-compress",
-        "https://utilipad.com/en/tools/image-compress",
+        "https://www.utilipad.com/es/tools/image-compress",
+        "https://www.utilipad.com/en/tools/image-compress",
 
-        "https://utilipad.com/es/tools/image-converter",
-        "https://utilipad.com/en/tools/image-converter",
+        "https://www.utilipad.com/es/tools/image-converter",
+        "https://www.utilipad.com/en/tools/image-converter",
 
-        "https://utilipad.com/es/tools/json-formatter",
-        "https://utilipad.com/en/tools/json-formatter",
+        "https://www.utilipad.com/es/tools/json-formatter",
+        "https://www.utilipad.com/en/tools/json-formatter",
 
-        "https://utilipad.com/es/tools/text-analyzer",
-        "https://utilipad.com/en/tools/text-analyzer",
+        "https://www.utilipad.com/es/tools/text-analyzer",
+        "https://www.utilipad.com/en/tools/text-analyzer",
 
-        "https://utilipad.com/es/tools/qr-generator",
-        "https://utilipad.com/en/tools/qr-generator",
+        "https://www.utilipad.com/es/tools/qr-generator",
+        "https://www.utilipad.com/en/tools/qr-generator",
 
-        "https://utilipad.com/es/tools/password-generator",
-        "https://utilipad.com/en/tools/password-generator",
+        "https://www.utilipad.com/es/tools/password-generator",
+        "https://www.utilipad.com/en/tools/password-generator",
       ],
     }),
     db(),
