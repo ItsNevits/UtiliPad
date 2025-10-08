@@ -41,34 +41,345 @@ const filesSupported = (await response.json()) as FilesSupported;
     />
   </div>
 
-  <div class="mt-3">
-    <p class="text-sm text-neutral-400">
-      {getTranslation(lang, "common.supportedFormats") || "Supported formats: "}
-    </p>
-    <ul class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 mt-2">
+  <!-- Conversiones Soportadas -->
+  <div class="mt-6">
+    <h3 class="text-lg font-semibold text-neutral-200 mb-4">
       {
-        Object.entries(filesSupported).map(([input, outputs]) => (
-          <li
-            class="flex flex-col flex-wrap items-start gap-2 bg-neutral-900/60 rounded-lg px-3 py-2 min-w-0"
-            style="list-style:none;"
-            title={`${input.toUpperCase()} → ${outputs.map((o: string) => o.toUpperCase()).join(", ")}`}
-          >
-            <div>
-              <span class="inline-block bg-emerald-700/80 text-white px-2 py-0.5 rounded text-xs font-semibold tracking-wide">
-                {input.toUpperCase()}
-              </span>
-            </div>
-            <span class="flex flex-wrap gap-1">
-              {outputs.map((o: string) => (
-                <span class="inline-block bg-neutral-700/70 text-emerald-300 px-2 py-0.5 rounded text-xs font-medium">
-                  {o.toUpperCase()}
-                </span>
-              ))}
-            </span>
-          </li>
-        ))
+        getTranslation(lang, "common.supportedConversions") ||
+          "Conversiones Soportadas"
       }
-    </ul>
+    </h3>
+
+    <!-- Categorías de conversión -->
+    <div class="space-y-4">
+      <!-- Documents -->
+      <div class="bg-neutral-900/40 rounded-lg p-4 border border-neutral-800">
+        <div class="flex items-center gap-2 mb-3">
+          <svg
+            class="w-5 h-5 text-blue-400"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+            ></path>
+          </svg>
+          <h4 class="text-sm font-semibold text-neutral-300">
+            {getTranslation(lang, "common.documents") || "Documentos"}
+          </h4>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+          <div class="flex items-center gap-2 text-sm">
+            <span
+              class="px-2 py-1 bg-emerald-700/80 text-white rounded text-xs font-semibold"
+              >DOCX</span
+            >
+            <svg
+              class="w-4 h-4 text-neutral-500"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 5l7 7-7 7"></path>
+            </svg>
+            <div class="flex flex-wrap gap-1">
+              <span
+                class="px-2 py-0.5 bg-neutral-700/70 text-emerald-300 rounded text-xs"
+                >HTML</span
+              >
+              <span
+                class="px-2 py-0.5 bg-neutral-700/70 text-emerald-300 rounded text-xs"
+                >TXT</span
+              >
+              <span
+                class="px-2 py-0.5 bg-neutral-700/70 text-emerald-300 rounded text-xs"
+                >PDF</span
+              >
+            </div>
+          </div>
+          <div class="flex items-center gap-2 text-sm">
+            <span
+              class="px-2 py-1 bg-emerald-700/80 text-white rounded text-xs font-semibold"
+              >TXT</span
+            >
+            <svg
+              class="w-4 h-4 text-neutral-500"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 5l7 7-7 7"></path>
+            </svg>
+            <span
+              class="px-2 py-0.5 bg-neutral-700/70 text-emerald-300 rounded text-xs"
+              >DOCX</span
+            >
+          </div>
+          <div class="flex items-center gap-2 text-sm">
+            <span
+              class="px-2 py-1 bg-emerald-700/80 text-white rounded text-xs font-semibold"
+              >MD</span
+            >
+            <svg
+              class="w-4 h-4 text-neutral-500"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 5l7 7-7 7"></path>
+            </svg>
+            <div class="flex flex-wrap gap-1">
+              <span
+                class="px-2 py-0.5 bg-neutral-700/70 text-emerald-300 rounded text-xs"
+                >DOCX</span
+              >
+              <span
+                class="px-2 py-0.5 bg-neutral-700/70 text-emerald-300 rounded text-xs"
+                >HTML</span
+              >
+            </div>
+          </div>
+          <div class="flex items-center gap-2 text-sm">
+            <span
+              class="px-2 py-1 bg-emerald-700/80 text-white rounded text-xs font-semibold"
+              >HTML</span
+            >
+            <svg
+              class="w-4 h-4 text-neutral-500"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 5l7 7-7 7"></path>
+            </svg>
+            <span
+              class="px-2 py-0.5 bg-neutral-700/70 text-emerald-300 rounded text-xs"
+              >PDF</span
+            >
+          </div>
+        </div>
+      </div>
+
+      <!-- Spreadsheets -->
+      <div class="bg-neutral-900/40 rounded-lg p-4 border border-neutral-800">
+        <div class="flex items-center gap-2 mb-3">
+          <svg
+            class="w-5 h-5 text-green-400"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"
+            ></path>
+          </svg>
+          <h4 class="text-sm font-semibold text-neutral-300">
+            {getTranslation(lang, "common.spreadsheets") || "Hojas de Cálculo"}
+          </h4>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+          <div class="flex items-center gap-2 text-sm">
+            <span
+              class="px-2 py-1 bg-emerald-700/80 text-white rounded text-xs font-semibold"
+              >XLSX</span
+            >
+            <svg
+              class="w-4 h-4 text-neutral-500"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 5l7 7-7 7"></path>
+            </svg>
+            <div class="flex flex-wrap gap-1">
+              <span
+                class="px-2 py-0.5 bg-neutral-700/70 text-emerald-300 rounded text-xs"
+                >CSV</span
+              >
+              <span
+                class="px-2 py-0.5 bg-neutral-700/70 text-emerald-300 rounded text-xs"
+                >JSON</span
+              >
+              <span
+                class="px-2 py-0.5 bg-neutral-700/70 text-emerald-300 rounded text-xs"
+                >HTML</span
+              >
+            </div>
+          </div>
+          <div class="flex items-center gap-2 text-sm">
+            <span
+              class="px-2 py-1 bg-emerald-700/80 text-white rounded text-xs font-semibold"
+              >XLS</span
+            >
+            <svg
+              class="w-4 h-4 text-neutral-500"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 5l7 7-7 7"></path>
+            </svg>
+            <div class="flex flex-wrap gap-1">
+              <span
+                class="px-2 py-0.5 bg-neutral-700/70 text-emerald-300 rounded text-xs"
+                >CSV</span
+              >
+              <span
+                class="px-2 py-0.5 bg-neutral-700/70 text-emerald-300 rounded text-xs"
+                >JSON</span
+              >
+              <span
+                class="px-2 py-0.5 bg-neutral-700/70 text-emerald-300 rounded text-xs"
+                >HTML</span
+              >
+            </div>
+          </div>
+          <div class="flex items-center gap-2 text-sm">
+            <span
+              class="px-2 py-1 bg-emerald-700/80 text-white rounded text-xs font-semibold"
+              >ODS</span
+            >
+            <svg
+              class="w-4 h-4 text-neutral-500"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 5l7 7-7 7"></path>
+            </svg>
+            <div class="flex flex-wrap gap-1">
+              <span
+                class="px-2 py-0.5 bg-neutral-700/70 text-emerald-300 rounded text-xs"
+                >CSV</span
+              >
+              <span
+                class="px-2 py-0.5 bg-neutral-700/70 text-emerald-300 rounded text-xs"
+                >JSON</span
+              >
+              <span
+                class="px-2 py-0.5 bg-neutral-700/70 text-emerald-300 rounded text-xs"
+                >HTML</span
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Data Formats -->
+      <div class="bg-neutral-900/40 rounded-lg p-4 border border-neutral-800">
+        <div class="flex items-center gap-2 mb-3">
+          <svg
+            class="w-5 h-5 text-yellow-400"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"
+            ></path>
+          </svg>
+          <h4 class="text-sm font-semibold text-neutral-300">
+            {getTranslation(lang, "common.dataFormats") || "Formatos de Datos"}
+          </h4>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+          <div class="flex items-center gap-2 text-sm">
+            <span
+              class="px-2 py-1 bg-emerald-700/80 text-white rounded text-xs font-semibold"
+              >CSV</span
+            >
+            <svg
+              class="w-4 h-4 text-neutral-500"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 5l7 7-7 7"></path>
+            </svg>
+            <div class="flex flex-wrap gap-1">
+              <span
+                class="px-2 py-0.5 bg-neutral-700/70 text-emerald-300 rounded text-xs"
+                >XLSX</span
+              >
+              <span
+                class="px-2 py-0.5 bg-neutral-700/70 text-emerald-300 rounded text-xs"
+                >JSON</span
+              >
+            </div>
+          </div>
+          <div class="flex items-center gap-2 text-sm">
+            <span
+              class="px-2 py-1 bg-emerald-700/80 text-white rounded text-xs font-semibold"
+              >JSON</span
+            >
+            <svg
+              class="w-4 h-4 text-neutral-500"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 5l7 7-7 7"></path>
+            </svg>
+            <div class="flex flex-wrap gap-1">
+              <span
+                class="px-2 py-0.5 bg-neutral-700/70 text-emerald-300 rounded text-xs"
+                >XLSX</span
+              >
+              <span
+                class="px-2 py-0.5 bg-neutral-700/70 text-emerald-300 rounded text-xs"
+                >CSV</span
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 

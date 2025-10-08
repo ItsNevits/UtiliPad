@@ -3,16 +3,23 @@ export const prerender = false;
 import JSZip from "jszip";
 import mammoth from "mammoth";
 import * as XLSX from "xlsx";
+import { Document, Packer, Paragraph, TextRun } from "docx";
+import { marked } from "marked";
+import { jsPDF } from "jspdf";
+import { PDFDocument } from "pdf-lib";
 import type { APIRoute } from "astro";
 
 // Supported conversions (serverless-friendly)
 const supportedConversions = {
-  docx: ["html", "txt"],
+  docx: ["html", "txt", "pdf"],
   xlsx: ["csv", "json", "html"],
   xls: ["csv", "json", "html"],
   ods: ["csv", "json", "html"],
   csv: ["xlsx", "json"],
   json: ["xlsx", "csv"],
+  txt: ["docx"],
+  md: ["docx", "html"],
+  html: ["pdf"],
 };
 
 export const GET: APIRoute = async () => {
@@ -64,8 +71,84 @@ export const POST: APIRoute = async ({ request }) => {
       let resultBuffer: Buffer | null = null;
       let contentType = "application/octet-stream";
       let outName = `converted.${format}`;
+
+      // TXT → DOCX
+      if (ext === "txt" && format === "docx") {
+        const text = buffer.toString("utf-8");
+        const lines = text.split("\n");
+        const doc = new Document({
+          sections: [{
+            properties: {},
+            children: lines.map(line =>
+              new Paragraph({
+                children: [new TextRun(line || " ")],
+              })
+            ),
+          }],
+        });
+        resultBuffer = Buffer.from(await Packer.toBuffer(doc));
+        contentType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+        outName = `${name?.split(".")[0]}.docx`;
+      }
+
+      // MD → DOCX
+      else if (ext === "md" && format === "docx") {
+        const markdown = buffer.toString("utf-8");
+        const html = await marked(markdown);
+        // Convert HTML to paragraphs (simple approach)
+        const textContent = html.replace(/<[^>]+>/g, "\n").split("\n").filter(line => line.trim());
+        const doc = new Document({
+          sections: [{
+            properties: {},
+            children: textContent.map(line =>
+              new Paragraph({
+                children: [new TextRun(line)],
+              })
+            ),
+          }],
+        });
+        resultBuffer = Buffer.from(await Packer.toBuffer(doc));
+        contentType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+        outName = `${name?.split(".")[0]}.docx`;
+      }
+
+      // MD → HTML
+      else if (ext === "md" && format === "html") {
+        const markdown = buffer.toString("utf-8");
+        const html = await marked(markdown);
+        resultBuffer = Buffer.from(html, "utf-8");
+        contentType = "text/html";
+        outName = `${name?.split(".")[0]}.html`;
+      }
+
+      // HTML → PDF
+      else if (ext === "html" && format === "pdf") {
+        const html = buffer.toString("utf-8");
+        const doc = new jsPDF();
+        // Extract text from HTML (simple approach - removes tags)
+        const text = html.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
+        const lines = doc.splitTextToSize(text, 180);
+        doc.text(lines, 10, 10);
+        resultBuffer = Buffer.from(doc.output("arraybuffer"));
+        contentType = "application/pdf";
+        outName = `${name?.split(".")[0]}.pdf`;
+      }
+
+      // DOCX → PDF
+      else if (ext === "docx" && format === "pdf") {
+        const { value: html } = await mammoth.convertToHtml({ buffer });
+        const doc = new jsPDF();
+        // Extract text from HTML
+        const text = html.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
+        const lines = doc.splitTextToSize(text, 180);
+        doc.text(lines, 10, 10);
+        resultBuffer = Buffer.from(doc.output("arraybuffer"));
+        contentType = "application/pdf";
+        outName = `${name?.split(".")[0]}.pdf`;
+      }
+
       // DOCX → HTML/TXT
-      if (ext === "docx" && format === "html") {
+      else if (ext === "docx" && format === "html") {
         const { value } = await mammoth.convertToHtml({ buffer });
         resultBuffer = Buffer.from(value, "utf-8");
         contentType = "text/html";
@@ -232,8 +315,76 @@ export const POST: APIRoute = async ({ request }) => {
         const buffer = Buffer.from(arrayBuffer);
         let resultBuffer: Buffer | null = null;
         let outName = `${name.split(".")[0]}.${format}`;
+
+        // TXT → DOCX
+        if (ext === "txt" && format === "docx") {
+          const text = buffer.toString("utf-8");
+          const lines = text.split("\n");
+          const doc = new Document({
+            sections: [{
+              properties: {},
+              children: lines.map(line =>
+                new Paragraph({
+                  children: [new TextRun(line || " ")],
+                })
+              ),
+            }],
+          });
+          resultBuffer = Buffer.from(await Packer.toBuffer(doc));
+          outName = `${name.split(".")[0]}.docx`;
+        }
+
+        // MD → DOCX
+        else if (ext === "md" && format === "docx") {
+          const markdown = buffer.toString("utf-8");
+          const html = await marked(markdown);
+          const textContent = html.replace(/<[^>]+>/g, "\n").split("\n").filter(line => line.trim());
+          const doc = new Document({
+            sections: [{
+              properties: {},
+              children: textContent.map(line =>
+                new Paragraph({
+                  children: [new TextRun(line)],
+                })
+              ),
+            }],
+          });
+          resultBuffer = Buffer.from(await Packer.toBuffer(doc));
+          outName = `${name.split(".")[0]}.docx`;
+        }
+
+        // MD → HTML
+        else if (ext === "md" && format === "html") {
+          const markdown = buffer.toString("utf-8");
+          const html = await marked(markdown);
+          resultBuffer = Buffer.from(html, "utf-8");
+          outName = `${name.split(".")[0]}.html`;
+        }
+
+        // HTML → PDF
+        else if (ext === "html" && format === "pdf") {
+          const html = buffer.toString("utf-8");
+          const doc = new jsPDF();
+          const text = html.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
+          const lines = doc.splitTextToSize(text, 180);
+          doc.text(lines, 10, 10);
+          resultBuffer = Buffer.from(doc.output("arraybuffer"));
+          outName = `${name.split(".")[0]}.pdf`;
+        }
+
+        // DOCX → PDF
+        else if (ext === "docx" && format === "pdf") {
+          const { value: html } = await mammoth.convertToHtml({ buffer });
+          const doc = new jsPDF();
+          const text = html.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
+          const lines = doc.splitTextToSize(text, 180);
+          doc.text(lines, 10, 10);
+          resultBuffer = Buffer.from(doc.output("arraybuffer"));
+          outName = `${name.split(".")[0]}.pdf`;
+        }
+
         // DOCX → HTML/TXT
-        if (ext === "docx" && format === "html") {
+        else if (ext === "docx" && format === "html") {
           const { value } = await mammoth.convertToHtml({ buffer });
           resultBuffer = Buffer.from(value, "utf-8");
           outName = `${name.split(".")[0]}.html`;
