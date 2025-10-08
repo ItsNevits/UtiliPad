@@ -1,0 +1,420 @@
+---
+import ExpandIcon from "@assets/icons/expand.svg";
+import { Picture } from "astro:assets";
+
+import type { Language } from "@@types/language.type";
+import { getTranslation } from "@i18n/index";
+
+import "../../../styles/tools/JsonFormatter.css";
+
+const lang = Astro.params.lang as Language;
+---
+
+<div class="bg-neutral-800/50 rounded-xl p-6 select-none">
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <!-- Panel de entrada -->
+    <div class="space-y-4">
+      <div class="flex items-center justify-between">
+        <label class="block text-sm font-medium text-neutral-300">
+          {getTranslation(lang, "components.jsonFormatter.inputTitle")}
+        </label>
+        <div class="flex gap-2">
+          <button
+            id="paste-btn"
+            title={getTranslation(lang, "components.jsonFormatter.paste")}
+            class="cursor-pointer text-xs px-3 py-1 bg-neutral-700 hover:bg-neutral-600 text-neutral-200 rounded transition-colors"
+          >
+            {getTranslation(lang, "components.jsonFormatter.paste")}
+          </button>
+          <button
+            id="clear-btn"
+            title={getTranslation(lang, "components.jsonFormatter.clear")}
+            class="cursor-pointer text-xs px-3 py-1 bg-neutral-700 hover:bg-neutral-600 text-neutral-200 rounded transition-colors"
+          >
+            {getTranslation(lang, "components.jsonFormatter.clear")}
+          </button>
+        </div>
+      </div>
+
+      <textarea
+        id="json-input"
+        placeholder='{"nombre": "Juan", "edad": 30, "activo": true}'
+        class="w-full h-96 p-4 bg-neutral-900/60 border border-neutral-700 rounded-lg text-sm font-mono resize-none focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
+      ></textarea>
+
+      <!-- Controles de formateo -->
+      <div class="flex flex-wrap gap-4">
+        <label class="flex items-center gap-2 text-sm text-neutral-300">
+          <input
+            type="number"
+            id="indent-size"
+            min="1"
+            max="8"
+            value="2"
+            class="w-16 px-2 py-1 bg-neutral-700 border border-neutral-600 rounded text-xs"
+          />
+          {getTranslation(lang, "components.jsonFormatter.indentSpaces")}
+        </label>
+
+        <div class="flex flex-wrap gap-2">
+          <button
+            id="format-btn"
+            title={getTranslation(lang, "components.jsonFormatter.format")}
+            class="cursor-pointer px-4 py-2 bg-neutral-700 hover:bg-neutral-600 text-neutral-200 rounded transition-colors text-sm"
+          >
+            {getTranslation(lang, "components.jsonFormatter.format")}
+          </button>
+          <button
+            id="minify-btn"
+            title={getTranslation(lang, "components.jsonFormatter.minify")}
+            class="cursor-pointer px-4 py-2 bg-neutral-700 hover:bg-neutral-600 text-neutral-200 rounded transition-colors text-sm"
+          >
+            {getTranslation(lang, "components.jsonFormatter.minify")}
+          </button>
+        </div>
+      </div>
+
+      <!-- Estado de validación -->
+      <div id="validation-status" class="text-sm"></div>
+    </div>
+
+    <!-- Panel de salida -->
+    <div class="space-y-4">
+      <div class="flex items-center justify-between">
+        <label class="block text-sm font-medium text-neutral-300">
+          {getTranslation(lang, "components.jsonFormatter.outputTitle")}
+        </label>
+        <div class="flex gap-2">
+          <button
+            id="copy-btn"
+            title={getTranslation(lang, "components.jsonFormatter.copy")}
+            class="cursor-pointer text-xs px-3 py-1 bg-neutral-700 hover:bg-neutral-600 text-neutral-200 rounded transition-colors"
+          >
+            {getTranslation(lang, "components.jsonFormatter.copy")}
+          </button>
+          <button
+            id="download-btn"
+            title={getTranslation(lang, "common.download")}
+            class="cursor-pointer text-xs px-3 py-1 bg-neutral-700 hover:bg-neutral-600 text-neutral-200 rounded transition-colors"
+          >
+            {getTranslation(lang, "common.download")}
+          </button>
+        </div>
+      </div>
+
+      <!-- Salida con json-formatter-js -->
+      <div class="relative">
+        <div
+          id="json-output"
+          class="w-full h-96 p-4 bg-neutral-900/60 border border-neutral-700 rounded-lg text-sm font-mono overflow-auto"
+        >
+        </div>
+        <textarea
+          id="json-output-text"
+          class="w-full h-96 p-4 bg-neutral-900/60 border border-neutral-700 rounded-lg text-sm font-mono resize-none focus:outline-none focus:ring-2 focus:ring-emerald-500/50 hidden"
+          readonly></textarea>
+
+        <button
+          id="expand-btn"
+          title="Expandir JSON"
+          class="cursor-pointer absolute top-2 right-2 p-2 bg-neutral-800/80 backdrop-blur-sm rounded-lg hover:bg-neutral-700/80 transition-all duration-200 shadow-lg border border-neutral-700/50 hover:border-neutral-600/70"
+        >
+          <Picture
+            src={ExpandIcon}
+            alt="Expandir"
+            class="w-4 h-4 filter brightness-0 invert opacity-70 hover:opacity-100 transition-opacity duration-200"
+          />
+        </button>
+      </div>
+
+      <!-- Información del JSON -->
+      <div class="grid grid-cols-2 gap-4 text-sm">
+        <div class="bg-neutral-900/60 rounded-lg p-3">
+          <div class="text-neutral-400">
+            {getTranslation(lang, "components.jsonFormatter.originalSize")}
+          </div>
+          <div id="original-size" class="font-mono text-neutral-300">
+            0 bytes
+          </div>
+        </div>
+        <div class="bg-neutral-900/60 rounded-lg p-3">
+          <div class="text-neutral-400">
+            {getTranslation(lang, "components.jsonFormatter.formattedSize")}
+          </div>
+          <div id="formatted-size" class="font-mono text-neutral-300">
+            0 bytes
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<astro-greet
+  data-translations={JSON.stringify(
+    getTranslation(lang, "components.jsonFormatter")
+  )}></astro-greet>
+
+<script>
+  import JSONFormatter from "json-formatter-js";
+  import { openModal } from "../../../stores/modal";
+  import { actions } from "astro:actions";
+
+  document.addEventListener("astro:page-load", () => {
+    let jsonMessages = {} as any;
+    let currentJsonData: any = null;
+    let currentFormatter: any = null; // Track current formatter instance
+
+    // Initialize translations - Define custom element BEFORE using it
+    class AstroGreet extends HTMLElement {
+      connectedCallback() {
+        jsonMessages = JSON.parse(
+          this.getAttribute("data-translations") || "{}"
+        );
+      }
+    }
+
+    // Always define the custom element (it's safe to redefine)
+    if (!customElements.get("astro-greet")) {
+      customElements.define("astro-greet", AstroGreet);
+    }
+
+    // Wait for custom element to be ready
+    const astroGreetElement = document.querySelector("astro-greet");
+    if (astroGreetElement) {
+      jsonMessages = JSON.parse(
+        astroGreetElement.getAttribute("data-translations") || "{}"
+      );
+    }
+
+    // Get DOM elements
+    const elements = {
+      jsonInput: document.getElementById("json-input") as HTMLTextAreaElement,
+      jsonOutput: document.getElementById("json-output") as HTMLElement,
+      jsonOutputText: document.getElementById(
+        "json-output-text"
+      ) as HTMLTextAreaElement,
+      validationStatus: document.getElementById(
+        "validation-status"
+      ) as HTMLElement,
+      originalSize: document.getElementById("original-size") as HTMLElement,
+      formattedSize: document.getElementById("formatted-size") as HTMLElement,
+      indentSize: document.getElementById("indent-size") as HTMLInputElement,
+      formatBtn: document.getElementById("format-btn") as HTMLButtonElement,
+      minifyBtn: document.getElementById("minify-btn") as HTMLButtonElement,
+      pasteBtn: document.getElementById("paste-btn") as HTMLButtonElement,
+      clearBtn: document.getElementById("clear-btn") as HTMLButtonElement,
+      copyBtn: document.getElementById("copy-btn") as HTMLButtonElement,
+      downloadBtn: document.getElementById("download-btn") as HTMLButtonElement,
+      expandBtn: document.getElementById("expand-btn") as HTMLButtonElement,
+    };
+
+    // Check if all elements exist
+    if (Object.values(elements).some((el) => !el)) return;
+
+    // Clean up function for the formatter
+    const cleanupFormatter = () => {
+      if (elements.jsonOutput) {
+        // Remove all children completely
+        while (elements.jsonOutput.firstChild) {
+          elements.jsonOutput.removeChild(elements.jsonOutput.firstChild);
+        }
+        // Reset innerHTML as backup
+        elements.jsonOutput.innerHTML = "";
+      }
+      currentFormatter = null;
+    };
+
+    // Utility functions
+    const updateSizes = (original: string, formatted: string) => {
+      elements.originalSize.textContent = `${new Blob([original]).size} bytes`;
+      elements.formattedSize.textContent = `${new Blob([formatted]).size} bytes`;
+    };
+
+    const showValidationStatus = (isValid: boolean, message: string = "") => {
+      const status = isValid
+        ? `<span class="text-emerald-400">✓ ${jsonMessages.validJson}</span>`
+        : `<span class="text-red-400">✗ ${jsonMessages.invalidJson}: ${message}</span>`;
+      elements.validationStatus.innerHTML = status;
+    };
+
+    const clearOutput = () => {
+      cleanupFormatter(); // Use the proper cleanup function
+      elements.jsonOutputText.value = "";
+      elements.validationStatus.innerHTML = "";
+      updateSizes("", "");
+      currentJsonData = null;
+    };
+
+    // Main functions
+    const formatJSON = () => {
+      const inputText = elements.jsonInput.value.trim();
+
+      if (!inputText) {
+        clearOutput();
+        showValidationStatus(false, jsonMessages.emptyInput);
+        return;
+      }
+
+      try {
+        const parsedJSON = JSON.parse(inputText);
+        const indent = parseInt(elements.indentSize.value) || 2;
+        currentJsonData = parsedJSON;
+
+        // Clean up previous formatter instance completely
+        cleanupFormatter();
+
+        // Show formatted view
+        elements.jsonOutput.classList.remove("hidden");
+        elements.jsonOutputText.classList.add("hidden");
+
+        // Create new formatter instance
+        currentFormatter = new JSONFormatter(parsedJSON, 1, {
+          hoverPreviewEnabled: false,
+          hoverPreviewArrayCount: 100,
+          hoverPreviewFieldCount: 5,
+          theme: "dark",
+        });
+
+        elements.jsonOutput.appendChild(currentFormatter.render());
+
+        const formattedText = JSON.stringify(parsedJSON, null, indent);
+        elements.jsonOutputText.value = formattedText;
+
+        showValidationStatus(true);
+        updateSizes(inputText, formattedText);
+
+        actions.createUpdateProcessCount({ process_name: "json-formatter" });
+      } catch (error) {
+        showValidationStatus(false, (error as Error).message);
+        elements.jsonOutput.innerHTML = `<div class="text-red-400 p-4">${jsonMessages.errorParsing}</div>`;
+        elements.jsonOutputText.value = "";
+        updateSizes(inputText, "");
+        currentJsonData = null;
+      }
+    };
+
+    const minifyJSON = () => {
+      const inputText = elements.jsonInput.value.trim();
+      if (!inputText) return;
+
+      try {
+        const parsedJSON = JSON.parse(inputText);
+        const minified = JSON.stringify(parsedJSON);
+
+        elements.jsonOutput.classList.add("hidden");
+        elements.jsonOutputText.classList.remove("hidden");
+        elements.jsonOutputText.value = minified;
+
+        showValidationStatus(true);
+        updateSizes(inputText, minified);
+        actions.createUpdateProcessCount({ process_name: "json-formatter" });
+      } catch (error) {
+        showValidationStatus(false, (error as Error).message);
+      }
+    };
+
+    const openJsonModal = () => {
+      if (!currentJsonData) return;
+
+      const modalFormatter = new JSONFormatter(currentJsonData, 3, {
+        hoverPreviewEnabled: true,
+        hoverPreviewArrayCount: 50,
+        hoverPreviewFieldCount: 8,
+        theme: "dark",
+        animateOpen: true,
+        animateClose: true,
+      });
+
+      const container = document.createElement("div");
+      container.className =
+        "json-formatter-container w-full max-w-full overflow-hidden";
+      container.appendChild(modalFormatter.render());
+
+      openModal({
+        title: jsonMessages.modalTitle,
+        description: jsonMessages.modalDescription,
+        content: container,
+        onCopy: async () => {
+          try {
+            await navigator.clipboard.writeText(
+              JSON.stringify(currentJsonData, null, 2)
+            );
+          } catch (error) {
+            console.error("Error al copiar:", error);
+          }
+        },
+      });
+    };
+
+    // Event listeners
+    elements.formatBtn.addEventListener("click", formatJSON);
+    elements.minifyBtn.addEventListener("click", minifyJSON);
+    elements.expandBtn.addEventListener("click", openJsonModal);
+
+    elements.pasteBtn.addEventListener("click", async () => {
+      try {
+        elements.jsonInput.value = await navigator.clipboard.readText();
+        formatJSON();
+      } catch (error) {
+        console.error("Error al pegar:", error);
+      }
+    });
+
+    elements.clearBtn.addEventListener("click", () => {
+      elements.jsonInput.value = "";
+      clearOutput();
+    });
+
+    elements.copyBtn.addEventListener("click", async () => {
+      if (elements.jsonOutputText.value) {
+        try {
+          await navigator.clipboard.writeText(elements.jsonOutputText.value);
+          elements.copyBtn.textContent = `${jsonMessages.copy} ✓`;
+          setTimeout(() => {
+            elements.copyBtn.textContent = jsonMessages.copy;
+          }, 2000);
+        } catch (error) {
+          console.error("Error al copiar:", error);
+        }
+      }
+    });
+
+    elements.downloadBtn.addEventListener("click", () => {
+      if (elements.jsonOutputText.value) {
+        const blob = new Blob([elements.jsonOutputText.value], {
+          type: "application/json",
+        });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "formatted.json";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      }
+    });
+
+    // Auto-format with debounce
+    let timeoutId: ReturnType<typeof setTimeout>;
+    elements.jsonInput.addEventListener("input", () => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(formatJSON, 500);
+    });
+
+    // Format on load if there's initial content
+    if (elements.jsonInput.value.trim()) {
+      formatJSON();
+    }
+
+    // Cleanup on page leave (important for View Transitions)
+    document.addEventListener(
+      "astro:before-preparation",
+      () => {
+        cleanupFormatter();
+      },
+      { once: true }
+    );
+  });
+</script>

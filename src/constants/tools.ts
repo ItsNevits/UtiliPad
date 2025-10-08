@@ -54,8 +54,8 @@ export const TOOLS_CATEGORIES: Category[] = [
         name: "Comprimir imagen",
         description: "Reduce el tamaño de tus imágenes",
         href: "/category/images?tool=image-compress",
-        bagde: "Proximamente",
-        isAvailable: false,
+        bagde: "Nuevo",
+        isAvailable: true,
         component: "ImageCompressor",
       },
       {

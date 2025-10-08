@@ -8,6 +8,7 @@ import Modal from "@components/shared/Modal.astro";
 
 import type { Language } from "@@types/language.type";
 import { getDynamicSEO, generateJSONLD } from "@utils/seo";
+import { ClientRouter } from "astro:transitions";
 
 const lang = Astro.params.lang as Language;
 
@@ -48,6 +49,8 @@ const enUrl = `${baseUrl}/en${alternateUrl}`;
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <link rel="sitemap" href="/sitemap-index.xml" />
+
+    <ClientRouter />
 
     <!-- SEO Básico -->
     <title>{finalTitle}</title>

@@ -7,13 +7,14 @@ import Tools from "@components/shared/Tools.astro";
 import BreadCrumbs from "@components/shared/BreadCrumbs.astro";
 
 // Importar componentes de herramientas
-import TextAnalyzer from "@components/tools/TextAnalyzer.astro";
-import JsonFormatter from "@components/tools/JsonFormatter.astro";
-import ZipCompressor from "@components/tools/ZipCompressor.astro";
-import QrGenerator from "@components/tools/QrGenerator.astro";
-import ImageConverter from "@components/tools/ImageConverter.astro";
-import FileConverter from "@components/tools/FileConverter.astro";
-import PasswordGenerator from "@components/tools/PasswordGenerator.astro";
+import TextAnalyzer from "@components/tools/text/TextAnalyzer.astro";
+import JsonFormatter from "@components/tools/text/JsonFormatter.astro";
+import ZipCompressor from "@components/tools/files/ZipCompressor.astro";
+import QrGenerator from "@components/tools/text/QrGenerator.astro";
+import ImageConverter from "@components/tools/images/ImageConverter.astro";
+import ImageCompressor from "@components/tools/images/ImageCompressor.astro";
+import FileConverter from "@components/tools/files/FileConverter.astro";
+import PasswordGenerator from "@components/tools/text/PasswordGenerator.astro";
 
 import { TOOLS_CATEGORIES, getToolById } from "../../../constants/tools";
 import type { Language } from "@@types/language.type";
@@ -38,6 +39,7 @@ const COMPONENT_MAP = {
 
   // Images Components
   ImageConverter: ImageConverter,
+  ImageCompressor: ImageCompressor,
 };
 
 // Configurar traducciones
@@ -183,7 +185,7 @@ const descriptionSeo = selectedTool
               .filter((tool) => tool.id !== selectedTool.id && tool.isAvailable)
               .map((tool) => (
                 <a
-                  href={tool.href}
+                  href={`/${lang}${tool.href}`}
                   class="block p-4 bg-neutral-900/40 rounded-xl border border-neutral-800 hover:border-emerald-600/60 transition-colors"
                 >
                   <h4 class="font-medium mb-1">

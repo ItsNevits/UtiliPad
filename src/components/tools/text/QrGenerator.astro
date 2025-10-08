@@ -77,11 +77,13 @@ const lang = Astro.params.lang as Language;
       </div>
     </div>
   </div>
+</div>
 
-  <script>
-    import QRCode from "qr-code-styling";
-    import { fetchIncrementProcessCountByToolId } from "@utils/tools";
+<script>
+  import { actions } from "astro:actions";
+  import QRCode from "qr-code-styling";
 
+  document.addEventListener("astro:page-load", () => {
     const generateQrButton = document.getElementById(
       "generate-qr"
     ) as HTMLButtonElement;
@@ -97,6 +99,16 @@ const lang = Astro.params.lang as Language;
     const shareButton = document.getElementById(
       "share-qr"
     ) as HTMLButtonElement;
+
+    // si algun elemento no existe, salir
+    if (
+      !generateQrButton ||
+      !downloadButtons ||
+      !downloadPngButton ||
+      !downloadSvgButton ||
+      !shareButton
+    )
+      return;
 
     let currentQr: QRCode | null = null;
     let currentData: string = "";
@@ -163,7 +175,7 @@ const lang = Astro.params.lang as Language;
         console.error("Error generando el código QR:", error);
       } finally {
         // Incrementar el contador de uso del servicio
-        fetchIncrementProcessCountByToolId("qr-generator");
+        actions.createUpdateProcessCount({ process_name: "qr-generator" });
       }
     }
 
@@ -349,5 +361,5 @@ const lang = Astro.params.lang as Language;
       clearTimeout(resizeTimeout);
       resizeTimeout = setTimeout(resizeQr, 150);
     });
-  </script>
-</div>
+  });
+</script>

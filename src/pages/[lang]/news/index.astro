@@ -22,6 +22,14 @@ const news = allNews.filter(({ id }) => {
 const sortedNews = news.sort(
   (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
 );
+
+// Paginación
+const ITEMS_PER_PAGE = 4;
+const currentPage = Number(Astro.url.searchParams.get("page")) || 1;
+const totalPages = Math.ceil(sortedNews.length / ITEMS_PER_PAGE);
+const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+const endIndex = startIndex + ITEMS_PER_PAGE;
+const paginatedNews = sortedNews.slice(startIndex, endIndex);
 ---
 
 <MainLayout
@@ -35,9 +43,9 @@ const sortedNews = news.sort(
 
   <section class="mt-8">
     {
-      sortedNews.length > 0 ? (
+      paginatedNews.length > 0 ? (
         <div class="grid gap-6 md:gap-8">
-          {sortedNews.map((article) => (
+          {paginatedNews.map((article) => (
             <article class="opacity-0 sequence-item-tool bg-neutral-800/50 rounded-2xl border border-neutral-800 p-6 hover:border-neutral-700 transition-colors group">
               <div class="flex flex-col space-y-4">
                 <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -154,6 +162,81 @@ const sortedNews = news.sort(
           <p class="text-neutral-500">
             {getTranslation(lang, "pages.news.noPostsDesc")}
           </p>
+        </div>
+      )
+    }
+
+    <!-- Paginación -->
+    {
+      totalPages > 1 && (
+        <div class="mt-12 flex flex-col sm:flex-row items-center justify-between gap-4 p-6 bg-neutral-900/20 rounded-2xl border border-neutral-800">
+          <div class="text-sm text-neutral-400">
+            {getTranslation(lang, "pages.news.pagination.page")} {currentPage}{" "}
+            {getTranslation(lang, "pages.news.pagination.of")} {totalPages}
+          </div>
+
+          <div class="flex gap-2">
+            {currentPage > 1 && (
+              <a
+                href={`/${lang}/news?page=${currentPage - 1}`}
+                class="cursor-pointer px-4 py-2 bg-neutral-700 hover:bg-neutral-600 text-neutral-200 rounded-lg transition-colors text-sm font-medium inline-flex items-center gap-2"
+              >
+                <svg
+                  class="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M15 19l-7-7 7-7"
+                  />
+                </svg>
+                {getTranslation(lang, "pages.news.pagination.previous")}
+              </a>
+            )}
+
+            <div class="flex gap-1">
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                (page) => (
+                  <a
+                    href={`/${lang}/news?page=${page}`}
+                    class={`cursor-pointer px-4 py-2 rounded-lg transition-colors text-sm font-medium ${
+                      page === currentPage
+                        ? "bg-emerald-600 text-white"
+                        : "bg-neutral-700 hover:bg-neutral-600 text-neutral-200"
+                    }`}
+                  >
+                    {page}
+                  </a>
+                )
+              )}
+            </div>
+
+            {currentPage < totalPages && (
+              <a
+                href={`/${lang}/news?page=${currentPage + 1}`}
+                class="cursor-pointer px-4 py-2 bg-neutral-700 hover:bg-neutral-600 text-neutral-200 rounded-lg transition-colors text-sm font-medium inline-flex items-center gap-2"
+              >
+                {getTranslation(lang, "pages.news.pagination.next")}
+                <svg
+                  class="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M9 5l7 7-7 7"
+                  />
+                </svg>
+              </a>
+            )}
+          </div>
         </div>
       )
     }

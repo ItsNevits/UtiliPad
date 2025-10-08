@@ -141,4 +141,43 @@ export default {
       "Value must be between 5 and 128. Use 14 characters or more to generate a strong password.",
     tip: "Tip: Use a mix of all character types for best security.",
   },
+  imageCompressor: {
+    // ==== DROP ZONE ====
+    dropZoneTitle: "Click to upload or drag and drop",
+    dropZoneSubtitle: "PNG, JPG, WebP up to 10MB",
+
+    // ==== SETTINGS ====
+    settingsTitle: "Compression Settings",
+    maxSize: "Max Size (MB)",
+    maxSizeHelp: "Target file size in megabytes",
+    maxDimension: "Max Width/Height (px)",
+    maxDimensionHelp: "Maximum dimension in pixels",
+    quality: "Quality",
+    qualityLower: "Lower size",
+    qualityHigher: "Higher quality",
+    outputFormat: "Output Format",
+    formatOriginal: "Keep Original",
+    formatJpeg: "JPEG",
+    formatPng: "PNG",
+    formatWebp: "WebP",
+
+    // ==== BUTTONS ====
+    compress: "Compress Images",
+    compressing: "Compressing...",
+    reset: "Reset",
+    downloadAll: "Download All",
+    download: "Download",
+    creatingZip: "Creating ZIP...",
+
+    // ==== RESULTS ====
+    resultsTitle: "Compressed Images",
+    statTotal: "Total Images",
+    statOriginal: "Original Size",
+    statCompressed: "Compressed Size",
+
+    // ==== MESSAGES ====
+    errorSelect: "Please select valid image files",
+    errorCompressing: "Error compressing",
+    errorCreatingZip: "Error creating ZIP file",
+  },
 };

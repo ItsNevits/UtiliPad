@@ -1,0 +1,329 @@
+---
+import BoxIcon from "@assets/icons/box.svg";
+import Image from "astro/components/Image.astro";
+
+import type { Language } from "@@types/language.type";
+import { getTranslation } from "@i18n/index";
+
+const lang = Astro.params.lang as Language;
+---
+
+<div class="bg-neutral-800/50 rounded-xl p-6 select-none mb-5">
+  <div
+    id="drop-zone"
+    class="border border-neutral-700 p-5 rounded-lg flex flex-col items-center justify-center cursor-pointer"
+  >
+    <Image
+      class="text-neutral-400 mb-2 svg-color-neutral-400 opacity-40"
+      src={BoxIcon}
+      alt={"Box icon"}
+      quality={"mid"}
+      width={35}
+      height={35}
+      loading={"lazy"}
+    />
+    <span class="text-neutral-400"
+      >{getTranslation(lang, "components.zipCompressor.dropFiles")}</span
+    >
+
+    <input type="file" class="hidden" id="zip-file-input" multiple />
+  </div>
+</div>
+
+<div
+  id="files-uploaded"
+  class="bg-neutral-800/50 rounded-xl p-6 select-none mb-5 hidden"
+>
+  <div class="flex items-end justify-between mb-4">
+    <h2 class="text-xl md:text-2xl font-bold leading-tight">
+      {getTranslation(lang, "components.zipCompressor.filesUploaded")}
+    </h2>
+
+    <span class="text-neutral-400 text-sm"
+      >{getTranslation(lang, "components.zipCompressor.totalFiles")}: <span
+        id="total-files-uploaded">0</span
+      ></span
+    >
+  </div>
+
+  <div
+    id="content-files-uploaded"
+    class="relative flex flex-col gap-4 max-h-100 overflow-y-auto mb-4"
+  >
+    <div
+      id="overlay-zip-files"
+      class="absolute hidden z-10 top-0 left-0 bg-neutral-700/80 w-full h-full rounded-2xl justify-center items-center"
+    >
+      <p class="text-lg md:text-xl font-bold leading-tight animate-bounce">
+        {getTranslation(lang, "components.zipCompressor.processInfo")}
+      </p>
+    </div>
+  </div>
+
+  <!-- Information -->
+  <div class="flex flex-col justify-between md:flex-row gap-2">
+    <span class="text-neutral-400 text-sm"
+      >{getTranslation(lang, "components.zipCompressor.previousSize")}: <span
+        id="total-files-prev-sizes">0 KB</span
+      ></span
+    >
+
+    <span class="text-neutral-400 text-sm"
+      >{getTranslation(lang, "components.zipCompressor.compressSize")}: <span
+        id="total-files-next-sizes">0 KB</span
+      ></span
+    >
+  </div>
+
+  <button
+    id="compress-and-download"
+    class="cursor-pointer mt-5 px-4 py-2 bg-neutral-700 hover:bg-neutral-600 text-neutral-200 rounded transition-colors text-sm"
+  >
+    {getTranslation(lang, "components.zipCompressor.compressAndDownload")}
+  </button>
+</div>
+
+<astro-greet
+  data-translations={JSON.stringify(
+    getTranslation(lang, "components.zipCompressor")
+  )}></astro-greet>
+
+<script>
+  import { actions } from "astro:actions";
+  import JSZip from "jszip";
+
+  document.addEventListener("astro:page-load", () => {
+    let jsonMessages = {} as any;
+
+    class AstroGreet extends HTMLElement {
+      connectedCallback() {
+        const t = JSON.parse(this.getAttribute("data-translations") || "{}");
+        jsonMessages = t;
+      }
+    }
+
+    if (!customElements.get("astro-greet"))
+      customElements.define("astro-greet", AstroGreet);
+
+    const dropZone = document.getElementById("drop-zone") as HTMLDivElement;
+    const fileInput = document.getElementById(
+      "zip-file-input"
+    ) as HTMLInputElement;
+    const filesUploaded = document.getElementById(
+      "files-uploaded"
+    ) as HTMLDivElement;
+    const contentFilesUploaded = document.getElementById(
+      "content-files-uploaded"
+    ) as HTMLDivElement;
+    const compressButton = document.getElementById(
+      "compress-and-download"
+    ) as HTMLButtonElement;
+    const overlay = document.getElementById(
+      "overlay-zip-files"
+    ) as HTMLDivElement;
+
+    // si algun elemento no existe, salir
+    if (!dropZone || !fileInput || !filesUploaded || !contentFilesUploaded)
+      return;
+
+    // Array para mantener los archivos cargados
+    let currentFiles: File[] = [];
+
+    dropZone.addEventListener("click", () => {
+      fileInput.click();
+    });
+
+    dropZone.addEventListener("dragover", (event) => {
+      event.preventDefault();
+      dropZone.classList.add("border-blue-500");
+    });
+
+    dropZone.addEventListener("dragleave", () => {
+      dropZone.classList.remove("border-blue-500");
+    });
+
+    dropZone.addEventListener("drop", (event) => {
+      event.preventDefault();
+      dropZone.classList.remove("border-blue-500");
+      if (!event.dataTransfer) return;
+      const files = event.dataTransfer.files;
+      handleFiles(files);
+    });
+
+    fileInput.addEventListener("change", () => {
+      const files = fileInput.files;
+      handleFiles(files);
+    });
+
+    function handleFiles(files: FileList | null) {
+      if (!files || files.length === 0) return;
+
+      // Agregar nuevos archivos al array existente
+      const newFiles = Array.from(files);
+      currentFiles = [...currentFiles, ...newFiles];
+
+      updateUI();
+    }
+
+    function updateUI() {
+      if (currentFiles.length === 0) {
+        filesUploaded.classList.add("hidden");
+        return;
+      }
+
+      filesUploaded.classList.remove("hidden");
+      contentFilesUploaded.innerHTML = "";
+
+      currentFiles.forEach((file: File, index: number) => {
+        const fileType = file.name.split(".").pop() || "file";
+        const fileName = file.name;
+        const fileSize = (file.size / 1024).toFixed(2) + " KB";
+
+        const newElement = generateElement(fileType, fileName, fileSize, index);
+        contentFilesUploaded.appendChild(
+          document.createRange().createContextualFragment(newElement)
+        );
+      });
+
+      // Actualizar información adicional
+      const totalSize = currentFiles.reduce((acc, file) => acc + file.size, 0);
+      const estimatedCompressedSize = totalSize * 0.7; // Estimación del 70% del tamaño original
+      AditionalFilesInfo(
+        currentFiles.length,
+        (totalSize / 1024).toFixed(2) + " KB",
+        (estimatedCompressedSize / 1024).toFixed(2) + " KB"
+      );
+
+      // Actualizar el input file con los archivos actuales
+      updateFileInput();
+    }
+
+    function updateFileInput() {
+      const dt = new DataTransfer();
+      currentFiles.forEach((file) => dt.items.add(file));
+      fileInput.files = dt.files;
+    }
+
+    function generateElement(
+      type: string,
+      name: string,
+      size: string,
+      index: number
+    ) {
+      const elementHtml = `
+    <div
+      class="bg-neutral-900/40 rounded-2xl border border-neutral-800 p-4 flex flex-col md:flex-row md:items-center gap-4 justify-between"
+    >
+      <div class="flex items-center gap-4">
+        <div
+          class="w-10 min-w-10 h-10 min-h-10 bg-neutral-700/50 rounded-lg flex items-center justify-center"
+        >
+          <span class="text-sm text-neutral-400">${type.toUpperCase()}</span>
+        </div>
+        <div>
+          <p style="word-break: break-word;overflow-wrap: anywhere;" class="font-medium">${name}</p>
+          <p class="text-sm text-neutral-400">${size}</p>
+        </div>
+      </div>
+      <button
+        title=${jsonMessages.delete}
+        class="cursor-pointer px-3 py-1 bg-red-600/20 hover:bg-red-600/30 text-red-400 rounded-lg transition-colors text-sm"
+        onclick="removeFileUploaded(${index})"
+      >
+        ${jsonMessages.delete}
+      </button>
+    </div>`;
+
+      return elementHtml;
+    }
+
+    function removeFileUploaded(index: number) {
+      // Remover el archivo del array
+      currentFiles.splice(index, 1);
+      // Actualizar la interfaz
+      updateUI();
+    }
+
+    function AditionalFilesInfo(
+      totalFiles: number,
+      originalSize: string,
+      compressedSize: string
+    ) {
+      const totalFilesSpan = document.getElementById(
+        "total-files-uploaded"
+      ) as HTMLSpanElement;
+      const originalSizeSpan = document.getElementById(
+        "total-files-prev-sizes"
+      ) as HTMLSpanElement;
+      const compressedSizeSpan = document.getElementById(
+        "total-files-next-sizes"
+      ) as HTMLSpanElement;
+
+      totalFilesSpan.textContent = totalFiles.toString();
+      originalSizeSpan.textContent = originalSize;
+      compressedSizeSpan.textContent = compressedSize;
+    }
+
+    // Agregar evento al botón de comprimir
+    compressButton.addEventListener("click", compressAndDownload);
+
+    async function compressAndDownload() {
+      if (currentFiles.length === 0) {
+        return;
+      }
+
+      // Mostrar overlay de procesamiento
+      overlay.classList.remove("hidden");
+      overlay.classList.add("flex");
+
+      try {
+        const zip = new JSZip();
+
+        // Agregar cada archivo al ZIP
+        for (const file of currentFiles) {
+          const arrayBuffer = await file.arrayBuffer();
+          zip.file(file.name, arrayBuffer);
+        }
+
+        // Generar el ZIP con máxima compresión
+        const zipBlob = await zip.generateAsync({
+          type: "blob",
+          compression: "DEFLATE",
+          compressionOptions: {
+            level: 9, // Máxima compresión
+          },
+        });
+
+        // Actualizar tamaño comprimido real
+        const compressedSizeSpan = document.getElementById(
+          "total-files-next-sizes"
+        ) as HTMLSpanElement;
+        compressedSizeSpan.textContent =
+          (zipBlob.size / 1024).toFixed(2) + " KB";
+
+        // Crear enlace de descarga
+        const url = URL.createObjectURL(zipBlob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `utilipad-compressed-files.zip`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+
+        // Limpiar URL
+        URL.revokeObjectURL(url);
+      } catch (error) {
+        console.error("Error al comprimir archivos:", error);
+      } finally {
+        // Ocultar overlay
+        overlay.classList.add("hidden");
+        overlay.classList.remove("flex");
+        // Incrementar el contador de uso del servicio
+        actions.createUpdateProcessCount({ process_name: "zip-compressor" });
+      }
+    }
+
+    // Hacer la función global para que sea accesible desde el onclick
+    (window as any).removeFileUploaded = removeFileUploaded;
+  });
+</script>
