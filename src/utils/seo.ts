@@ -63,15 +63,15 @@ export const getDynamicSEO = (
   }
 
   // Tool page
-  if (pageData.tool) {
+  if (pathname.includes("/tools/") || pageData.tool) {
     return {
       title: getTranslation(lang, "seo.pages.tool.title").replace(
         "{tool}",
-        pageData.tool
+        pageData.tool || ""
       ),
       description: getTranslation(lang, "seo.pages.tool.description").replace(
         "{tool}",
-        pageData.tool
+        pageData.tool || ""
       ),
     };
   }
@@ -106,7 +106,7 @@ export const generateJSONLD = (
           "@type": "SearchAction",
           target: {
             "@type": "EntryPoint",
-            urlTemplate: `${baseUrl}/${lang}/category/{category_name}?tool={search_term_string}`,
+            urlTemplate: `${baseUrl}/${lang}/tools/{search_term_string}`,
           },
           "query-input": "required name=search_term_string",
         },
@@ -138,7 +138,7 @@ export const generateJSONLD = (
         "@id": `${baseUrl}/#website`,
       },
     });
-  } else if (pathname.includes("/category/") && pageData.tool) {
+  } else if (pathname.includes("/tools/") || (pathname.includes("/category/") && pageData.tool)) {
     // Tool page
     baseSchema["@graph"].push({
       "@type": "WebApplication",

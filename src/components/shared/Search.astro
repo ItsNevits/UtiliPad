@@ -62,17 +62,8 @@ const toolsData = {
     toolIds.forEach((toolId) => {
       const toolTranslation = items[toolId];
       if (toolTranslation) {
-        // Determinar la categoría y href basado en el ID
-        let categoryId = "text"; // default
-        let href = `/${lang}/category/text?tool=${toolId}`;
-
-        if (toolId.includes("zip") || toolId.includes("file")) {
-          categoryId = "files";
-          href = `/${lang}/category/files?tool=${toolId}`;
-        } else if (toolId.includes("image")) {
-          categoryId = "images";
-          href = `/${lang}/category/images?tool=${toolId}`;
-        }
+        // Usar las nuevas URLs SEO-friendly
+        let href = `/${lang}/tools/${toolId}`;
 
         allTools.push({
           id: toolId,
