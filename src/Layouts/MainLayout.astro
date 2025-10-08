@@ -129,11 +129,15 @@ const enUrl = `${baseUrl}/en${alternateUrl}`;
     </script>
 
     <!-- Google AdSense -->
-    <script
-      is:inline
-      async
-      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3668405035365712"
-      crossorigin="anonymous"></script>
+    <script is:inline>
+      (function() {
+        var script = document.createElement('script');
+        script.async = true;
+        script.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3668405035365712';
+        script.crossOrigin = 'anonymous';
+        document.head.appendChild(script);
+      })();
+    </script>
   </head>
   <body class="bg-primary text-primary-text">
     <Header />
