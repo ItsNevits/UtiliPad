@@ -14,6 +14,12 @@ export default {
     statisticsTitle: "Statistics",
     statisticsDescription: "Summary of published news",
     articles: "Articles",
+    pagination: {
+      previous: "Previous",
+      next: "Next",
+      page: "Page",
+      of: "of",
+    },
   },
   privacy: {
     title: "Privacy Policy",
