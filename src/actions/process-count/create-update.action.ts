@@ -1,5 +1,5 @@
 import { defineAction } from "astro:actions";
-import { count, db, eq, ProcessCounter } from "astro:db";
+import { db, eq, ProcessCounter } from "astro:db";
 import { z } from "astro:schema";
 
 export const createUpdateProcessCount = defineAction({
