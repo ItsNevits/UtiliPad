@@ -1,0 +1,536 @@
+---
+import BoxIcon from "@assets/icons/box.svg";
+import Image from "astro/components/Image.astro";
+
+import type { Language } from "@@types/language.type";
+import { getTranslation } from "@i18n/index";
+
+const lang = Astro.params.lang as Language;
+---
+
+<div class="bg-neutral-800/50 rounded-xl p-6 select-none mb-5">
+  <div
+    id="drop-zone"
+    class="border-2 border-dashed border-neutral-700 p-8 rounded-lg flex flex-col items-center justify-center cursor-pointer hover:border-emerald-600/50 transition-colors"
+  >
+    <Image
+      class="text-neutral-400 mb-3 svg-color-neutral-400 opacity-40"
+      src={BoxIcon}
+      alt={"Upload icon"}
+      quality={"mid"}
+      width={40}
+      height={40}
+      loading={"lazy"}
+    />
+    <span class="text-neutral-300 font-medium mb-1">
+      {getTranslation(lang, "common.dropFilesOrSelect")}
+    </span>
+    <span class="text-neutral-400 text-sm">
+      {getTranslation(lang, "components.imageCompressor.dropZoneSubtitle")}
+    </span>
+    <input
+      type="file"
+      class="hidden"
+      id="image-file-input"
+      multiple
+      accept="image/*"
+    />
+  </div>
+</div>
+
+<!-- Compression Settings -->
+<div
+  id="settings-panel"
+  class="bg-neutral-800/50 rounded-xl p-6 select-none mb-5 hidden"
+>
+  <h3 class="text-lg font-semibold mb-4 text-neutral-200">
+    {getTranslation(lang, "components.imageCompressor.settingsTitle")}
+  </h3>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <!-- Max Size -->
+    <div>
+      <label
+        for="max-size"
+        class="block text-sm font-medium text-neutral-300 mb-2"
+      >
+        {getTranslation(lang, "components.imageCompressor.maxSize")}
+      </label>
+      <input
+        type="number"
+        id="max-size"
+        min="0.1"
+        max="10"
+        step="0.1"
+        value="1"
+        class="w-full px-4 py-2 bg-neutral-900/60 border border-neutral-700 rounded-lg text-neutral-200 focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
+      />
+      <p class="text-xs text-neutral-400 mt-1">
+        {getTranslation(lang, "components.imageCompressor.maxSizeHelp")}
+      </p>
+    </div>
+
+    <!-- Max Width/Height -->
+    <div>
+      <label
+        for="max-dimension"
+        class="block text-sm font-medium text-neutral-300 mb-2"
+      >
+        {getTranslation(lang, "components.imageCompressor.maxDimension")}
+      </label>
+      <input
+        type="number"
+        id="max-dimension"
+        min="100"
+        max="4096"
+        step="100"
+        value="1920"
+        class="w-full px-4 py-2 bg-neutral-900/60 border border-neutral-700 rounded-lg text-neutral-200 focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
+      />
+      <p class="text-xs text-neutral-400 mt-1">
+        {getTranslation(lang, "components.imageCompressor.maxDimensionHelp")}
+      </p>
+    </div>
+
+    <!-- Quality -->
+    <div>
+      <label
+        for="quality"
+        class="block text-sm font-medium text-neutral-300 mb-2"
+      >
+        {getTranslation(lang, "components.imageCompressor.quality")}: <span
+          id="quality-value"
+          class="text-emerald-400">0.8</span
+        >
+      </label>
+      <input
+        type="range"
+        id="quality"
+        min="0"
+        max="1"
+        step="0.05"
+        value="0.8"
+        class="w-full h-2 bg-neutral-700 rounded-lg appearance-none cursor-pointer accent-emerald-500"
+      />
+      <div class="flex justify-between text-xs text-neutral-400 mt-1">
+        <span
+          >{
+            getTranslation(lang, "components.imageCompressor.qualityLower")
+          }</span
+        >
+        <span
+          >{
+            getTranslation(lang, "components.imageCompressor.qualityHigher")
+          }</span
+        >
+      </div>
+    </div>
+
+    <!-- Format -->
+    <div>
+      <label
+        for="output-format"
+        class="block text-sm font-medium text-neutral-300 mb-2"
+      >
+        {getTranslation(lang, "components.imageCompressor.outputFormat")}
+      </label>
+      <select
+        id="output-format"
+        class="w-full px-4 py-2 bg-neutral-900/60 border border-neutral-700 rounded-lg text-neutral-200 cursor-pointer focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
+      >
+        <option value="original"
+          >{
+            getTranslation(lang, "components.imageCompressor.formatOriginal")
+          }</option
+        >
+        <option value="jpeg"
+          >{
+            getTranslation(lang, "components.imageCompressor.formatJpeg")
+          }</option
+        >
+        <option value="png"
+          >{
+            getTranslation(lang, "components.imageCompressor.formatPng")
+          }</option
+        >
+        <option value="webp" selected
+          >{
+            getTranslation(lang, "components.imageCompressor.formatWebp")
+          }</option
+        >
+      </select>
+    </div>
+  </div>
+
+  <div class="mt-6 flex gap-3">
+    <button
+      id="compress-btn"
+      class="cursor-pointer px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg transition-colors text-sm font-medium"
+    >
+      {getTranslation(lang, "components.imageCompressor.compress")}
+    </button>
+    <button
+      id="reset-btn"
+      class="cursor-pointer px-6 py-2.5 bg-neutral-700 hover:bg-neutral-600 text-neutral-200 rounded-lg transition-colors text-sm"
+    >
+      {getTranslation(lang, "components.imageCompressor.reset")}
+    </button>
+  </div>
+</div>
+
+<!-- Results Panel -->
+<div
+  id="results-panel"
+  class="bg-neutral-800/50 rounded-xl p-6 select-none mb-5 hidden"
+>
+  <div class="flex items-center justify-between mb-4">
+    <h3 class="text-lg font-semibold text-neutral-200">
+      {getTranslation(lang, "components.imageCompressor.resultsTitle")}
+    </h3>
+    <button
+      id="download-all-btn"
+      class="cursor-pointer px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg transition-colors text-sm font-medium"
+    >
+      {getTranslation(lang, "components.imageCompressor.downloadAll")}
+    </button>
+  </div>
+
+  <div id="results-container" class="space-y-4 max-h-[500px] overflow-y-auto">
+    <!-- Results will be inserted here -->
+  </div>
+
+  <!-- Summary Stats -->
+  <div class="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-4">
+    <div class="bg-neutral-900/60 rounded-lg p-4">
+      <div class="text-xs text-neutral-400 mb-1">
+        {getTranslation(lang, "components.imageCompressor.statTotal")}
+      </div>
+      <div id="stat-total" class="text-2xl font-bold text-neutral-200">0</div>
+    </div>
+    <div class="bg-neutral-900/60 rounded-lg p-4">
+      <div class="text-xs text-neutral-400 mb-1">
+        {getTranslation(lang, "components.imageCompressor.statOriginal")}
+      </div>
+      <div id="stat-original" class="text-2xl font-bold text-neutral-200">
+        0 MB
+      </div>
+    </div>
+    <div class="bg-neutral-900/60 rounded-lg p-4">
+      <div class="text-xs text-neutral-400 mb-1">
+        {getTranslation(lang, "components.imageCompressor.statCompressed")}
+      </div>
+      <div id="stat-compressed" class="text-2xl font-bold text-emerald-400">
+        0 MB
+      </div>
+    </div>
+  </div>
+</div>
+
+<astro-greet
+  data-translations={JSON.stringify(
+    getTranslation(lang, "components.imageCompressor")
+  )}></astro-greet>
+
+<script>
+  import imageCompression from "browser-image-compression";
+  import { fetchIncrementProcessCountByToolId } from "@utils/tools";
+
+  document.addEventListener("astro:page-load", () => {
+    let messages = {} as any;
+
+    // Initialize translations - Define custom element BEFORE using it
+    class AstroGreet extends HTMLElement {
+      connectedCallback() {
+        messages = JSON.parse(this.getAttribute("data-translations") || "{}");
+      }
+    }
+
+    // Always define the custom element (it's safe to redefine)
+    if (!customElements.get("astro-greet")) {
+      customElements.define("astro-greet", AstroGreet);
+    }
+
+    // Wait for custom element to be ready
+    const astroGreetElement = document.querySelector("astro-greet");
+    if (astroGreetElement) {
+      messages = JSON.parse(
+        astroGreetElement.getAttribute("data-translations") || "{}"
+      );
+    }
+
+    const dropZone = document.getElementById("drop-zone") as HTMLDivElement;
+    const fileInput = document.getElementById(
+      "image-file-input"
+    ) as HTMLInputElement;
+    const settingsPanel = document.getElementById(
+      "settings-panel"
+    ) as HTMLDivElement;
+    const resultsPanel = document.getElementById(
+      "results-panel"
+    ) as HTMLDivElement;
+    const resultsContainer = document.getElementById(
+      "results-container"
+    ) as HTMLDivElement;
+    const compressBtn = document.getElementById(
+      "compress-btn"
+    ) as HTMLButtonElement;
+    const resetBtn = document.getElementById("reset-btn") as HTMLButtonElement;
+    const downloadAllBtn = document.getElementById(
+      "download-all-btn"
+    ) as HTMLButtonElement;
+
+    // Settings inputs
+    const maxSizeInput = document.getElementById(
+      "max-size"
+    ) as HTMLInputElement;
+    const maxDimensionInput = document.getElementById(
+      "max-dimension"
+    ) as HTMLInputElement;
+    const qualityInput = document.getElementById("quality") as HTMLInputElement;
+    const qualityValue = document.getElementById(
+      "quality-value"
+    ) as HTMLSpanElement;
+    const outputFormatSelect = document.getElementById(
+      "output-format"
+    ) as HTMLSelectElement;
+
+    if (!dropZone || !fileInput || !settingsPanel || !resultsPanel) return;
+
+    let currentFiles: File[] = [];
+    let compressedFiles: { original: File; compressed: Blob; name: string }[] =
+      [];
+
+    // Quality slider update
+    qualityInput?.addEventListener("input", () => {
+      if (qualityValue) {
+        qualityValue.textContent = qualityInput.value;
+      }
+    });
+
+    // Drop zone handlers
+    dropZone.addEventListener("click", () => fileInput.click());
+
+    dropZone.addEventListener("dragover", (e) => {
+      e.preventDefault();
+      dropZone.classList.add("border-emerald-500", "bg-emerald-500/5");
+    });
+
+    dropZone.addEventListener("dragleave", () => {
+      dropZone.classList.remove("border-emerald-500", "bg-emerald-500/5");
+    });
+
+    dropZone.addEventListener("drop", (e) => {
+      e.preventDefault();
+      dropZone.classList.remove("border-emerald-500", "bg-emerald-500/5");
+      if (e.dataTransfer?.files) {
+        handleFiles(e.dataTransfer.files);
+      }
+    });
+
+    fileInput.addEventListener("change", () => {
+      if (fileInput.files) {
+        handleFiles(fileInput.files);
+      }
+    });
+
+    function handleFiles(files: FileList) {
+      const imageFiles = Array.from(files).filter((file) =>
+        file.type.startsWith("image/")
+      );
+
+      if (imageFiles.length === 0) {
+        alert(messages.errorSelect);
+        return;
+      }
+
+      currentFiles = imageFiles;
+      settingsPanel.classList.remove("hidden");
+      resultsPanel.classList.add("hidden");
+      compressedFiles = [];
+    }
+
+    // Compress images
+    compressBtn?.addEventListener("click", async () => {
+      if (currentFiles.length === 0) return;
+
+      compressBtn.disabled = true;
+      compressBtn.textContent = messages.compressing;
+
+      resultsContainer.innerHTML = "";
+      compressedFiles = [];
+
+      const options = {
+        maxSizeMB: parseFloat(maxSizeInput.value) || 1,
+        maxWidthOrHeight: parseInt(maxDimensionInput.value) || 1920,
+        useWebWorker: true,
+        fileType:
+          outputFormatSelect.value === "original"
+            ? undefined
+            : `image/${outputFormatSelect.value}`,
+        initialQuality: parseFloat(qualityInput.value) || 0.8,
+      };
+
+      let totalOriginalSize = 0;
+      let totalCompressedSize = 0;
+
+      for (const file of currentFiles) {
+        try {
+          const originalSize = file.size;
+          totalOriginalSize += originalSize;
+
+          const compressedBlob = await imageCompression(file, options);
+          const compressedSize = compressedBlob.size;
+          totalCompressedSize += compressedSize;
+
+          const ext =
+            outputFormatSelect.value === "original"
+              ? file.name.split(".").pop()
+              : outputFormatSelect.value;
+          const newName = `${file.name.split(".")[0]}_compressed.${ext}`;
+
+          compressedFiles.push({
+            original: file,
+            compressed: compressedBlob,
+            name: newName,
+          });
+
+          // Add result card
+          const reduction = (
+            ((originalSize - compressedSize) / originalSize) *
+            100
+          ).toFixed(1);
+          resultsContainer.innerHTML += createResultCard(
+            file.name,
+            originalSize,
+            compressedSize,
+            reduction,
+            compressedFiles.length - 1
+          );
+        } catch (error) {
+          console.error(`Error compressing ${file.name}:`, error);
+          resultsContainer.innerHTML += `
+            <div class="bg-red-900/20 border border-red-700 rounded-lg p-4">
+              <p class="text-red-400">${messages.errorCompressing} ${file.name}</p>
+            </div>
+          `;
+        }
+      }
+
+      // Update stats
+      document.getElementById("stat-total")!.textContent =
+        currentFiles.length.toString();
+      document.getElementById("stat-original")!.textContent =
+        formatBytes(totalOriginalSize);
+      document.getElementById("stat-compressed")!.textContent =
+        formatBytes(totalCompressedSize);
+
+      resultsPanel.classList.remove("hidden");
+      compressBtn.disabled = false;
+      compressBtn.textContent = messages.compress;
+
+      // Track usage
+      fetchIncrementProcessCountByToolId("image-compress");
+    });
+
+    function createResultCard(
+      name: string,
+      original: number,
+      compressed: number,
+      reduction: string,
+      index: number
+    ): string {
+      return `
+        <div class="bg-neutral-900/40 rounded-lg border border-neutral-800 p-4">
+          <div class="flex items-start justify-between gap-4">
+            <div class="flex-1 min-w-0">
+              <p class="font-medium text-neutral-200 truncate" title="${name}">${name}</p>
+              <div class="flex gap-4 mt-2 text-sm">
+                <span class="text-neutral-400">${formatBytes(original)}</span>
+                <span class="text-neutral-500">→</span>
+                <span class="text-emerald-400">${formatBytes(compressed)}</span>
+                <span class="text-emerald-400 font-medium">(-${reduction}%)</span>
+              </div>
+            </div>
+            <button
+              onclick="window.downloadSingleImage(${index})"
+              class="cursor-pointer px-3 py-1.5 bg-neutral-700 hover:bg-neutral-600 text-neutral-200 rounded transition-colors text-sm whitespace-nowrap"
+              data-text="${messages.download}"
+            >
+              ${messages.download}
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    function formatBytes(bytes: number): string {
+      if (bytes < 1024) return bytes + " B";
+      if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + " KB";
+      return (bytes / (1024 * 1024)).toFixed(2) + " MB";
+    }
+
+    // Download single image
+    (window as any).downloadSingleImage = (index: number) => {
+      const item = compressedFiles[index];
+      if (!item) return;
+
+      const url = URL.createObjectURL(item.compressed);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = item.name;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    };
+
+    // Download all as ZIP or single file
+    downloadAllBtn?.addEventListener("click", async () => {
+      if (compressedFiles.length === 0) return;
+
+      // If only one file, download it directly
+      if (compressedFiles.length === 1) {
+        (window as any).downloadSingleImage(0);
+        return;
+      }
+
+      downloadAllBtn.disabled = true;
+      downloadAllBtn.textContent = messages.creatingZip;
+
+      try {
+        const JSZip = (await import("jszip")).default;
+        const zip = new JSZip();
+
+        for (const item of compressedFiles) {
+          zip.file(item.name, item.compressed);
+        }
+
+        const zipBlob = await zip.generateAsync({ type: "blob" });
+        const url = URL.createObjectURL(zipBlob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "compressed-images.zip";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      } catch (error) {
+        console.error("Error creating ZIP:", error);
+        alert(messages.errorCreatingZip);
+      } finally {
+        downloadAllBtn.disabled = false;
+        downloadAllBtn.textContent = messages.downloadAll;
+      }
+    });
+
+    // Reset button
+    resetBtn?.addEventListener("click", () => {
+      currentFiles = [];
+      compressedFiles = [];
+      fileInput.value = "";
+      settingsPanel.classList.add("hidden");
+      resultsPanel.classList.add("hidden");
+      resultsContainer.innerHTML = "";
+    });
+  });
+</script>

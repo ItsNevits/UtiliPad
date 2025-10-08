@@ -140,4 +140,43 @@ export default {
       "El valor debe estar entre 5 y 128. Usa 14 caracteres o más para generar una contraseña fuerte.",
     tip: "Consejo: Usa una mezcla de todos los tipos de caracteres para mayor seguridad.",
   },
+  imageCompressor: {
+    // ==== DROP ZONE ====
+    dropZoneTitle: "Haz clic para subir o arrastra y suelta",
+    dropZoneSubtitle: "PNG, JPG, WebP hasta 10MB",
+
+    // ==== SETTINGS ====
+    settingsTitle: "Configuración de Compresión",
+    maxSize: "Tamaño Máx. (MB)",
+    maxSizeHelp: "Tamaño objetivo del archivo en megabytes",
+    maxDimension: "Ancho/Alto Máx. (px)",
+    maxDimensionHelp: "Dimensión máxima en píxeles",
+    quality: "Calidad",
+    qualityLower: "Menor tamaño",
+    qualityHigher: "Mayor calidad",
+    outputFormat: "Formato de Salida",
+    formatOriginal: "Mantener Original",
+    formatJpeg: "JPEG",
+    formatPng: "PNG",
+    formatWebp: "WebP",
+
+    // ==== BUTTONS ====
+    compress: "Comprimir Imágenes",
+    compressing: "Comprimiendo...",
+    reset: "Reiniciar",
+    downloadAll: "Descargar Todo",
+    download: "Descargar",
+    creatingZip: "Creando ZIP...",
+
+    // ==== RESULTS ====
+    resultsTitle: "Imágenes Comprimidas",
+    statTotal: "Total de Imágenes",
+    statOriginal: "Tamaño Original",
+    statCompressed: "Tamaño Comprimido",
+
+    // ==== MESSAGES ====
+    errorSelect: "Por favor selecciona archivos de imagen válidos",
+    errorCompressing: "Error al comprimir",
+    errorCreatingZip: "Error al crear archivo ZIP",
+  },
 };
