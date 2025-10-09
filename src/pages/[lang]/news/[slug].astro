@@ -1,12 +1,12 @@
 ---
 export const prerender = false;
-import Hero from "@components/shared/Hero.astro";
-import MainLayout from "src/Layouts/MainLayout.astro";
-import BreadCrumbs from "@components/shared/BreadCrumbs.astro";
+import Hero from "@/components/shared/Hero.astro";
+import MainLayout from "@/Layouts/MainLayout.astro";
+import BreadCrumbs from "@/components/shared/BreadCrumbs.astro";
 
 import { getCollection } from "astro:content";
-import type { Language } from "@@types/language.type";
-import { getTranslation } from "@i18n/index";
+import type { Language } from "@/types/language.type";
+import { getTranslation } from "@/i18n/index";
 
 const lang = Astro.params.lang as Language;
 const slug = Astro.params.slug;

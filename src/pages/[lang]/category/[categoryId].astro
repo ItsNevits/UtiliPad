@@ -2,23 +2,23 @@
 export const prerender = false;
 
 import MainLayout from "../../../Layouts/MainLayout.astro";
-import Hero from "@components/shared/Hero.astro";
-import Tools from "@components/shared/Tools.astro";
-import BreadCrumbs from "@components/shared/BreadCrumbs.astro";
+import Hero from "@/components/shared/Hero.astro";
+import Tools from "@/components/shared/Tools.astro";
+import BreadCrumbs from "@/components/shared/BreadCrumbs.astro";
 
-// Importar componentes de herramientas
-import TextAnalyzer from "@components/tools/text/TextAnalyzer.astro";
-import JsonFormatter from "@components/tools/text/JsonFormatter.astro";
-import ZipCompressor from "@components/tools/files/ZipCompressor.astro";
-import QrGenerator from "@components/tools/text/QrGenerator.astro";
-import ImageConverter from "@components/tools/images/ImageConverter.astro";
-import ImageCompressor from "@components/tools/images/ImageCompressor.astro";
-import FileConverter from "@components/tools/files/FileConverter.astro";
-import PasswordGenerator from "@components/tools/text/PasswordGenerator.astro";
+// Componentes de herramientas
+import JsonFormatter from "@/features/tools/json-formatter/JsonFormatter.astro";
+import PasswordGenerator from "@/features/tools/password-generator/PasswordGenerator.astro";
+import TextAnalyzer from "@/features/tools/text-analyzer/TextAnalyzer.astro";
+import QrGenerator from "@/features/tools/qr-generator/QrGenerator.astro";
+import ImageCompressor from "@/features/tools/image-compressor/ImageCompressor.astro";
+import ImageConverter from "@/features/tools/image-converter/ImageConverter.astro";
+import FileConverter from "@/features/tools/file-converter/FileConverter.astro";
+import ZipCompressor from "@/features/tools/zip-compressor/ZipCompressor.astro";
 
-import { TOOLS_CATEGORIES, getToolById } from "../../../constants/tools";
-import type { Language } from "@@types/language.type";
-import { getTranslatedCategories } from "@utils/tools";
+import { TOOLS_CATEGORIES, getToolById } from "@/config/tools.config";
+import type { Language } from "@/types/language.type";
+import { getTranslatedCategories } from "@/utils/tools";
 
 // Obtener los parámetros de la URL
 const { categoryId } = Astro.params;
@@ -58,9 +58,10 @@ if (!originalCategory) {
 
 // Obtener la categoría traducida
 const category =
-  translatedCategories.find((cat) => cat.id === categoryId) || originalCategory;
+  translatedCategories.find((cat: any) => cat.id === categoryId) ||
+  originalCategory;
 
-import { getTranslation } from "@i18n/index";
+import { getTranslation } from "@/i18n/index";
 
 // Obtener traducciones de herramientas
 const getTranslatedToolName = (toolId: string, tool?: any) => {

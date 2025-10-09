@@ -1,5 +1,5 @@
-import { getTranslation } from "@i18n/index";
-import type { Language } from "@@types/language.type";
+import { getTranslation } from "@/i18n/index";
+import type { Language } from "@/types/language.type";
 
 export interface SEOData {
   title: string;
@@ -138,7 +138,10 @@ export const generateJSONLD = (
         "@id": `${baseUrl}/#website`,
       },
     });
-  } else if (pathname.includes("/tools/") || (pathname.includes("/category/") && pageData.tool)) {
+  } else if (
+    pathname.includes("/tools/") ||
+    (pathname.includes("/category/") && pageData.tool)
+  ) {
     // Tool page
     baseSchema["@graph"].push({
       "@type": "WebApplication",

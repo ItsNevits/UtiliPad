@@ -1,11 +1,11 @@
 ---
-import UtiliPadIcon from "@assets/icons/favicon.png";
+import UtiliPadIcon from "@/assets/icons/favicon.png";
 import Search from "./shared/Search.astro";
 import LanguageToggle from "./LanguageToggle.astro";
 
 import { Picture } from "astro:assets";
-import type { Language } from "@@types/language.type";
-import { getTranslation } from "@i18n/index";
+import type { Language } from "@/types/language.type";
+import { getTranslation } from "@/i18n/index";
 
 const lang = Astro.params.lang as Language;
 ---

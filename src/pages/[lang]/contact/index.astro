@@ -1,9 +1,9 @@
 ---
-import MainLayout from "src/Layouts/MainLayout.astro";
-import Hero from "@components/shared/Hero.astro";
+import MainLayout from "@/Layouts/MainLayout.astro";
+import Hero from "@/components/shared/Hero.astro";
 
-import type { Language } from "@@types/language.type";
-import { getTranslation } from "@i18n/index";
+import type { Language } from "@/types/language.type";
+import { getTranslation } from "@/i18n/index";
 
 const lang = Astro.params.lang as Language;
 
@@ -249,64 +249,100 @@ const FagQuestions = getTranslation(lang, "pages.contact.faq.items");
     </div>
   </div>
 
-  <astro-greet
+  <astro-contact-form-translations
     data-translations={JSON.stringify(
       getTranslation(lang, "pages.contact.form.submit")
-    )}></astro-greet>
+    )}></astro-contact-form-translations>
 </MainLayout>
 
 <script>
   import { actions } from "astro:actions";
 
-  const form = document.getElementById("contact-form") as HTMLFormElement;
-  const submitText = document.getElementById("submit-text") as HTMLSpanElement;
-  const formStatus = document.getElementById("form-status") as HTMLDivElement;
-  const submitButton = form.querySelector(
-    'button[type="submit"]'
-  ) as HTMLButtonElement;
-
+  // Define custom element globally
   let jsonMessages = {} as any;
 
-  class AstroGreet extends HTMLElement {
+  class AstroContactFormTranslations extends HTMLElement {
     connectedCallback() {
       const t = JSON.parse(this.getAttribute("data-translations") || "{}");
+      console.log("Translations loaded:", t);
       jsonMessages = t || {};
+      // Dispatch event to signal translations are ready
+      this.dispatchEvent(
+        new CustomEvent("translations-ready", {
+          bubbles: true,
+          detail: t,
+        })
+      );
     }
   }
 
-  if (!customElements.get("astro-greet"))
-    customElements.define("astro-greet", AstroGreet);
+  if (!customElements.get("astro-contact-form-translations")) {
+    customElements.define(
+      "astro-contact-form-translations",
+      AstroContactFormTranslations
+    );
+  }
 
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    submitButton.disabled = true;
-    submitText.textContent = jsonMessages.sending;
-    formStatus.classList.add("hidden");
-
-    const formData = new FormData(form);
-    const data = Object.fromEntries(formData) as {
-      name: string;
-      email: string;
-      subject: string;
-      message: string;
-    };
-
-    try {
-      const { data: result, error } = await actions.sendContactEmail(data);
-
-      if (error) {
-        formStatus.innerHTML = `<span class='text-red-400'>${jsonMessages.error}<br>${error.message || ""}</span>`;
-      } else if (result?.success) {
-        formStatus.innerHTML = `<span class='text-emerald-400'>${jsonMessages.success}</span>`;
-        form.reset();
-      }
-      formStatus.classList.remove("hidden");
-    } catch (error: any) {
-      formStatus.innerHTML = `<span class='text-red-400'>${jsonMessages.error}<br>${error?.message || ""}</span>`;
-      formStatus.classList.remove("hidden");
-    } finally {
-      submitButton.disabled = false;
-      submitText.textContent = jsonMessages.default;
+  document.addEventListener("astro:page-load", () => {
+    // Wait for translations to be loaded
+    const astroContactElement = document.querySelector(
+      "astro-contact-form-translations"
+    );
+    if (astroContactElement && Object.keys(jsonMessages).length === 0) {
+      astroContactElement.addEventListener(
+        "translations-ready",
+        initializeForm,
+        { once: true }
+      );
+      return;
     }
+
+    initializeForm();
   });
+
+  function initializeForm() {
+    const form = document.getElementById("contact-form") as HTMLFormElement;
+    const submitText = document.getElementById(
+      "submit-text"
+    ) as HTMLSpanElement;
+    const formStatus = document.getElementById("form-status") as HTMLDivElement;
+    const submitButton = form.querySelector(
+      'button[type="submit"]'
+    ) as HTMLButtonElement;
+
+    if (!form || !submitText || !formStatus || !submitButton) return;
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      submitButton.disabled = true;
+      submitText.textContent = jsonMessages.sending;
+      formStatus.classList.add("hidden");
+
+      const formData = new FormData(form);
+      const data = Object.fromEntries(formData) as {
+        name: string;
+        email: string;
+        subject: string;
+        message: string;
+      };
+
+      try {
+        const { data: result, error } = await actions.sendContactEmail(data);
+
+        if (error) {
+          formStatus.innerHTML = `<span class='text-red-400'>${jsonMessages.error}<br>${error.message || ""}</span>`;
+        } else if (result?.success) {
+          formStatus.innerHTML = `<span class='text-emerald-400'>${jsonMessages.success}</span>`;
+          form.reset();
+        }
+        formStatus.classList.remove("hidden");
+      } catch (error: any) {
+        formStatus.innerHTML = `<span class='text-red-400'>${jsonMessages.error}<br>${error?.message || ""}</span>`;
+        formStatus.classList.remove("hidden");
+      } finally {
+        submitButton.disabled = false;
+        submitText.textContent = jsonMessages.default;
+      }
+    });
+  }
 </script>
