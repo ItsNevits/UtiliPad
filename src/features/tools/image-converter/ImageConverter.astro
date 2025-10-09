@@ -128,7 +128,7 @@ const lang = Astro.params.lang as Language;
     );
   }
 
-  document.addEventListener("astro:page-load", () => {
+  document.addEventListener("DOMContentLoaded", () => {
     // Wait for translations to be loaded
     const astroImageConverterElement = document.querySelector(
       "astro-image-converter-translations"

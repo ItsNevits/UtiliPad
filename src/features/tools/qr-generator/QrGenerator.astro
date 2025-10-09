@@ -83,7 +83,7 @@ const lang = Astro.params.lang as Language;
   import { actions } from "astro:actions";
   import QRCode from "qr-code-styling";
 
-  document.addEventListener("astro:page-load", () => {
+  document.addEventListener("DOMContentLoaded", () => {
     const generateQrButton = document.getElementById(
       "generate-qr"
     ) as HTMLButtonElement;

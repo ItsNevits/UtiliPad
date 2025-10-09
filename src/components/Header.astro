@@ -64,5 +64,5 @@ const lang = Astro.params.lang as Language;
     });
   };
 
-  document.addEventListener("astro:page-load", initSearchShortcut);
+  document.addEventListener("DOMContentLoaded", initSearchShortcut);
 </script>

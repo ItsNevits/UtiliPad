@@ -135,5 +135,5 @@ const lang = Astro.params.lang as Language;
   }
 
   // Inicializar cuando el DOM esté listo
-  document.addEventListener("astro:page-load", initLanguageToggle);
+  document.addEventListener("DOMContentLoaded", initLanguageToggle);
 </script>
