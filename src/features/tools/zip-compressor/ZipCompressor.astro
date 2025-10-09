@@ -98,7 +98,6 @@ const lang = Astro.params.lang as Language;
   class AstroZipCompressorTranslations extends HTMLElement {
     connectedCallback() {
       const t = JSON.parse(this.getAttribute("data-translations") || "{}");
-      console.log("Translations loaded:", t);
       jsonMessages = t;
       // Dispatch event to signal translations are ready
       this.dispatchEvent(

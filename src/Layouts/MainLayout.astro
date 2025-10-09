@@ -140,5 +140,26 @@ const enUrl = `${baseUrl}/en${alternateUrl}`;
     </main>
     <Footer />
     <Modal />
+
+    <!-- Script para recargar Auto Ads de AdSense después de navegación con ClientRouter -->
+    <script is:inline>
+      function loadAutoAds() {
+        try {
+          // Inicializar el array si no existe
+          window.adsbygoogle = window.adsbygoogle || [];
+
+          // Notificar a AdSense sobre el nuevo contenido de la página
+          window.adsbygoogle.push({
+            google_ad_client: "ca-pub-3668405035365712",
+            enable_page_level_ads: true
+          });
+        } catch (e) {
+          console.error('Error loading Auto Ads:', e);
+        }
+      }
+
+      // Recargar Auto Ads después de cada transición de página
+      document.addEventListener('astro:after-swap', loadAutoAds);
+    </script>
   </body>
 </html>

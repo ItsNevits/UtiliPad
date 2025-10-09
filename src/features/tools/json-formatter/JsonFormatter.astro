@@ -180,7 +180,6 @@ const lang = Astro.params.lang as Language;
   class AstroJsonFormatterTranslations extends HTMLElement {
     connectedCallback() {
       jsonMessages = JSON.parse(this.getAttribute("data-translations") || "{}");
-      console.log("Translations loaded:", jsonMessages);
       // Dispatch event to signal translations are ready
       this.dispatchEvent(
         new CustomEvent("translations-ready", {
