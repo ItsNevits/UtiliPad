@@ -197,7 +197,7 @@ const lang = Astro.params.lang as Language;
     );
   }
 
-  document.addEventListener("astro:page-load", () => {
+  document.addEventListener("DOMContentLoaded", () => {
     // Wait for translations to be loaded
     const astroJsonFormatterElement = document.querySelector(
       "astro-json-formatter-translations"
@@ -407,9 +407,9 @@ const lang = Astro.params.lang as Language;
       formatJSON();
     }
 
-    // Cleanup on page leave (important for View Transitions)
-    document.addEventListener(
-      "astro:before-preparation",
+    // Cleanup on page unload
+    window.addEventListener(
+      "beforeunload",
       () => {
         cleanupFormatter();
       },

@@ -282,7 +282,7 @@ const FagQuestions = getTranslation(lang, "pages.contact.faq.items");
     );
   }
 
-  document.addEventListener("astro:page-load", () => {
+  document.addEventListener("DOMContentLoaded", () => {
     // Wait for translations to be loaded
     const astroContactElement = document.querySelector(
       "astro-contact-form-translations"

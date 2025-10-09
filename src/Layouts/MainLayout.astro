@@ -8,7 +8,6 @@ import Modal from "@/components/shared/Modal.astro";
 
 import type { Language } from "@/types/language.type.ts";
 import { getDynamicSEO, generateJSONLD } from "@/utils/seo";
-import { ClientRouter } from "astro:transitions";
 
 const lang = Astro.params.lang as Language;
 
@@ -47,8 +46,6 @@ const enUrl = `${baseUrl}/en${alternateUrl}`;
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <link rel="sitemap" href="/sitemap-index.xml" />
-
-    <ClientRouter />
 
     <!-- SEO Básico -->
     <title>{finalTitle}</title>
@@ -128,12 +125,6 @@ const enUrl = `${baseUrl}/en${alternateUrl}`;
 
     <!-- Google AdSense -->
     <script is:inline async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3668405035365712" crossorigin="anonymous"></script>
-    <script is:inline>
-      (adsbygoogle = window.adsbygoogle || []).push({
-        google_ad_client: "ca-pub-3668405035365712",
-        enable_page_level_ads: true
-      });
-    </script>
   </head>
   <body class="bg-primary text-primary-text">
     <Header />

@@ -473,7 +473,7 @@ if (data) {
     );
   }
 
-  document.addEventListener("astro:page-load", async () => {
+  document.addEventListener("DOMContentLoaded", async () => {
     // Wait for translations to be loaded
     const astroFileConverterElement = document.querySelector(
       "astro-file-converter-translations"

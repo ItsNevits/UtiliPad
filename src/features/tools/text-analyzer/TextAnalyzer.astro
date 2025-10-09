@@ -74,7 +74,7 @@ const lang = Astro.params.lang as Language;
 </div>
 
 <script>
-  document.addEventListener("astro:page-load", () => {
+  document.addEventListener("DOMContentLoaded", () => {
     const textInput = document.getElementById(
       "text-input"
     ) as HTMLTextAreaElement;

@@ -275,8 +275,8 @@ const paginatedNews = sortedNews.slice(startIndex, endIndex);
 <script>
   import { animateSequenceItems } from "@/assets/gsap/timeline";
 
-  // Múltiples listeners para asegurar la ejecución
-  document.addEventListener("astro:page-load", () => {
+  // Inicializar cuando el DOM esté listo
+  document.addEventListener("DOMContentLoaded", () => {
     animateSequenceItems(".sequence-item-tool");
   });
   document.addEventListener("DOMContentLoaded", () => {
