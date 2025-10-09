@@ -1,5 +1,5 @@
-import { TOOLS_CATEGORIES, type Tool } from "@constants/tools";
-import { getTranslation } from "@i18n/index";
+import { TOOLS_CATEGORIES, type Tool } from "@/config/tools.config";
+import { getTranslation } from "@/i18n/index";
 
 /**
  * Obtiene las herramientas con traducciones aplicadas
@@ -41,7 +41,9 @@ export const getTranslatedTools = (categoryId: string, lang: string) => {
 export const fetchIncrementProcessCountByToolId = async (toolId: string) => {
   // Esta función ya no se usa, mantenerla por compatibilidad
   // Se debe usar: actions.createUpdateProcessCount({ process_name: toolId })
-  console.warn("fetchIncrementProcessCountByToolId is deprecated, use actions.createUpdateProcessCount instead");
+  console.warn(
+    "fetchIncrementProcessCountByToolId is deprecated, use actions.createUpdateProcessCount instead"
+  );
   throw new Error("Use actions.createUpdateProcessCount instead");
 };
 
@@ -52,7 +54,9 @@ export const fetchIncrementProcessCountByToolId = async (toolId: string) => {
 export const fetchTopProcessCounts = async () => {
   // Esta función ya no se usa, mantenerla por compatibilidad
   // Se debe usar: actions.mostUsedTool({})
-  console.warn("fetchTopProcessCounts is deprecated, use actions.mostUsedTool instead");
+  console.warn(
+    "fetchTopProcessCounts is deprecated, use actions.mostUsedTool instead"
+  );
   throw new Error("Use actions.mostUsedTool instead");
 };
 

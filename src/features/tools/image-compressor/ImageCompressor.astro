@@ -1,9 +1,9 @@
 ---
-import BoxIcon from "@assets/icons/box.svg";
+import BoxIcon from "@/assets/icons/box.svg";
 import Image from "astro/components/Image.astro";
 
-import type { Language } from "@@types/language.type";
-import { getTranslation } from "@i18n/index";
+import type { Language } from "@/types/language.type";
+import { getTranslation } from "@/i18n/index";
 
 const lang = Astro.params.lang as Language;
 ---
@@ -165,13 +165,13 @@ const lang = Astro.params.lang as Language;
   <div class="mt-6 flex gap-3">
     <button
       id="compress-btn"
-      class="cursor-pointer px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg transition-colors text-sm font-medium"
+      class="cursor-pointer mt-5 px-4 py-2 bg-neutral-700 hover:bg-neutral-600 text-neutral-200 rounded transition-colors text-sm active:scale-95"
     >
       {getTranslation(lang, "components.imageCompressor.compress")}
     </button>
     <button
       id="reset-btn"
-      class="cursor-pointer px-6 py-2.5 bg-neutral-700 hover:bg-neutral-600 text-neutral-200 rounded-lg transition-colors text-sm"
+      class="cursor-pointer mt-5 px-4 py-2 bg-neutral-700 hover:bg-neutral-600 text-neutral-200 rounded transition-colors text-sm active:scale-95"
     >
       {getTranslation(lang, "components.imageCompressor.reset")}
     </button>
@@ -226,38 +226,57 @@ const lang = Astro.params.lang as Language;
   </div>
 </div>
 
-<astro-greet
+<astro-image-compressor-translations
   data-translations={JSON.stringify(
     getTranslation(lang, "components.imageCompressor")
-  )}></astro-greet>
+  )}></astro-image-compressor-translations>
 
 <script>
   import { actions } from "astro:actions";
   import imageCompression from "browser-image-compression";
 
-  document.addEventListener("astro:page-load", () => {
-    let messages = {} as any;
+  // Define custom element globally
+  let messages = {} as any;
 
-    // Initialize translations - Define custom element BEFORE using it
-    class AstroGreet extends HTMLElement {
-      connectedCallback() {
-        messages = JSON.parse(this.getAttribute("data-translations") || "{}");
-      }
-    }
-
-    // Always define the custom element (it's safe to redefine)
-    if (!customElements.get("astro-greet")) {
-      customElements.define("astro-greet", AstroGreet);
-    }
-
-    // Wait for custom element to be ready
-    const astroGreetElement = document.querySelector("astro-greet");
-    if (astroGreetElement) {
-      messages = JSON.parse(
-        astroGreetElement.getAttribute("data-translations") || "{}"
+  class AstroImageCompressorTranslations extends HTMLElement {
+    connectedCallback() {
+      messages = JSON.parse(this.getAttribute("data-translations") || "{}");
+      console.log("Translations loaded:", messages);
+      // Dispatch event to signal translations are ready
+      this.dispatchEvent(
+        new CustomEvent("translations-ready", {
+          bubbles: true,
+          detail: messages,
+        })
       );
     }
+  }
 
+  if (!customElements.get("astro-image-compressor-translations")) {
+    customElements.define(
+      "astro-image-compressor-translations",
+      AstroImageCompressorTranslations
+    );
+  }
+
+  document.addEventListener("astro:page-load", () => {
+    // Wait for translations to be loaded
+    const astroImageCompressorElement = document.querySelector(
+      "astro-image-compressor-translations"
+    );
+    if (astroImageCompressorElement && Object.keys(messages).length === 0) {
+      astroImageCompressorElement.addEventListener(
+        "translations-ready",
+        initializeComponent,
+        { once: true }
+      );
+      return;
+    }
+
+    initializeComponent();
+  });
+
+  function initializeComponent() {
     const dropZone = document.getElementById("drop-zone") as HTMLDivElement;
     const fileInput = document.getElementById(
       "image-file-input"
@@ -532,5 +551,5 @@ const lang = Astro.params.lang as Language;
       resultsPanel.classList.add("hidden");
       resultsContainer.innerHTML = "";
     });
-  });
+  }
 </script>

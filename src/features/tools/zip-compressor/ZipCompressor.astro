@@ -1,9 +1,9 @@
 ---
-import BoxIcon from "@assets/icons/box.svg";
+import BoxIcon from "@/assets/icons/box.svg";
 import Image from "astro/components/Image.astro";
 
-import type { Language } from "@@types/language.type";
-import { getTranslation } from "@i18n/index";
+import type { Language } from "@/types/language.type";
+import { getTranslation } from "@/i18n/index";
 
 const lang = Astro.params.lang as Language;
 ---
@@ -77,34 +77,64 @@ const lang = Astro.params.lang as Language;
 
   <button
     id="compress-and-download"
-    class="cursor-pointer mt-5 px-4 py-2 bg-neutral-700 hover:bg-neutral-600 text-neutral-200 rounded transition-colors text-sm"
+    class="cursor-pointer mt-5 px-4 py-2 bg-neutral-700 hover:bg-neutral-600 text-neutral-200 rounded transition-colors text-sm active:scale-95"
   >
     {getTranslation(lang, "components.zipCompressor.compressAndDownload")}
   </button>
 </div>
 
-<astro-greet
+<astro-zip-compressor-translations
   data-translations={JSON.stringify(
     getTranslation(lang, "components.zipCompressor")
-  )}></astro-greet>
+  )}></astro-zip-compressor-translations>
 
 <script>
   import { actions } from "astro:actions";
   import JSZip from "jszip";
 
-  document.addEventListener("astro:page-load", () => {
-    let jsonMessages = {} as any;
+  // Define custom element globally (outside event listener)
+  let jsonMessages = {} as any;
 
-    class AstroGreet extends HTMLElement {
-      connectedCallback() {
-        const t = JSON.parse(this.getAttribute("data-translations") || "{}");
-        jsonMessages = t;
-      }
+  class AstroZipCompressorTranslations extends HTMLElement {
+    connectedCallback() {
+      const t = JSON.parse(this.getAttribute("data-translations") || "{}");
+      console.log("Translations loaded:", t);
+      jsonMessages = t;
+      // Dispatch event to signal translations are ready
+      this.dispatchEvent(
+        new CustomEvent("translations-ready", {
+          bubbles: true,
+          detail: t,
+        })
+      );
+    }
+  }
+
+  if (!customElements.get("astro-zip-compressor-translations")) {
+    customElements.define(
+      "astro-zip-compressor-translations",
+      AstroZipCompressorTranslations
+    );
+  }
+
+  document.addEventListener("astro:page-load", () => {
+    // Wait for translations to be loaded
+    const astroZipCompressorElement = document.querySelector(
+      "astro-zip-compressor-translations"
+    );
+    if (astroZipCompressorElement && Object.keys(jsonMessages).length === 0) {
+      astroZipCompressorElement.addEventListener(
+        "translations-ready",
+        initializeComponent,
+        { once: true }
+      );
+      return;
     }
 
-    if (!customElements.get("astro-greet"))
-      customElements.define("astro-greet", AstroGreet);
+    initializeComponent();
+  });
 
+  function initializeComponent() {
     const dropZone = document.getElementById("drop-zone") as HTMLDivElement;
     const fileInput = document.getElementById(
       "zip-file-input"
@@ -227,7 +257,7 @@ const lang = Astro.params.lang as Language;
       </div>
       <button
         title=${jsonMessages.delete}
-        class="cursor-pointer px-3 py-1 bg-red-600/20 hover:bg-red-600/30 text-red-400 rounded-lg transition-colors text-sm"
+        class="cursor-pointer px-3 py-1 bg-red-600/20 hover:bg-red-600/30 text-red-400 rounded-lg transition-colors text-sm active:scale-95"
         onclick="removeFileUploaded(${index})"
       >
         ${jsonMessages.delete}
@@ -325,5 +355,5 @@ const lang = Astro.params.lang as Language;
 
     // Hacer la función global para que sea accesible desde el onclick
     (window as any).removeFileUploaded = removeFileUploaded;
-  });
+  }
 </script>

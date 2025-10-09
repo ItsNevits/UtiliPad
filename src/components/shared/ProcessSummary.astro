@@ -1,7 +1,7 @@
 ---
-import { getToolById } from "@constants/tools";
-import type { Language } from "@@types/language.type";
-import { getTranslation } from "@i18n/index";
+import { getToolById } from "@/config/tools.config";
+import type { Language } from "@/types/language.type";
+import { getTranslation } from "@/i18n/index";
 import { actions } from "astro:actions";
 
 const lang = Astro.params.lang as Language;
@@ -68,7 +68,7 @@ if (data) {
 </div>
 
 <script>
-  import { animateCountUp } from "../../animate/timeline";
+  import { animateCountUp } from "@/assets/gsap/timeline";
 
   document.addEventListener("astro:page-load", () => {
     animateCountUp(".process-count-up");

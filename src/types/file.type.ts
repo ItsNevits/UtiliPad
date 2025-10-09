@@ -1,3 +1,7 @@
+/**
+ * File-related types
+ */
+
 export interface FilesSupported {
   docx: string[];
   xlsx: string[];
@@ -6,3 +10,7 @@ export interface FilesSupported {
   csv: string[];
   json: string[];
 }
+
+export type FileExtension = keyof FilesSupported;
+
+export type SupportedOutputFormat = string;

@@ -1,0 +1,12 @@
+/**
+ * Main styles entry point
+ * Import order matters for CSS specificity
+ */
+
+/* Base styles */
+@import "./base/global.css";
+@import "./base/reset.css";
+
+/* Component styles can be imported here if needed */
+
+/* Tool-specific styles are imported per-component */

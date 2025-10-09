@@ -1,12 +1,9 @@
-export interface PasswordOptions {
-  length: number;
-  includeUppercase: boolean;
-  includeLowercase: boolean;
-  includeNumbers: boolean;
-  includeSymbols: boolean;
-  minNumbers: number;
-  minSpecial: number;
-}
+/**
+ * Password Generator Business Logic
+ * Pure functions for generating secure passwords
+ */
+
+import type { PasswordOptions } from "@/types/password.type";
 
 export class PasswordGenerator {
   private readonly uppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -65,4 +62,20 @@ export class PasswordGenerator {
       .sort(() => Math.random() - 0.5)
       .join("");
   }
+}
+
+/**
+ * Calculate password strength
+ * Returns a score from 0-4
+ */
+export function calculatePasswordStrength(password: string): number {
+  let strength = 0;
+
+  if (password.length >= 8) strength++;
+  if (password.length >= 12) strength++;
+  if (/[a-z]/.test(password) && /[A-Z]/.test(password)) strength++;
+  if (/\d/.test(password)) strength++;
+  if (/[^a-zA-Z0-9]/.test(password)) strength++;
+
+  return Math.min(strength, 4);
 }

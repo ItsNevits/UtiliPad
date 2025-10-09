@@ -1,6 +1,6 @@
 import { defineAction } from "astro:actions";
 import { z } from "astro:schema";
-import { sendEmail } from "../../utils/email";
+import { sendEmail } from "@/utils/email";
 
 export const sendContactEmail = defineAction({
   accept: "json",

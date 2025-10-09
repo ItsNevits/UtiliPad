@@ -5,15 +5,7 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@@types/*": ["./src/types/*"],
-      "@components/*": ["./src/components/*"],
-      "@assets/*": ["./src/assets/*"],
-      "@styles/*": ["./src/styles/*"],
-      "@interfaces/*": ["./src/interfaces/*"],
-      "@constants/*": ["./src/constants/*"],
-      "@stores/*": ["./src/stores/*"],
-      "@utils/*": ["./src/utils/*"],
-      "@i18n/*": ["./src/i18n/*"]
+      "@/*": ["./src/*"]
     }
   }
 }

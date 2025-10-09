@@ -1,9 +1,9 @@
 ---
-import BoxIcon from "@assets/icons/box.svg";
+import BoxIcon from "@/assets/icons/box.svg";
 import Image from "astro/components/Image.astro";
-import type { Language } from "@@types/language.type";
-import type { FilesSupported } from "@interfaces/files/ConvertSupporterFiles";
-import { getTranslation } from "@i18n/index";
+import type { Language } from "@/types/language.type";
+import type { FilesSupported } from "@/types/file.type";
+import { getTranslation } from "@/i18n/index";
 import { actions } from "astro:actions";
 const lang = Astro.params.lang as Language;
 
@@ -420,7 +420,7 @@ if (data) {
   <div class="flex flex-wrap items-center justify-between gap-2">
     <button
       id="compress-and-download"
-      class="cursor-pointer mt-5 px-4 py-2 bg-neutral-700 hover:bg-neutral-600 text-neutral-200 rounded transition-colors text-sm"
+      class="cursor-pointer mt-5 px-4 py-2 bg-neutral-700 hover:bg-neutral-600 text-neutral-200 rounded transition-colors text-sm active:scale-95"
     >
       {getTranslation(lang, "common.downloadZip") || "Descargar todo en ZIP"}
     </button>
@@ -440,27 +440,54 @@ if (data) {
   </div>
 </div>
 
-<astro-greet data-translations={JSON.stringify(getTranslation(lang, "common"))}
-></astro-greet>
+<astro-file-converter-translations
+  data-translations={JSON.stringify(getTranslation(lang, "common"))}
+></astro-file-converter-translations>
 
 <script>
   import { actions } from "astro:actions";
 
-  document.addEventListener("astro:page-load", async () => {
-    // Variables para conversiones soportadas
-    let supportedConversions: Record<string, string[]> = {};
-    let outputFormats: string[] = [];
+  // Define custom element globally (outside event listener)
+  let jsonMessages = {} as any;
+  let supportedConversions: Record<string, string[]> = {};
+  let outputFormats: string[] = [];
 
-    let jsonMessages = {} as any;
-
-    class AstroGreet extends HTMLElement {
-      connectedCallback() {
-        const t = JSON.parse(this.getAttribute("data-translations") || "{}");
-        jsonMessages = t || {};
-      }
+  class AstroFileConverterTranslations extends HTMLElement {
+    connectedCallback() {
+      const t = JSON.parse(this.getAttribute("data-translations") || "{}");
+      console.log("Translations loaded:", t);
+      jsonMessages = t || {};
+      // Dispatch event to signal translations are ready
+      this.dispatchEvent(
+        new CustomEvent("translations-ready", {
+          bubbles: true,
+          detail: t,
+        })
+      );
     }
-    if (!customElements.get("astro-greet"))
-      customElements.define("astro-greet", AstroGreet);
+  }
+
+  if (!customElements.get("astro-file-converter-translations")) {
+    customElements.define(
+      "astro-file-converter-translations",
+      AstroFileConverterTranslations
+    );
+  }
+
+  document.addEventListener("astro:page-load", async () => {
+    // Wait for translations to be loaded
+    const astroFileConverterElement = document.querySelector(
+      "astro-file-converter-translations"
+    );
+    if (astroFileConverterElement && Object.keys(jsonMessages).length === 0) {
+      await new Promise((resolve) => {
+        astroFileConverterElement.addEventListener(
+          "translations-ready",
+          resolve,
+          { once: true }
+        );
+      });
+    }
 
     const { data, error } = await actions.getSupportedConversions({});
 
@@ -655,10 +682,10 @@ if (data) {
           </div>
         </div>
         <div class="flex items-center gap-3 flex-wrap w-full md:w-auto">
-          <button class="cursor-pointer min-w-25 px-3 py-1 bg-neutral-700 hover:bg-neutral-600 text-neutral-200 rounded transition-colors text-sm w-full md:w-auto" onclick="window.downloadFile(${index})">
+          <button class="cursor-pointer active:scale-95 min-w-25 px-3 py-1 bg-neutral-700 hover:bg-neutral-600 text-neutral-200 rounded transition-colors text-sm w-full md:w-auto" onclick="window.downloadFile(${index})">
             ${jsonMessages.download}
           </button>
-          <button title="${jsonMessages.delete}" class="cursor-pointer min-w-25 px-3 py-1 bg-red-600/20 hover:bg-red-600/30 text-red-400 rounded transition-colors text-sm w-full md:w-auto" onclick="window.removeFileUploaded(${index})">
+          <button title="${jsonMessages.delete}" class="cursor-pointer active:scale-95 min-w-25 px-3 py-1 bg-red-600/20 hover:bg-red-600/30 text-red-400 rounded transition-colors text-sm w-full md:w-auto" onclick="window.removeFileUploaded(${index})">
             ${jsonMessages.delete}
           </button>
         </div>

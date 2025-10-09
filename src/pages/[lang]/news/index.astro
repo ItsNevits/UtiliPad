@@ -1,11 +1,11 @@
 ---
 export const prerender = false;
-import Hero from "@components/shared/Hero.astro";
-import MainLayout from "src/Layouts/MainLayout.astro";
+import Hero from "@/components/shared/Hero.astro";
+import MainLayout from "@/Layouts/MainLayout.astro";
 
 import { getCollection } from "astro:content";
-import type { Language } from "@@types/language.type";
-import { getTranslation } from "@i18n/index";
+import type { Language } from "@/types/language.type";
+import { getTranslation } from "@/i18n/index";
 
 const lang = Astro.params.lang as Language;
 
@@ -273,7 +273,7 @@ const paginatedNews = sortedNews.slice(startIndex, endIndex);
 </MainLayout>
 
 <script>
-  import { animateSequenceItems } from "../../../animate/timeline";
+  import { animateSequenceItems } from "@/assets/gsap/timeline";
 
   // Múltiples listeners para asegurar la ejecución
   document.addEventListener("astro:page-load", () => {

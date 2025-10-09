@@ -1,9 +1,9 @@
 ---
-import AboutUsImage from "@assets/images/about-us.jpg";
+import AboutUsImage from "@/assets/images/about-us.jpg";
 import Picture from "astro/components/Picture.astro";
 
-import type { Language } from "@@types/language.type";
-import { getTranslation } from "@i18n/index";
+import type { Language } from "@/types/language.type";
+import { getTranslation } from "@/i18n/index";
 
 const lang = Astro.params.lang as Language;
 ---
