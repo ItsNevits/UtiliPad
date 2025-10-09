@@ -241,7 +241,6 @@ const lang = Astro.params.lang as Language;
   class AstroImageCompressorTranslations extends HTMLElement {
     connectedCallback() {
       messages = JSON.parse(this.getAttribute("data-translations") || "{}");
-      console.log("Translations loaded:", messages);
       // Dispatch event to signal translations are ready
       this.dispatchEvent(
         new CustomEvent("translations-ready", {
