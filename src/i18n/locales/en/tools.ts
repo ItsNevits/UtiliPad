@@ -96,6 +96,14 @@ export default {
         description: "Generate secure and random passwords instantly. Customize length, symbols and numbers. 100% private, no data saved. Protect your accounts now."
       }
     },
+    "base64-converter": {
+      name: "Base64 Converter",
+      description: "Encode and decode text in Base64",
+      seo: {
+        title: "Base64 Converter Online | Encode and Decode | UtiliPad",
+        description: "Convert text to Base64 and vice versa online. Encode and decode files and images. Free, fast and secure tool. 100% private in your browser."
+      }
+    },
   },
   badges: {
     Nuevo: "New",

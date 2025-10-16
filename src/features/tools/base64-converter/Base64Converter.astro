@@ -1,0 +1,528 @@
+---
+import type { Language } from "@/types/language.type";
+import { getTranslation } from "@/i18n/index";
+import "@/styles/tools/Base64Converter.css";
+
+const lang = Astro.params.lang as Language;
+---
+
+<div class="bg-neutral-800/50 rounded-xl p-6 select-none mb-5">
+  <!-- Tabs para cambiar entre Encode y Decode -->
+  <div class="flex gap-2 mb-6">
+    <button
+      id="tab-encode"
+      title={getTranslation(lang, "components.base64Converter.encode")}
+      class="cursor-pointer flex-1 px-4 py-2 bg-neutral-700 text-neutral-200 rounded-lg transition-colors text-sm font-medium tab-active active:scale-99"
+    >
+      {getTranslation(lang, "components.base64Converter.encode")}
+    </button>
+    <button
+      id="tab-decode"
+      title={getTranslation(lang, "components.base64Converter.decode")}
+      class="cursor-pointer flex-1 px-4 py-2 bg-neutral-800/50 text-neutral-400 rounded-lg transition-colors text-sm font-medium active:scale-99"
+    >
+      {getTranslation(lang, "components.base64Converter.decode")}
+    </button>
+  </div>
+
+  <!-- Input Area -->
+  <div class="mb-4">
+    <label class="block text-sm font-medium text-neutral-300 mb-2">
+      {getTranslation(lang, "components.base64Converter.inputLabel")}
+    </label>
+    <textarea
+      id="input-text"
+      rows="6"
+      class="w-full bg-neutral-900/40 border border-neutral-700 rounded-lg p-4 text-neutral-200 font-mono text-sm focus:outline-none focus:border-neutral-600 resize-none"
+      placeholder={getTranslation(
+        lang,
+        "components.base64Converter.inputPlaceholder"
+      )}></textarea>
+  </div>
+
+  <!-- File Upload Option (solo para Encode) -->
+  <div id="file-upload-section" class="mb-4">
+    <div class="flex items-center gap-2 mb-2">
+      <span class="text-sm text-neutral-400"
+        >{getTranslation(lang, "components.base64Converter.orUploadFile")}</span
+      >
+    </div>
+    <div
+      id="file-drop-zone"
+      class="border-2 border-dashed border-neutral-700 rounded-lg p-4 text-center cursor-pointer hover:border-neutral-600 transition-colors"
+    >
+      <p class="text-neutral-400 text-sm">
+        {getTranslation(lang, "components.base64Converter.dropFileHere")}
+      </p>
+      <input type="file" id="file-input" class="hidden" />
+    </div>
+    <p id="file-name" class="text-xs text-neutral-500 mt-2"></p>
+  </div>
+
+  <!-- Action Buttons -->
+  <div class="flex gap-2 mb-4">
+    <button
+      id="convert-button"
+      class="cursor-pointer flex-1 px-4 py-2 bg-neutral-700 text-neutral-200 rounded-lg transition-colors text-sm font-medium active:scale-99 hover:bg-neutral-600"
+    >
+      {getTranslation(lang, "components.base64Converter.convertButton")}
+    </button>
+    <button
+      id="clear-button"
+      class="cursor-pointer px-4 py-2 bg-neutral-700 text-neutral-200 rounded-lg transition-colors text-sm font-medium active:scale-99 hover:bg-neutral-600"
+    >
+      {getTranslation(lang, "components.base64Converter.clearButton")}
+    </button>
+  </div>
+
+  <!-- Output Area -->
+  <div id="output-text-container">
+    <div class="flex items-center justify-between mb-2">
+      <label class="block text-sm font-medium text-neutral-300">
+        {getTranslation(lang, "components.base64Converter.outputLabel")}
+      </label>
+      <button
+        id="copy-button"
+        class="cursor-pointer px-3 py-1 bg-neutral-700 text-neutral-200 rounded-lg transition-colors text-xs font-medium active:scale-99 hover:bg-neutral-600"
+      >
+        {getTranslation(lang, "components.base64Converter.copyButton")}
+      </button>
+    </div>
+    <textarea
+      id="output-text"
+      rows="6"
+      readonly
+      class="w-full bg-neutral-900/40 border border-neutral-700 rounded-lg p-4 text-neutral-200 font-mono text-sm focus:outline-none resize-none"
+      placeholder={getTranslation(
+        lang,
+        "components.base64Converter.outputPlaceholder"
+      )}></textarea>
+  </div>
+
+  <!-- File Preview Area (for decoded files) -->
+  <div id="file-preview" class="hidden mt-4">
+    <div class="flex items-center justify-between mb-2">
+      <label class="block text-sm font-medium text-neutral-300">
+        {getTranslation(lang, "components.base64Converter.previewLabel")}
+      </label>
+      <div class="flex gap-2 items-center">
+        <span id="file-info" class="text-xs text-neutral-400"></span>
+        <button
+          id="download-button"
+          class="cursor-pointer px-3 py-1 bg-neutral-700 text-neutral-200 rounded-lg transition-colors text-xs font-medium active:scale-99 hover:bg-neutral-600"
+        >
+          {getTranslation(lang, "components.base64Converter.downloadButton")}
+        </button>
+      </div>
+    </div>
+    <div
+      class="bg-neutral-900/40 border border-neutral-700 rounded-lg p-4 overflow-auto max-h-96"
+    >
+      <!-- Image Preview -->
+      <img
+        id="image-preview"
+        class="hidden max-w-full h-auto rounded mx-auto"
+        alt="Preview"
+      />
+      <!-- PDF/Document Preview -->
+      <iframe
+        id="iframe-preview"
+        class="hidden w-full h-96 rounded bg-white"
+        title="File Preview"></iframe>
+      <!-- Audio Preview -->
+      <audio id="audio-preview" class="hidden w-full" controls></audio>
+      <!-- Video Preview -->
+      <video id="video-preview" class="hidden w-full rounded" controls></video>
+      <!-- Text Preview -->
+      <div
+        id="text-preview"
+        class="hidden text-neutral-300 text-sm whitespace-pre-wrap"
+      >
+      </div>
+    </div>
+  </div>
+
+  <!-- Error Message -->
+  <div
+    id="error-message"
+    class="hidden mt-4 p-3 bg-red-600/20 border border-red-600/50 rounded-lg"
+  >
+    <p class="text-red-400 text-sm"></p>
+  </div>
+</div>
+
+<astro-base64-converter-translations
+  data-translations={JSON.stringify(
+    getTranslation(lang, "components.base64Converter")
+  )}></astro-base64-converter-translations>
+
+<script>
+  import { actions } from "astro:actions";
+  import { copyToClipboard } from "@/hooks";
+  import { detectBase64File, downloadBlob } from "@/utils/base64";
+  import type { Base64Mode } from "@/types/base64.type";
+
+  let jsonMessages = {} as any;
+  let currentMode: Base64Mode = "encode";
+
+  class AstroBase64ConverterTranslations extends HTMLElement {
+    connectedCallback() {
+      const t = JSON.parse(this.getAttribute("data-translations") || "{}");
+      jsonMessages = t;
+      this.dispatchEvent(
+        new CustomEvent("translations-ready", {
+          bubbles: true,
+          detail: t,
+        })
+      );
+    }
+  }
+
+  if (!customElements.get("astro-base64-converter-translations")) {
+    customElements.define(
+      "astro-base64-converter-translations",
+      AstroBase64ConverterTranslations
+    );
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const astroBase64Element = document.querySelector(
+      "astro-base64-converter-translations"
+    );
+    if (astroBase64Element && Object.keys(jsonMessages).length === 0) {
+      astroBase64Element.addEventListener(
+        "translations-ready",
+        initializeComponent,
+        { once: true }
+      );
+      return;
+    }
+
+    initializeComponent();
+  });
+
+  function initializeComponent() {
+    const tabEncode = document.getElementById(
+      "tab-encode"
+    ) as HTMLButtonElement;
+    const tabDecode = document.getElementById(
+      "tab-decode"
+    ) as HTMLButtonElement;
+    const inputText = document.getElementById(
+      "input-text"
+    ) as HTMLTextAreaElement;
+    const outputText = document.getElementById(
+      "output-text"
+    ) as HTMLTextAreaElement;
+    const outputTextContainer = document.getElementById(
+      "output-text-container"
+    ) as HTMLDivElement;
+    const convertButton = document.getElementById(
+      "convert-button"
+    ) as HTMLButtonElement;
+    const clearButton = document.getElementById(
+      "clear-button"
+    ) as HTMLButtonElement;
+    const copyButton = document.getElementById(
+      "copy-button"
+    ) as HTMLButtonElement;
+    const downloadButton = document.getElementById(
+      "download-button"
+    ) as HTMLButtonElement;
+    const fileUploadSection = document.getElementById(
+      "file-upload-section"
+    ) as HTMLDivElement;
+    const fileDropZone = document.getElementById(
+      "file-drop-zone"
+    ) as HTMLDivElement;
+    const fileInput = document.getElementById("file-input") as HTMLInputElement;
+    const fileName = document.getElementById(
+      "file-name"
+    ) as HTMLParagraphElement;
+    const errorMessage = document.getElementById(
+      "error-message"
+    ) as HTMLDivElement;
+    const filePreview = document.getElementById(
+      "file-preview"
+    ) as HTMLDivElement;
+    const imagePreview = document.getElementById(
+      "image-preview"
+    ) as HTMLImageElement;
+    const iframePreview = document.getElementById(
+      "iframe-preview"
+    ) as HTMLIFrameElement;
+    const audioPreview = document.getElementById(
+      "audio-preview"
+    ) as HTMLAudioElement;
+    const videoPreview = document.getElementById(
+      "video-preview"
+    ) as HTMLVideoElement;
+    const textPreview = document.getElementById(
+      "text-preview"
+    ) as HTMLDivElement;
+    const fileInfo = document.getElementById("file-info") as HTMLSpanElement;
+
+    if (!tabEncode || !tabDecode || !inputText || !outputText) return;
+
+    let currentFileBlob: Blob | null = null;
+    let currentFileName = "file";
+
+    // Tab switching
+    tabEncode.addEventListener("click", () => {
+      currentMode = "encode";
+      tabEncode.classList.add("tab-active");
+      tabEncode.classList.remove("tab-inactive");
+      tabDecode.classList.remove("tab-active");
+      tabDecode.classList.add("tab-inactive");
+      fileUploadSection.classList.remove("hidden");
+      clearAll();
+    });
+
+    tabDecode.addEventListener("click", () => {
+      currentMode = "decode";
+      tabDecode.classList.add("tab-active");
+      tabDecode.classList.remove("tab-inactive");
+      tabEncode.classList.remove("tab-active");
+      tabEncode.classList.add("tab-inactive");
+      fileUploadSection.classList.add("hidden");
+      clearAll();
+    });
+
+    // File handling
+    fileDropZone.addEventListener("click", () => {
+      fileInput.click();
+    });
+
+    fileDropZone.addEventListener("dragover", (e) => {
+      e.preventDefault();
+      fileDropZone.classList.add("border-blue-500");
+    });
+
+    fileDropZone.addEventListener("dragleave", () => {
+      fileDropZone.classList.remove("border-blue-500");
+    });
+
+    fileDropZone.addEventListener("drop", (e) => {
+      e.preventDefault();
+      fileDropZone.classList.remove("border-blue-500");
+      if (e.dataTransfer?.files) {
+        handleFile(e.dataTransfer.files[0]);
+      }
+    });
+
+    fileInput.addEventListener("change", () => {
+      if (fileInput.files && fileInput.files[0]) {
+        handleFile(fileInput.files[0]);
+      }
+    });
+
+    async function handleFile(file: File) {
+      try {
+        fileName.textContent = `${jsonMessages.fileSelected}: ${file.name} (${(file.size / 1024).toFixed(2)} KB)`;
+
+        // Use server action to encode file
+        const formData = new FormData();
+        formData.append("file", file);
+
+        const { data, error } = await actions.encodeFileToBase64(formData);
+
+        if (error) {
+          showError(
+            error.message || jsonMessages.fileError || "Error reading file"
+          );
+          return;
+        }
+
+        if (data.success) {
+          inputText.value = "";
+          outputText.value = data.base64;
+          hideError();
+        } else {
+          showError(
+            data?.error || jsonMessages.fileError || "Error reading file"
+          );
+        }
+      } catch (error) {
+        showError(jsonMessages.fileError || "Error reading file");
+      }
+    }
+
+    // Convert button
+    convertButton.addEventListener("click", async () => {
+      const input = inputText.value.trim();
+
+      if (!input) {
+        showError(
+          jsonMessages.emptyInputError || "Please enter text to convert"
+        );
+        return;
+      }
+
+      try {
+        // Use server action for conversion
+        const { data, error } = await actions.convertBase64({
+          input: input,
+          mode: currentMode,
+        });
+
+        if (error) {
+          showError(
+            error.message ||
+              jsonMessages.conversionError ||
+              "Conversion error occurred"
+          );
+          return;
+        }
+
+        if (data.success) {
+          if (currentMode === "decode") {
+            // Try to detect if it's a file
+            const fileDetection = detectBase64File(input);
+
+            if (fileDetection) {
+              // It's a file - show preview
+              displayFilePreview(fileDetection);
+            } else {
+              // It's plain text
+              outputText.value = data.output;
+              hidePreview();
+            }
+          } else {
+            // Encode mode - just show result
+            outputText.value = data.output;
+            hidePreview();
+          }
+
+          hideError();
+        } else {
+          showError(
+            data?.error ||
+              jsonMessages.conversionError ||
+              "Invalid input for conversion"
+          );
+        }
+
+        // Track usage
+        actions.createUpdateProcessCount({ process_name: "base64-converter" });
+      } catch (error) {
+        showError(
+          jsonMessages.conversionError || "Invalid input for conversion"
+        );
+      }
+    });
+
+    // Display file preview based on type
+    function displayFilePreview(fileDetection: {
+      mimeType: string;
+      extension: string;
+      size: number;
+      blob: Blob;
+      dataUrl: string;
+    }) {
+      // Store for download
+      currentFileBlob = fileDetection.blob;
+      currentFileName = `decoded-file.${fileDetection.extension}`;
+
+      // Set file info
+      const fileSize = (fileDetection.size / 1024).toFixed(2);
+      fileInfo.textContent = `${fileDetection.mimeType} (${fileSize} KB)`;
+
+      // Show preview
+      hideAllPreviews();
+      filePreview.classList.remove("hidden");
+
+      // Determine preview type from MIME type
+      const mimeType = fileDetection.mimeType;
+
+      if (mimeType.startsWith("image/")) {
+        imagePreview.src = fileDetection.dataUrl;
+        imagePreview.classList.remove("hidden");
+        outputTextContainer.classList.add("hidden");
+      } else if (mimeType === "application/pdf") {
+        iframePreview.src = fileDetection.dataUrl;
+        iframePreview.classList.remove("hidden");
+        outputTextContainer.classList.add("hidden");
+      } else if (mimeType.startsWith("audio/")) {
+        audioPreview.src = fileDetection.dataUrl;
+        audioPreview.classList.remove("hidden");
+        outputTextContainer.classList.add("hidden");
+      } else if (mimeType.startsWith("video/")) {
+        videoPreview.src = fileDetection.dataUrl;
+        videoPreview.classList.remove("hidden");
+        outputTextContainer.classList.add("hidden");
+      } else if (mimeType.startsWith("text/")) {
+        textPreview.textContent = outputText.value;
+        textPreview.classList.remove("hidden");
+        outputTextContainer.classList.add("hidden");
+      } else {
+        outputText.value =
+          jsonMessages.fileDetected ||
+          "Binary file detected. Click download to save.";
+        outputTextContainer.classList.remove("hidden");
+      }
+    }
+
+    function hideAllPreviews() {
+      imagePreview.classList.add("hidden");
+      iframePreview.classList.add("hidden");
+      audioPreview.classList.add("hidden");
+      videoPreview.classList.add("hidden");
+      textPreview.classList.add("hidden");
+    }
+
+    function hidePreview() {
+      filePreview.classList.add("hidden");
+      outputTextContainer.classList.remove("hidden");
+      hideAllPreviews();
+    }
+
+    // Download button
+    downloadButton.addEventListener("click", () => {
+      if (!currentFileBlob) return;
+      downloadBlob(currentFileBlob, currentFileName);
+    });
+
+    // Clear button
+    clearButton.addEventListener("click", clearAll);
+
+    function clearAll() {
+      inputText.value = "";
+      outputText.value = "";
+      fileName.textContent = "";
+      fileInput.value = "";
+      currentFileBlob = null;
+      currentFileName = "file";
+      hidePreview();
+      hideError();
+    }
+
+    // Copy button
+    copyButton.addEventListener("click", async () => {
+      const output = outputText.value;
+
+      if (!output) {
+        showError(jsonMessages.nothingToCopyError || "Nothing to copy");
+        return;
+      }
+
+      const result = await copyToClipboard(output);
+      if (result.success) {
+        copyButton.textContent = jsonMessages.copied || "Copied!";
+        setTimeout(() => {
+          copyButton.textContent = jsonMessages.copyButton || "Copy";
+        }, 2000);
+      } else {
+        showError(jsonMessages.copyError || "Failed to copy");
+      }
+    });
+
+    function showError(message: string) {
+      errorMessage.classList.remove("hidden");
+      errorMessage.querySelector("p")!.textContent = message;
+    }
+
+    function hideError() {
+      errorMessage.classList.add("hidden");
+    }
+  }
+</script>

@@ -179,4 +179,42 @@ export default {
     errorCompressing: "Error al comprimir",
     errorCreatingZip: "Error al crear archivo ZIP",
   },
+  base64Converter: {
+    // ==== TABS ====
+    encode: "Codificar",
+    decode: "Decodificar",
+
+    // ==== LABELS ====
+    inputLabel: "Texto de entrada",
+    outputLabel: "Resultado",
+    previewLabel: "Vista previa",
+    inputPlaceholder: "Ingresa el texto aquí...",
+    outputPlaceholder: "El resultado aparecerá aquí...",
+
+    // ==== FILE UPLOAD ====
+    orUploadFile: "O sube un archivo",
+    dropFileHere: "Arrastra un archivo aquí o haz clic para seleccionar",
+    fileSelected: "Archivo seleccionado",
+
+    // ==== BUTTONS ====
+    convertButton: "Convertir",
+    clearButton: "Limpiar",
+    copyButton: "Copiar",
+    copied: "¡Copiado!",
+    downloadButton: "Descargar",
+
+    // ==== FILE DETECTION ====
+    imageDetected: "Imagen detectada. Ver vista previa abajo.",
+    pdfDetected: "PDF detectado. Ver vista previa abajo.",
+    audioDetected: "Audio detectado. Ver reproductor abajo.",
+    videoDetected: "Video detectado. Ver reproductor abajo.",
+    fileDetected: "Archivo binario detectado. Haz clic en descargar para guardar.",
+
+    // ==== ERRORS ====
+    emptyInputError: "Por favor ingresa texto para convertir",
+    conversionError: "Entrada inválida para conversión",
+    fileError: "Error al leer el archivo",
+    nothingToCopyError: "No hay nada para copiar",
+    copyError: "Error al copiar",
+  },
 };

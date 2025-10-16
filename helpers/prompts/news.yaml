@@ -1,0 +1,50 @@
+Quiero que generes un archivo en formato Markdown (.md) basado en el archivo de referencia que te proporcionaré.  
+Debes seguir estrictamente la siguiente estructura:
+
+---
+
+title: [Título descriptivo de la herramienta o tema]
+author: [Autor o equipo responsable, por ejemplo: "Equipo de desarrollo"]
+date: [Fecha en formato YYYY-MM-DD]
+tags: ["palabra1", "palabra2", "palabra3"]
+draft: [true o false]
+
+---
+
+# [Título principal idéntico al campo "title"]
+
+[Descripción introductoria clara y profesional del propósito de la herramienta o tema.]
+
+## Características principales
+
+[Lista con viñetas de las funciones o ventajas más relevantes, usando **negritas** en los conceptos clave.]
+
+## Casos de uso
+
+[Lista de posibles aplicaciones prácticas o escenarios reales donde se utiliza la herramienta.]
+
+## Funcionalidades técnicas
+
+[Descripción técnica más detallada: protocolos, estándares, compatibilidad, rendimiento, validaciones, etc.]
+
+[Finaliza con un párrafo que resuma la utilidad o relevancia del tema para profesionales o usuarios.]
+
+---
+
+### Reglas obligatorias:
+
+1. Usa tono técnico, claro y natural, sin redundancias.
+2. Mantén coherencia con el archivo base que te proporcione.
+3. Si el archivo base tiene secciones o términos específicos, intégralos con naturalidad.
+4. Asegúrate de que el `.md` sea autocontenido (no debe depender de enlaces externos).
+5. La cabecera (`---`) **debe ir exactamente con los campos en este orden**:
+   - title
+   - author
+   - date
+   - tags
+   - draft
+6. Usa siempre formato Markdown correcto (#, ##, -, \*\*, etc.).
+
+---
+
+Cuando te dé un archivo base, léelo y genera el `.md` aplicando estas reglas.

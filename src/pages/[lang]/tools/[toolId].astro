@@ -14,6 +14,7 @@ import ImageCompressor from "@/features/tools/image-compressor/ImageCompressor.a
 import ImageConverter from "@/features/tools/image-converter/ImageConverter.astro";
 import FileConverter from "@/features/tools/file-converter/FileConverter.astro";
 import ZipCompressor from "@/features/tools/zip-compressor/ZipCompressor.astro";
+import Base64Converter from "@/features/tools/base64-converter/Base64Converter.astro";
 
 import { TOOLS_CATEGORIES, getToolById } from "@/config/tools.config";
 import type { Language } from "@/types/language.type";
@@ -34,6 +35,7 @@ const COMPONENT_MAP = {
   JsonFormatter: JsonFormatter,
   QrGenerator: QrGenerator,
   PasswordGenerator: PasswordGenerator,
+  Base64Converter: Base64Converter,
 
   // Images Components
   ImageConverter: ImageConverter,
