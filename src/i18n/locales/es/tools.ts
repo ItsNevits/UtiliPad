@@ -98,10 +98,10 @@ export default {
     },
     "base64-converter": {
       name: "Convertidor Base64",
-      description: "Codifica y decodifica texto en Base64",
+      description: "Codifica y decodifica texto, imágenes y archivos en Base64",
       seo: {
         title: "Convertidor Base64 Online | Codificar y Decodificar | UtiliPad",
-        description: "Convierte texto a Base64 y viceversa online. Codifica y decodifica archivos e imágenes. Herramienta gratuita, rápida y segura. 100% privado en tu navegador."
+        description: "Convierte texto, imágenes, PDF, audio y video a Base64 online. Codifica y decodifica cualquier archivo con vista previa instantánea. Gratis, seguro y 100% privado en tu navegador. Sin subir archivos."
       }
     },
   },
