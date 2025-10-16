@@ -129,6 +129,15 @@ export const TOOLS_CATEGORIES: Category[] = [
         isAvailable: true,
         component: "PasswordGenerator",
       },
+      {
+        id: "base64-converter",
+        name: "Convertidor Base64",
+        description: "Codifica y decodifica texto en Base64",
+        href: "/tools/base64-converter",
+        bagde: "Nuevo",
+        isAvailable: true,
+        component: "Base64Converter",
+      },
     ],
   },
 ];

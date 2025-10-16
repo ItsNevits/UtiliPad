@@ -96,6 +96,14 @@ export default {
         description: "Genera contraseñas seguras y aleatorias al instante. Personaliza longitud, símbolos y números. 100% privado, sin guardar datos. Protege tus cuentas ahora."
       }
     },
+    "base64-converter": {
+      name: "Convertidor Base64",
+      description: "Codifica y decodifica texto en Base64",
+      seo: {
+        title: "Convertidor Base64 Online | Codificar y Decodificar | UtiliPad",
+        description: "Convierte texto a Base64 y viceversa online. Codifica y decodifica archivos e imágenes. Herramienta gratuita, rápida y segura. 100% privado en tu navegador."
+      }
+    },
   },
   badges: {
     Nuevo: "Nuevo",

@@ -180,4 +180,42 @@ export default {
     errorCompressing: "Error compressing",
     errorCreatingZip: "Error creating ZIP file",
   },
+  base64Converter: {
+    // ==== TABS ====
+    encode: "Encode",
+    decode: "Decode",
+
+    // ==== LABELS ====
+    inputLabel: "Input text",
+    outputLabel: "Result",
+    previewLabel: "Preview",
+    inputPlaceholder: "Enter text here...",
+    outputPlaceholder: "Result will appear here...",
+
+    // ==== FILE UPLOAD ====
+    orUploadFile: "Or upload a file",
+    dropFileHere: "Drag a file here or click to select",
+    fileSelected: "File selected",
+
+    // ==== BUTTONS ====
+    convertButton: "Convert",
+    clearButton: "Clear",
+    copyButton: "Copy",
+    copied: "Copied!",
+    downloadButton: "Download",
+
+    // ==== FILE DETECTION ====
+    imageDetected: "Image file detected. See preview below.",
+    pdfDetected: "PDF file detected. See preview below.",
+    audioDetected: "Audio file detected. See player below.",
+    videoDetected: "Video file detected. See player below.",
+    fileDetected: "Binary file detected. Click download to save.",
+
+    // ==== ERRORS ====
+    emptyInputError: "Please enter text to convert",
+    conversionError: "Invalid input for conversion",
+    fileError: "Error reading file",
+    nothingToCopyError: "Nothing to copy",
+    copyError: "Error copying",
+  },
 };
