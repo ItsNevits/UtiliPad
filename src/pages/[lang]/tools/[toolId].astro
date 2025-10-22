@@ -15,6 +15,8 @@ import ImageConverter from "@/features/tools/image-converter/ImageConverter.astr
 import FileConverter from "@/features/tools/file-converter/FileConverter.astro";
 import ZipCompressor from "@/features/tools/zip-compressor/ZipCompressor.astro";
 import Base64Converter from "@/features/tools/base64-converter/Base64Converter.astro";
+import HashGenerator from "@/features/tools/hash-generator/HashGenerator.astro";
+import AESCipher from "@/features/tools/aes-cipher/AESCipher.astro";
 
 import { TOOLS_CATEGORIES, getToolById } from "@/config/tools.config";
 import type { Language } from "@/types/language.type";
@@ -36,6 +38,8 @@ const COMPONENT_MAP = {
   QrGenerator: QrGenerator,
   PasswordGenerator: PasswordGenerator,
   Base64Converter: Base64Converter,
+  HashGenerator: HashGenerator,
+  AESCipher: AESCipher,
 
   // Images Components
   ImageConverter: ImageConverter,
