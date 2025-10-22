@@ -208,7 +208,8 @@ export default {
     pdfDetected: "PDF detectado. Ver vista previa abajo.",
     audioDetected: "Audio detectado. Ver reproductor abajo.",
     videoDetected: "Video detectado. Ver reproductor abajo.",
-    fileDetected: "Archivo binario detectado. Haz clic en descargar para guardar.",
+    fileDetected:
+      "Archivo binario detectado. Haz clic en descargar para guardar.",
 
     // ==== ERRORS ====
     emptyInputError: "Por favor ingresa texto para convertir",
@@ -260,9 +261,11 @@ export default {
 
     // ==== INFORMACIÓN ====
     infoTitle: "Nota de Privacidad",
-    infoText: "Todo el hashing ocurre localmente en tu navegador. Tus datos nunca salen de tu dispositivo.",
+    infoText:
+      "Todo el hashing ocurre localmente en tu navegador. Tus datos nunca salen de tu dispositivo.",
     warningTitle: "Advertencia Educativa",
-    crackWarning: "El descifrado de hashes es solo para propósitos educativos y pruebas de seguridad. Nunca uses esto en hashes que no te pertenezcan o no tengas permiso para probar.",
+    crackWarning:
+      "El descifrado de hashes es solo para propósitos educativos y pruebas de seguridad. Nunca uses esto en hashes que no te pertenezcan o no tengas permiso para probar.",
 
     // ==== INFO DE ALGORITMO ====
     algorithm: "Algoritmo",
@@ -279,7 +282,8 @@ export default {
     hashMatch: "¡Hash Coincidente!",
     hashMatchDesc: "El hash proporcionado coincide con el hash calculado.",
     hashMismatch: "Hash No Coincide",
-    hashMismatchDesc: "El hash proporcionado no coincide con el hash calculado.",
+    hashMismatchDesc:
+      "El hash proporcionado no coincide con el hash calculado.",
     emptyInput: "Por favor proporciona tanto el texto como el hash",
 
     // ==== MODO DESCIFRADO ====
@@ -307,9 +311,11 @@ export default {
     crackStopped: "Descifrado Detenido",
     crackStoppedDesc: "El proceso de descifrado fue detenido por el usuario.",
     crackQuerying: "Consultando Tablas Arcoíris...",
-    crackQueryingDesc: "Buscando en bases de datos en línea de hashes conocidos...",
+    crackQueryingDesc:
+      "Buscando en bases de datos en línea de hashes conocidos...",
     crackFallback: "Recurriendo al Diccionario",
-    crackFallbackDesc: "Búsqueda en línea no disponible, usando diccionario local...",
+    crackFallbackDesc:
+      "Búsqueda en línea no disponible, usando diccionario local...",
 
     // ==== MENSAJES ====
     secretKeyRequired: "Se requiere clave secreta para modo HMAC",
@@ -349,24 +355,31 @@ export default {
     // ==== OPCIONES AVANZADAS ====
     advancedOptions: "Opciones Avanzadas",
     encryptionMode: "Modo de Cifrado",
-    encryptionModeHelp: "El modo contraseña usa derivación PBKDF2. El modo manual usa clave/IV directo.",
+    encryptionModeHelp:
+      "El modo contraseña usa derivación PBKDF2. El modo manual usa clave/IV directo.",
     decryptionMode: "Modo de Descifrado",
-    decryptionModeHelp: "El modo auto extrae la clave de la contraseña. El modo manual usa clave/IV proporcionado.",
+    decryptionModeHelp:
+      "El modo auto extrae la clave de la contraseña. El modo manual usa clave/IV proporcionado.",
     passwordMode: "Basado en Contraseña (PBKDF2)",
     manualMode: "Clave e IV Manual",
     autoMode: "Auto (Contraseña)",
     cipherMode: "Algoritmo de Cifrado",
-    cipherModeHelp: "GCM proporciona autenticación. CBC es el modo clásico compatible con la mayoría de sistemas.",
+    cipherModeHelp:
+      "GCM proporciona autenticación. CBC es el modo clásico compatible con la mayoría de sistemas.",
     keyEncoding: "Codificación de Clave/IV",
-    keyEncodingHelp: "Hex: formato estándar. UTF-8: para compatibilidad con .NET Encoding.UTF8.GetBytes().",
+    keyEncodingHelp:
+      "Hex: formato estándar. UTF-8: para compatibilidad con .NET Encoding.UTF8.GetBytes().",
     keySize: "Tamaño de Clave AES",
-    keySizeHelp: "Seleccione la fuerza de la clave: AES-128 (rápido), AES-192 (equilibrado), AES-256 (máxima seguridad)",
+    keySizeHelp:
+      "Seleccione la fuerza de la clave: AES-128 (rápido), AES-192 (equilibrado), AES-256 (máxima seguridad)",
     iterations: "Iteraciones PBKDF2",
     iterationsHelp: "Mayor = más seguro pero más lento (10,000 - 1,000,000)",
     manualKey: "Clave de Cifrado (Hex)",
     manualIV: "IV / Nonce (Hex)",
-    keyHelp: "Cualquier número par de caracteres hexadecimales (ej., 64 para AES-256)",
-    ivHelp: "Cualquier número par de caracteres hexadecimales (depende del modo de cifrado)",
+    keyHelp:
+      "Cualquier número par de caracteres hexadecimales (ej., 64 para AES-256)",
+    ivHelp:
+      "Cualquier número par de caracteres hexadecimales (depende del modo de cifrado)",
     generate: "Generar",
     outputFormat: "Formato de Salida",
     detectedFormat: "Formato Detectado",
@@ -387,8 +400,10 @@ export default {
 
     // ==== INFORMACIÓN ====
     infoTitle: "Privacidad y Seguridad",
-    infoText: "Todo el cifrado ocurre localmente en tu navegador usando AES-256-GCM. Tus datos y contraseñas nunca salen de tu dispositivo.",
+    infoText:
+      "Todo el cifrado ocurre localmente en tu navegador. Tus datos y contraseñas nunca salen de tu dispositivo.",
     warningTitle: "Importante",
-    warningText: "¡Guarda tu contraseña de forma segura! Las contraseñas perdidas no se pueden recuperar, y tus datos cifrados serán permanentemente inaccesibles.",
+    warningText:
+      "¡Guarda tu contraseña de forma segura! Las contraseñas perdidas no se pueden recuperar, y tus datos cifrados serán permanentemente inaccesibles.",
   },
 };

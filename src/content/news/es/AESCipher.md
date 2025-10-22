@@ -138,18 +138,32 @@ Si el descifrado falla:
 
 ## Especificaciones Técnicas
 
-### Proceso de Cifrado
+### Proceso de Cifrado (Modo Contraseña)
 1. **Contraseña → Derivación de Clave**: PBKDF2-SHA256 con salt aleatorio de 16 bytes
-2. **Generación de IV Aleatorio**: Vector de inicialización de 12 bytes para modo GCM
-3. **Cifrado AES-256-GCM**: Cifrado autenticado del texto plano
-4. **Empaquetado de Salida**: Iteraciones(4) + Salt(16) + IV(12) + Texto Cifrado
+2. **Generación de IV Aleatorio**: 12 bytes (GCM) o 16 bytes (CBC)
+3. **Cifrado AES**: Modo GCM (autenticado) o CBC (clásico)
+4. **Empaquetado de Salida**: Iteraciones(4) + Salt(16) + IV(12/16) + Texto Cifrado
 5. **Codificación**: Codificación Base64 o Hexadecimal para almacenamiento/transmisión
 
-### Proceso de Descifrado
+### Proceso de Cifrado (Modo Clave/IV Manual)
+1. **Entrada de Clave**: Usuario proporciona clave en formato hex o UTF-8 (16/24/32 bytes)
+2. **Entrada de IV**: Usuario proporciona IV en formato hex o UTF-8 (12/16 bytes)
+3. **Importación de Clave**: Importa bytes de clave raw con la variante AES seleccionada
+4. **Cifrado AES**: Cifrado directo con modo GCM o CBC
+5. **Salida**: Solo texto cifrado codificado en Base64 o Hexadecimal
+
+### Proceso de Descifrado (Modo Contraseña)
 1. **Análisis de Entrada**: Extrae iteraciones, salt, IV y texto cifrado
 2. **Re-derivación de Clave**: PBKDF2 con el mismo salt e iteraciones
-3. **Descifrado AES-256-GCM**: Descifrado autenticado con IV
-4. **Verificación**: La etiqueta de autenticación GCM valida la integridad
+3. **Descifrado AES**: Modo GCM (con autenticación) o CBC
+4. **Verificación**: Etiqueta GCM valida integridad, CBC verifica padding
+5. **Salida**: Texto plano original
+
+### Proceso de Descifrado (Modo Clave/IV Manual)
+1. **Entrada**: Usuario proporciona texto cifrado, clave e IV (mismo formato que el cifrado)
+2. **Importación de Clave**: Importa bytes de clave raw con la variante AES correspondiente
+3. **Descifrado AES**: Descifrado directo con el mismo modo de cifrado usado para cifrar
+4. **Verificación**: Autenticación GCM o validación de padding CBC
 5. **Salida**: Texto plano original
 
 ### Notas de Seguridad
