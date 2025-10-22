@@ -114,10 +114,10 @@ export default {
     },
     "aes-cipher": {
       name: "Cifrado AES",
-      description: "Cifra y descifra texto con AES-256-GCM",
+      description: "Cifrado AES-128/192/256 en modo GCM/CBC con compatibilidad .NET",
       seo: {
-        title: "Cifrado AES Online | AES-256-GCM | UtiliPad",
-        description: "Cifra y descifra texto con AES-256-GCM online. Cifrado de grado militar con derivación de claves PBKDF2. Seguro, rápido y 100% privado en tu navegador. Sin envío de datos a servidores."
+        title: "Cifrado AES Online | AES-128/192/256 GCM/CBC | UtiliPad",
+        description: "Cifra y descifra texto con AES-128/192/256 en modo GCM o CBC. Basado en contraseña (PBKDF2) o clave/IV manual. Compatible con .NET mediante codificación UTF-8. 100% privado en tu navegador."
       }
     },
   },

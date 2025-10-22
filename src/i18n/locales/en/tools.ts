@@ -126,11 +126,11 @@ export default {
     },
     "aes-cipher": {
       name: "AES Cipher",
-      description: "Encrypt and decrypt text with AES-256-GCM",
+      description: "AES-128/192/256 encryption in GCM/CBC mode with .NET compatibility",
       seo: {
-        title: "AES Encryption Online | AES-256-GCM Cipher | UtiliPad",
+        title: "AES Encryption Online | AES-128/192/256 GCM/CBC | UtiliPad",
         description:
-          "Encrypt and decrypt text with AES-256-GCM online. Military-grade encryption with PBKDF2 key derivation. Secure, fast, and 100% private in your browser. No data sent to servers.",
+          "Encrypt and decrypt text with AES-128/192/256 in GCM or CBC mode. Password-based (PBKDF2) or manual key/IV. .NET compatible with UTF-8 encoding support. 100% private in your browser.",
       },
     },
   },

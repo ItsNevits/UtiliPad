@@ -150,7 +150,7 @@ export const TOOLS_CATEGORIES: Category[] = [
       {
         id: "aes-cipher",
         name: "Cifrado AES",
-        description: "Cifra y descifra texto con AES-256-GCM",
+        description: "Cifrado AES-128/192/256 en modo GCM/CBC con compatibilidad .NET",
         href: "/tools/aes-cipher",
         bagde: "Nuevo",
         isAvailable: true,
