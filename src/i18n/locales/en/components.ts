@@ -261,9 +261,11 @@ export default {
 
     // ==== INFO ====
     infoTitle: "Privacy Note",
-    infoText: "All hashing happens locally in your browser. Your data never leaves your device.",
+    infoText:
+      "All hashing happens locally in your browser. Your data never leaves your device.",
     warningTitle: "Educational Warning",
-    crackWarning: "Hash cracking is for educational and security testing purposes only. Never use this on hashes you don't own or have permission to test.",
+    crackWarning:
+      "Hash cracking is for educational and security testing purposes only. Never use this on hashes you don't own or have permission to test.",
 
     // ==== ALGORITHM INFO ====
     algorithm: "Algorithm",
@@ -350,18 +352,23 @@ export default {
     // ==== ADVANCED OPTIONS ====
     advancedOptions: "Advanced Options",
     encryptionMode: "Encryption Mode",
-    encryptionModeHelp: "Password mode uses PBKDF2 derivation. Manual mode uses direct key/IV.",
+    encryptionModeHelp:
+      "Password mode uses PBKDF2 derivation. Manual mode uses direct key/IV.",
     decryptionMode: "Decryption Mode",
-    decryptionModeHelp: "Auto mode extracts key from password. Manual mode uses provided key/IV.",
+    decryptionModeHelp:
+      "Auto mode extracts key from password. Manual mode uses provided key/IV.",
     passwordMode: "Password-based (PBKDF2)",
     manualMode: "Manual Key & IV",
     autoMode: "Auto (Password)",
     cipherMode: "Cipher Algorithm",
-    cipherModeHelp: "GCM provides authentication. CBC is classic mode compatible with most systems.",
+    cipherModeHelp:
+      "GCM provides authentication. CBC is classic mode compatible with most systems.",
     keyEncoding: "Key/IV Encoding",
-    keyEncodingHelp: "Hex: standard format. UTF-8: for .NET Encoding.UTF8.GetBytes() compatibility.",
+    keyEncodingHelp:
+      "Hex: standard format. UTF-8: for .NET Encoding.UTF8.GetBytes() compatibility.",
     keySize: "AES Key Size",
-    keySizeHelp: "Select key strength: AES-128 (fast), AES-192 (balanced), AES-256 (maximum security)",
+    keySizeHelp:
+      "Select key strength: AES-128 (fast), AES-192 (balanced), AES-256 (maximum security)",
     iterations: "PBKDF2 Iterations",
     iterationsHelp: "Higher = more secure but slower (10,000 - 1,000,000)",
     manualKey: "Encryption Key (Hex)",
@@ -389,8 +396,10 @@ export default {
 
     // ==== INFO ====
     infoTitle: "Privacy & Security",
-    infoText: "All encryption happens locally in your browser using AES-256-GCM. Your data and passwords never leave your device.",
+    infoText:
+      "All encryption happens locally in your browser. Your data and passwords never leave your device.",
     warningTitle: "Important",
-    warningText: "Save your password securely! Lost passwords cannot be recovered, and your encrypted data will be permanently inaccessible.",
+    warningText:
+      "Save your password securely! Lost passwords cannot be recovered, and your encrypted data will be permanently inaccessible.",
   },
 };

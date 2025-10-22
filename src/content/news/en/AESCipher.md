@@ -138,18 +138,32 @@ If decryption fails:
 
 ## Technical Specifications
 
-### Encryption Process
+### Encryption Process (Password Mode)
 1. **Password → Key Derivation**: PBKDF2-SHA256 with random 16-byte salt
-2. **Random IV Generation**: 12-byte initialization vector for GCM mode
-3. **AES-256-GCM Encryption**: Authenticated encryption of plaintext
-4. **Output Packaging**: Iterations(4) + Salt(16) + IV(12) + Ciphertext
+2. **Random IV Generation**: 12 bytes (GCM) or 16 bytes (CBC)
+3. **AES Encryption**: GCM (authenticated) or CBC (classic) mode
+4. **Output Packaging**: Iterations(4) + Salt(16) + IV(12/16) + Ciphertext
 5. **Encoding**: Base64 or Hexadecimal encoding for storage/transmission
 
-### Decryption Process
+### Encryption Process (Manual Key/IV Mode)
+1. **Key Input**: User provides key in hex or UTF-8 format (16/24/32 bytes)
+2. **IV Input**: User provides IV in hex or UTF-8 format (12/16 bytes)
+3. **Key Import**: Import raw key bytes with selected AES variant
+4. **AES Encryption**: Direct encryption with GCM or CBC mode
+5. **Output**: Base64 or Hexadecimal encoded ciphertext only
+
+### Decryption Process (Password Mode)
 1. **Input Parsing**: Extract iterations, salt, IV, and ciphertext
 2. **Key Re-derivation**: PBKDF2 with same salt and iterations
-3. **AES-256-GCM Decryption**: Authenticated decryption with IV
-4. **Verification**: GCM authentication tag validates integrity
+3. **AES Decryption**: GCM (with authentication) or CBC mode
+4. **Verification**: GCM tag validates integrity, CBC verifies padding
+5. **Output**: Original plaintext
+
+### Decryption Process (Manual Key/IV Mode)
+1. **Input**: User provides ciphertext, key, and IV (same format as encryption)
+2. **Key Import**: Import raw key bytes with matching AES variant
+3. **AES Decryption**: Direct decryption with same cipher mode used for encryption
+4. **Verification**: GCM authentication or CBC padding validation
 5. **Output**: Original plaintext
 
 ### Security Notes
