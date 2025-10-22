@@ -104,6 +104,22 @@ export default {
         description: "Convierte texto, imágenes, PDF, audio y video a Base64 online. Codifica y decodifica cualquier archivo con vista previa instantánea. Gratis, seguro y 100% privado en tu navegador. Sin subir archivos."
       }
     },
+    "hash-generator": {
+      name: "Generador de Hash",
+      description: "Genera hashes MD5, SHA-1, SHA-256 y SHA-512",
+      seo: {
+        title: "Generador de Hash Online | MD5 SHA256 SHA512 | UtiliPad",
+        description: "Genera hashes criptográficos (MD5, SHA-1, SHA-256, SHA-512) online. Soporte para HMAC con claves secretas y salt. Rápido, seguro y 100% privado en tu navegador."
+      }
+    },
+    "aes-cipher": {
+      name: "Cifrado AES",
+      description: "Cifra y descifra texto con AES-256-GCM",
+      seo: {
+        title: "Cifrado AES Online | AES-256-GCM | UtiliPad",
+        description: "Cifra y descifra texto con AES-256-GCM online. Cifrado de grado militar con derivación de claves PBKDF2. Seguro, rápido y 100% privado en tu navegador. Sin envío de datos a servidores."
+      }
+    },
   },
   badges: {
     Nuevo: "Nuevo",

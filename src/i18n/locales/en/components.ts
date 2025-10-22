@@ -218,4 +218,179 @@ export default {
     nothingToCopyError: "Nothing to copy",
     copyError: "Error copying",
   },
+  hashGenerator: {
+    // ==== TABS ====
+    generateTab: "Generate",
+    verifyTab: "Verify",
+    crackTab: "Crack",
+
+    // ==== TITLES ====
+    inputTitle: "Input Text",
+    outputTitle: "Hash Outputs",
+    verifyInputTitle: "Verification Input",
+    verificationResult: "Verification Result",
+    crackInputTitle: "Crack Input",
+    crackResult: "Crack Result",
+
+    // ==== BUTTONS ====
+    generate: "Generate Hashes",
+    verifyHash: "Verify Hash",
+    startCrack: "Start Cracking",
+    stopCrack: "Stop Cracking",
+    copy: "Copy",
+    paste: "Paste",
+    clear: "Clear",
+
+    // ==== HMAC OPTIONS ====
+    hmacMode: "HMAC Mode (with Secret Key)",
+    secretKey: "Secret Key",
+    secretKeyPlaceholder: "Enter your secret key",
+    salt: "Salt",
+    saltPlaceholder: "Optional salt value",
+    optional: "optional",
+
+    // ==== PLACEHOLDERS ====
+    placeholder: "Enter text to generate hashes...",
+    originalText: "Original Text",
+    originalTextPlaceholder: "Enter the original text...",
+    hashToVerify: "Hash to Verify",
+    hashToVerifyPlaceholder: "Paste the hash to verify...",
+    hashToCrack: "Hash to Crack",
+    hashToCrackPlaceholder: "Paste the hash to crack...",
+    selectAlgorithm: "Algorithm",
+
+    // ==== INFO ====
+    infoTitle: "Privacy Note",
+    infoText: "All hashing happens locally in your browser. Your data never leaves your device.",
+    warningTitle: "Educational Warning",
+    crackWarning: "Hash cracking is for educational and security testing purposes only. Never use this on hashes you don't own or have permission to test.",
+
+    // ==== ALGORITHM INFO ====
+    algorithm: "Algorithm",
+    standardHash: "Standard Hash",
+    generated: "Generated",
+    verified: "Verified",
+    method: "Method",
+    timeTaken: "Time Taken",
+
+    // ==== VERIFICATION ====
+    verificationWaiting: "Enter text and hash to verify",
+    providedHash: "Provided Hash",
+    calculatedHash: "Calculated Hash",
+    hashMatch: "Hash Match!",
+    hashMatchDesc: "The provided hash matches the calculated hash.",
+    hashMismatch: "Hash Mismatch",
+    hashMismatchDesc: "The provided hash does not match the calculated hash.",
+    emptyInput: "Please provide both text and hash",
+
+    // ==== CRACK MODE ====
+    attackMethod: "Attack Method",
+    dictionaryAttack: "Dictionary Attack",
+    bruteForce: "Brute Force",
+    rainbowTable: "Rainbow Table API",
+    dictionarySize: "Dictionary Size",
+    commonPasswords: "Common Passwords",
+    extendedList: "Extended List",
+    maxLength: "Maximum Length",
+    charset: "Character Set",
+    numeric: "Numeric",
+    lowercase: "Lowercase",
+    alphanumeric: "Alphanumeric",
+    crackWaiting: "Enter a hash and click 'Start Cracking'",
+    progress: "Progress",
+    attempts: "attempts",
+    currentAttempt: "Current Attempt",
+    crackedText: "Cracked Text",
+    crackSuccess: "Hash Cracked!",
+    crackSuccessDesc: "The original text has been found.",
+    crackFailed: "Hash Not Found",
+    crackFailedDesc: "Could not crack the hash with the selected method.",
+    crackStopped: "Cracking Stopped",
+    crackStoppedDesc: "The cracking process was stopped by the user.",
+    crackQuerying: "Querying Rainbow Tables...",
+    crackQueryingDesc: "Searching online databases for known hashes...",
+    crackFallback: "Falling back to Dictionary",
+    crackFallbackDesc: "Online lookup unavailable, using local dictionary...",
+
+    // ==== MESSAGES ====
+    secretKeyRequired: "Secret key required for HMAC mode",
+    error: "Error generating hashes",
+  },
+  aesCipher: {
+    // ==== TABS ====
+    encryptTab: "Encrypt",
+    decryptTab: "Decrypt",
+
+    // ==== TITLES ====
+    inputTitle: "Plain Text Input",
+    encryptedInput: "Encrypted Text Input",
+    encryptedOutput: "Encrypted Output",
+    decryptedOutput: "Decrypted Output",
+
+    // ==== BUTTONS ====
+    encrypt: "Encrypt",
+    decrypt: "Decrypt",
+    copy: "Copy",
+    paste: "Paste",
+    clear: "Clear",
+    generate: "Generate",
+    showPassword: "Show password",
+    hidePassword: "Hide password",
+
+    // ==== PASSWORD ====
+    password: "Password / Encryption Key",
+    passwordPlaceholder: "Enter a strong password...",
+    generatePassword: "Generate secure password",
+
+    // ==== PLACEHOLDERS ====
+    encryptPlaceholder: "Enter text to encrypt...",
+    decryptPlaceholder: "Paste encrypted text here...",
+    outputPlaceholder: "Result will appear here...",
+
+    // ==== ADVANCED OPTIONS ====
+    advancedOptions: "Advanced Options",
+    encryptionMode: "Encryption Mode",
+    encryptionModeHelp: "Password mode uses PBKDF2 derivation. Manual mode uses direct key/IV.",
+    decryptionMode: "Decryption Mode",
+    decryptionModeHelp: "Auto mode extracts key from password. Manual mode uses provided key/IV.",
+    passwordMode: "Password-based (PBKDF2)",
+    manualMode: "Manual Key & IV",
+    autoMode: "Auto (Password)",
+    cipherMode: "Cipher Algorithm",
+    cipherModeHelp: "GCM provides authentication. CBC is classic mode compatible with most systems.",
+    keyEncoding: "Key/IV Encoding",
+    keyEncodingHelp: "Hex: standard format. UTF-8: for .NET Encoding.UTF8.GetBytes() compatibility.",
+    keySize: "AES Key Size",
+    keySizeHelp: "Select key strength: AES-128 (fast), AES-192 (balanced), AES-256 (maximum security)",
+    iterations: "PBKDF2 Iterations",
+    iterationsHelp: "Higher = more secure but slower (10,000 - 1,000,000)",
+    manualKey: "Encryption Key (Hex)",
+    manualIV: "IV / Nonce (Hex)",
+    keyHelp: "Any even number of hex characters (e.g., 64 for AES-256)",
+    ivHelp: "Any even number of hex characters (depends on cipher mode)",
+    generateKey: "Generate random key",
+    generateIV: "Generate random IV",
+    outputFormat: "Output Format",
+    detectedFormat: "Detected Format",
+    autoDetect: "Auto-detect",
+
+    // ==== ALGORITHM INFO ====
+    algorithm: "Algorithm",
+    keyDerivation: "Key Derivation",
+    encryptionTime: "Encryption Time",
+    decryptionTime: "Decryption Time",
+
+    // ==== STATUS MESSAGES ====
+    decryptSuccess: "Decryption successful!",
+    decryptError: "Decryption failed",
+    encryptError: "Encryption failed",
+    emptyInput: "Please enter text to process",
+    emptyPassword: "Please enter a password",
+
+    // ==== INFO ====
+    infoTitle: "Privacy & Security",
+    infoText: "All encryption happens locally in your browser using AES-256-GCM. Your data and passwords never leave your device.",
+    warningTitle: "Important",
+    warningText: "Save your password securely! Lost passwords cannot be recovered, and your encrypted data will be permanently inaccessible.",
+  },
 };
