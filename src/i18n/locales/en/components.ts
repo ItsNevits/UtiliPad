@@ -47,24 +47,10 @@ export default {
       alt: "Photo of Brian Alvarado",
       image: "/images/team/brian.jpg",
       socials: {
-        github: "https://github.com/brian",
-        linkedin: "https://linkedin.com/in/brian",
-        twitter: "https://twitter.com/brian",
-        instagram: "https://instagram.com/brian",
-      },
-    },
-    {
-      name: "Brian Alvarado 2",
-      role: "#Developer",
-      description:
-        "I just like to collaborate with the community and create useful things.",
-      alt: "Photo of Brian Alvarado",
-      image: "/images/team/brian.jpg",
-      socials: {
-        github: "https://github.com/brian",
-        linkedin: "https://linkedin.com/in/brian",
-        twitter: "https://twitter.com/brian",
-        instagram: "https://instagram.com/brian",
+        github: "https://github.com/ItsNevits",
+        linkedin: "https://linkedin.com/in/balavarado",
+        twitter: "https://x.com/ItzNevits",
+        instagram: "https://www.instagram.com/brian.nevits",
       },
     },
   ],
