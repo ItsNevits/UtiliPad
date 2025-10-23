@@ -2,6 +2,7 @@ export default {
   sidebar: {
     title: "Categories",
     categories: [
+      { label: "Encryption", href: "/category/encryption" },
       { label: "Files", href: "/category/files" },
       { label: "Images", href: "/category/images" },
       { label: "Text", href: "/category/text" },
@@ -37,12 +38,36 @@ export default {
     changeLanguage: "Change language",
     current: "English",
   },
-  aboutUs: {
-    title: "About me",
-    description:
-      "I just like to collaborate with the community and create useful things.",
-    alt: "About me",
-  },
+  aboutUs: [
+    {
+      name: "Brian Alvarado",
+      role: "#Developer",
+      description:
+        "I just like to collaborate with the community and create useful things.",
+      alt: "Photo of Brian Alvarado",
+      image: "/images/team/brian.jpg",
+      socials: {
+        github: "https://github.com/brian",
+        linkedin: "https://linkedin.com/in/brian",
+        twitter: "https://twitter.com/brian",
+        instagram: "https://instagram.com/brian",
+      },
+    },
+    {
+      name: "Brian Alvarado 2",
+      role: "#Developer",
+      description:
+        "I just like to collaborate with the community and create useful things.",
+      alt: "Photo of Brian Alvarado",
+      image: "/images/team/brian.jpg",
+      socials: {
+        github: "https://github.com/brian",
+        linkedin: "https://linkedin.com/in/brian",
+        twitter: "https://twitter.com/brian",
+        instagram: "https://instagram.com/brian",
+      },
+    },
+  ],
   processSummary: {
     title: "Processed Tasks",
     items: {

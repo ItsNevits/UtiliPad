@@ -3,6 +3,7 @@ export default {
     title: "Categorías",
     categories: [
       { label: "Archivos", href: "/category/files" },
+      { label: "Cifrado", href: "/category/encryption" },
       { label: "Imágenes", href: "/category/images" },
       { label: "Texto", href: "/category/text" },
       { label: "Novedades", href: "/news" },
@@ -37,11 +38,34 @@ export default {
     changeLanguage: "Cambiar idioma",
     current: "Español",
   },
-  aboutUs: {
-    title: "Sobre mí",
-    description: "Me gusta colaborar con la comunidad y crear cosas útiles.",
-    alt: "Sobre mí",
-  },
+  aboutUs: [
+    {
+      name: "Brian Alvarado",
+      role: "#Developer",
+      description: "Me gusta colaborar con la comunidad y crear cosas útiles.",
+      alt: "Foto de Brian Alvarado",
+      image: "/images/team/brian.jpg",
+      socials: {
+        github: "https://github.com/brian",
+        linkedin: "https://linkedin.com/in/brian",
+        twitter: "https://twitter.com/brian",
+        instagram: "https://instagram.com/brian",
+      },
+    },
+    {
+      name: "Brian Alvarado 2",
+      role: "#Developer",
+      description: "Me gusta colaborar con la comunidad y crear cosas útiles.",
+      alt: "Foto de Brian Alvarado",
+      image: "/images/team/brian.jpg",
+      socials: {
+        github: "https://github.com/brian",
+        linkedin: "https://linkedin.com/in/brian",
+        twitter: "https://twitter.com/brian",
+        instagram: "https://instagram.com/brian",
+      },
+    },
+  ],
   processSummary: {
     title: "Procesos realizados",
     items: {
@@ -380,7 +404,6 @@ export default {
       "Cualquier número par de caracteres hexadecimales (ej., 64 para AES-256)",
     ivHelp:
       "Cualquier número par de caracteres hexadecimales (depende del modo de cifrado)",
-    generate: "Generar",
     outputFormat: "Formato de Salida",
     detectedFormat: "Formato Detectado",
     autoDetect: "Auto-detectar",

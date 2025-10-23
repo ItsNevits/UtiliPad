@@ -3,17 +3,20 @@ export default {
     files: "Files",
     images: "Images",
     text: "Text",
+    encryption: "Encryption",
     news: "News",
   },
   categoryTitles: {
     files: "File Tools",
     images: "Image Tools",
     text: "Text Tools",
+    encryption: "Encryption Tools",
   },
   categoryDescriptions: {
     files: "Free tools to manipulate and convert files.",
     images: "Free tools to edit and process images.",
     text: "Free tools to manipulate and analyze text.",
+    encryption: "Free tools to encrypt, decrypt and secure data.",
   },
   items: {
     "zip-files": {
