@@ -3,17 +3,20 @@ export default {
     files: "Archivos",
     images: "Imágenes",
     text: "Texto",
+    encryption: "Cifrado",
     news: "Novedades",
   },
   categoryTitles: {
     files: "Herramientas de Archivos",
     images: "Herramientas de Imágenes",
     text: "Herramientas de Texto",
+    encryption: "Herramientas de Cifrado",
   },
   categoryDescriptions: {
     files: "Herramientas gratuitas para manipular y convertir archivos.",
     images: "Herramientas gratuitas para editar y procesar imágenes.",
     text: "Herramientas gratuitas para manipular y analizar texto.",
+    encryption: "Herramientas gratuitas para cifrar, descifrar y asegurar datos.",
   },
   items: {
     "zip-files": {

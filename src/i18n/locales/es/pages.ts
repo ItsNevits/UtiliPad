@@ -104,8 +104,8 @@ export default {
         {
           icon: "🐙",
           title: "GitHub",
-          description: "https://github.com/ItsNevits",
-          href: "https://github.com/ItsNevits",
+          description: "https://github.com/ItsNevits/UtiliPad",
+          href: "https://github.com/ItsNevits/UtiliPad",
         },
       ],
     },

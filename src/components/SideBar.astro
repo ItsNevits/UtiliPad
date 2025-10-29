@@ -12,6 +12,16 @@ const categories =
     href: `/${lang}${cat.href}`,
   }));
 
+if (categories && categories.length > 0) {
+  // ordenar categorías alfabéticamente por label
+  // label de novedades/news siempre de ultimo
+  categories.sort((a: any, b: any) => {
+    if (a.label === "Novedades" || a.label === "News") return 1;
+    if (b.label === "Novedades" || b.label === "News") return -1;
+    return a.label.localeCompare(b.label, lang);
+  });
+}
+
 // Obtener la URL actual para marcar la categoría activa
 const currentPath = Astro.url.pathname;
 ---

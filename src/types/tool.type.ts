@@ -21,4 +21,4 @@ export interface Category {
 }
 
 export type ToolId = string;
-export type CategoryId = 'files' | 'images' | 'text';
+export type CategoryId = 'files' | 'images' | 'text' | 'encryption';
