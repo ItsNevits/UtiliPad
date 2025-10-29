@@ -40,14 +40,14 @@ export default {
   },
   aboutUs: [
     {
-      name: "Brian Alvarado",
+      name: "Nevits",
       role: "#Developer",
       description: "Me gusta colaborar con la comunidad y crear cosas útiles.",
-      alt: "Foto de Brian Alvarado",
+      alt: "Foto de Nevits",
       image: "/images/team/brian.jpg",
       socials: {
         github: "https://github.com/ItsNevits",
-        linkedin: "https://linkedin.com/in/balavarado",
+        //linkedin: "https://linkedin.com/in/balavarado",
         twitter: "https://x.com/ItzNevits",
         instagram: "https://www.instagram.com/brian.nevits",
       },

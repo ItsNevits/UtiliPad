@@ -40,11 +40,11 @@ export default {
   },
   aboutUs: [
     {
-      name: "Brian Alvarado",
+      name: "Nevits",
       role: "#Developer",
       description:
         "I just like to collaborate with the community and create useful things.",
-      alt: "Photo of Brian Alvarado",
+      alt: "Photo of Nevits",
       image: "/images/team/brian.jpg",
       socials: {
         github: "https://github.com/ItsNevits",
