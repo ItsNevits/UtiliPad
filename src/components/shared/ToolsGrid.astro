@@ -1,0 +1,143 @@
+---
+import { Picture } from "astro:assets";
+import ImageEditor from "@/assets/images/ImageEditor.png";
+
+interface Props {
+  title?: string;
+}
+
+const { title = "All Tools" } = Astro.props;
+
+const categories = ["All", "Productivity", "Creativity", "Utilities"];
+
+const tools = [
+  {
+    title: "File Converter",
+    category: "Productivity",
+    image: ImageEditor,
+    href: "/tools/file-converter",
+  },
+  {
+    title: "Password Generator",
+    category: "Utilities",
+    image: ImageEditor,
+    href: "/tools/password-generator",
+  },
+  {
+    title: "QR Code Generator",
+    category: "Utilities",
+    image: ImageEditor,
+    href: "/tools/qr-generator",
+  },
+  {
+    title: "Color Palette Generator",
+    category: "Creativity",
+    image: ImageEditor,
+    href: "/tools/color-palette",
+  },
+  {
+    title: "Text Translator",
+    category: "Productivity",
+    image: ImageEditor,
+    href: "/tools/translator",
+  },
+  {
+    title: "Video Compressor",
+    category: "Utilities",
+    image: ImageEditor,
+    href: "/tools/video-compressor",
+  },
+  {
+    title: "Audio Editor",
+    category: "Creativity",
+    image: ImageEditor,
+    href: "/tools/audio-editor",
+  },
+  {
+    title: "Website Analyzer",
+    category: "Utilities",
+    image: ImageEditor,
+    href: "/tools/website-analyzer",
+  },
+];
+---
+
+<section class="select-none mb-8">
+  <h2 class="text-2xl font-semibold mb-6">{title}</h2>
+
+  <!-- Category Tabs -->
+  <div class="flex gap-6 mb-6 border-b border-gray-700">
+    {
+      categories.map((category, index) => (
+        <button
+          class:list={[
+            "cursor-pointer pb-2 px-1 transition-colors relative",
+            index === 0
+              ? "text-white border-b-2 border-white"
+              : "text-gray-400 hover:text-gray-200",
+          ]}
+          data-category={category}
+        >
+          {category}
+        </button>
+      ))
+    }
+  </div>
+
+  <!-- Tools Grid -->
+  <div
+    class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-6"
+  >
+    {
+      tools.map((tool) => (
+        <a
+          href={tool.href}
+          class="flex flex-col items-center cursor-pointer group"
+          title={tool.title}
+          data-tool-category={tool.category}
+        >
+          <div class="w-full aspect-square rounded-lg mb-3 overflow-hidden bg-gradient-to-br from-gray-800 to-gray-900 p-6">
+            <Picture
+              src={tool.image}
+              alt={tool.title}
+              class="w-full h-full object-contain"
+            />
+          </div>
+          <h3 class="text-sm font-light text-center">{tool.title}</h3>
+        </a>
+      ))
+    }
+  </div>
+</section>
+
+<script>
+  const categoryButtons = document.querySelectorAll("[data-category]");
+  const toolCards = document.querySelectorAll("[data-tool-category]");
+
+  categoryButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      const selectedCategory = button.getAttribute("data-category");
+
+      // Update active button styling
+      categoryButtons.forEach((btn) => {
+        if (btn === button) {
+          btn.classList.add("text-white", "border-b-2", "border-white");
+          btn.classList.remove("text-gray-400");
+        } else {
+          btn.classList.remove("text-white", "border-b-2", "border-white");
+          btn.classList.add("text-gray-400");
+        }
+      });
+
+      // Filter tools
+      toolCards.forEach((card) => {
+        const cardCategory = card.getAttribute("data-tool-category");
+        if (selectedCategory === "All" || cardCategory === selectedCategory) {
+          (card as HTMLElement).style.display = "flex";
+        } else {
+          (card as HTMLElement).style.display = "none";
+        }
+      });
+    });
+  });
+</script>

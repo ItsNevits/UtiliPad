@@ -7,6 +7,7 @@ import Hero from "@/components/shared/Hero.astro";
 import type { Language } from "@/types/language.type";
 import { getTranslation } from "@/i18n/index";
 import Cards from "@/components/shared/Cards.astro";
+import ToolsGrid from "@/components/shared/ToolsGrid.astro";
 
 const lang = Astro.params.lang as Language;
 ---
@@ -19,4 +20,5 @@ const lang = Astro.params.lang as Language;
   />
 
   <Cards title="Herramientas destacadas" />
+  <ToolsGrid title="All Tools" />
 </NewMainLayout>
