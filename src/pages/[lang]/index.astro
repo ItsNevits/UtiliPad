@@ -1,24 +1,22 @@
 ---
 export const prerender = false;
 
-import MainLayout from "@/Layouts/MainLayout.astro";
+import NewMainLayout from "@/Layouts/NewMainLayout.astro";
 import Hero from "@/components/shared/Hero.astro";
-import Tools from "@/components/shared/Tools.astro";
 
 import type { Language } from "@/types/language.type";
 import { getTranslation } from "@/i18n/index";
+import Cards from "@/components/shared/Cards.astro";
 
 const lang = Astro.params.lang as Language;
 ---
 
-<MainLayout>
+<NewMainLayout>
   <!-- Hero -->
   <Hero
     title={getTranslation(lang, "pages.home.title")}
     description={getTranslation(lang, "pages.home.description")}
   />
-  <!-- Tools -->
-  <Tools />
-  <!-- Recent Processes -->
-  <!-- <RecentProcesses /> -->
-</MainLayout>
+
+  <Cards title="Herramientas destacadas" />
+</NewMainLayout>

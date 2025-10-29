@@ -1,8 +1,8 @@
 export default {
   home: {
-    title: "Your toolbox on the web.",
+    title: "Unlock your potential with our suite of tools",
     description:
-      "Convert, edit, and automate your files without installing anything. Drag and drop or explore the most used tools.",
+      "Elevate your productivity with our comprehensive collection of online tools designed to simplify your tasks.",
   },
   news: {
     title: "News",

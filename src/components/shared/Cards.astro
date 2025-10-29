@@ -1,0 +1,85 @@
+---
+import ImageEditor from "@/assets/images/ImageEditor.png";
+import { Picture } from "astro:assets";
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const tools = [
+  {
+    title: "Tool 1",
+    description:
+      "Description for Tool 1 Description for Tool 1 Description for Tool 1 Description for Tool 1",
+    image: ImageEditor,
+  },
+  {
+    title: "Tool 2",
+    description:
+      "Description for Tool 2 Description for Tool 2 Description for Tool 2 Description for Tool 2 Description for Tool 2",
+    image: ImageEditor,
+  },
+  {
+    title: "Tool 3",
+    description:
+      "Description for Tool 3 Description for Tool 3 Description for Tool 3",
+    image: ImageEditor,
+  },
+  {
+    title: "Tool 4",
+    description:
+      "Description for Tool 4 Description for Tool 4 Description for Tool 4",
+    image: ImageEditor,
+  },
+  {
+    title: "Tool 4",
+    description:
+      "Description for Tool 4 Description for Tool 4 Description for Tool 4",
+    image: ImageEditor,
+  },
+  {
+    title: "Tool 4",
+    description:
+      "Description for Tool 4 Description for Tool 4 Description for Tool 4",
+    image: ImageEditor,
+  },
+];
+
+const { title, description } = Astro.props;
+---
+
+<section class="select-none mb-4">
+  {
+    title || description ? (
+      <div class="mb-4">
+        {title && <h2 class="text-2xl font-semibold mb-2">{title}</h2>}
+        {description && <p class="mb-6">{description}</p>}
+      </div>
+    ) : null
+  }
+
+  <div class="flex gap-10 overflow-x-auto pb-4 px-2">
+    {
+      tools.map((tool) => (
+        <a
+          href="#"
+          class="flex flex-col min-w-70 w-70 flex-shrink-0 cursor-pointer"
+          title={tool.title}
+        >
+          <Picture
+            src={tool.image}
+            alt={tool.title}
+            class="w-70 rounded-lg mb-3"
+          />
+          <h3 class="text-lg font-light">{tool.title}</h3>
+          <p class="text-md font-extralight text-balance">
+            {tool.description.length > 80
+              ? tool.description.slice(0, 80) + "..."
+              : tool.description}
+          </p>
+        </a>
+      ))
+    }
+  </div>
+</section>

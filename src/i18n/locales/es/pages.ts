@@ -1,8 +1,8 @@
 export default {
   home: {
-    title: "Tu caja de herramientas en la web.",
+    title: "Desbloquea tu potencial con nuestra suite de herramientas",
     description:
-      "Convierte, edita y automatiza tus archivos sin instalar nada. Arrastra y suelta o explora las herramientas más usadas.",
+      "Eleva tu productividad con nuestra completa colección de herramientas en línea diseñadas para simplificar tus tareas.",
   },
   news: {
     title: "Novedades",
