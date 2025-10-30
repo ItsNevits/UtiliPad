@@ -1,6 +1,6 @@
 ---
-import HeroImg from "@/assets/images/hero-image.png";
-import { Picture } from "astro:assets";
+import type { Language } from "@/types/language.type";
+import Search from "./Search.astro";
 
 interface Props {
   title: string;
@@ -8,28 +8,12 @@ interface Props {
 }
 
 const { title, description } = Astro.props;
+const lang = (Astro.params.lang as Language) || "es";
 ---
 
-<div
-  class="select-none relative w-full min-h-96 rounded-lg overflow-hidden mb-4"
->
-  <Picture
-    src={HeroImg}
-    alt="Hero Image"
-    class="absolute inset-0 object-cover w-full h-full"
-    format="webp"
-  />
+<section class="select-none flex flex-col px-9">
+  <h1 class="text-4xl font-medium max-w-md mb-7">{title}</h1>
+  <p class="text-md max-w-xl mb-7 text-balance">{description}</p>
 
-  <div
-    class="relative flex flex-col bg-black/20 p-4 w-full h-full backdrop-blur-md"
-  >
-    <div class="absolute bottom-5 left-5">
-      <h1 class="text-3xl md:text-5xl pb-2 font-bold leading-tight max-w-4xl">
-        {title}
-      </h1>
-      <p class="mt-2 text-neutral-100 text-lg max-w-3xl">
-        {description}
-      </p>
-    </div>
-  </div>
-</div>
+  <Search />
+</section>

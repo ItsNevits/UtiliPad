@@ -1,84 +1,54 @@
 ---
 import { Picture } from "astro:assets";
+import type { Language } from "@/types/language.type";
+import { getTranslatedTools, getTranslatedCategories } from "@/utils/tools";
 import ImageEditor from "@/assets/images/ImageEditor.png";
 
 interface Props {
   title?: string;
+  toolsPerPage?: number;
 }
 
-const { title = "All Tools" } = Astro.props;
+const { title = "All Tools", toolsPerPage = 10 } = Astro.props;
+const lang = (Astro.params.lang as Language) || "es";
 
-const categories = ["All", "Productivity", "Creativity", "Utilities"];
+// Obtener todas las categorías con traducciones
+const categories = getTranslatedCategories(lang);
 
-const tools = [
-  {
-    title: "File Converter",
-    category: "Productivity",
-    image: ImageEditor,
-    href: "/tools/file-converter",
-  },
-  {
-    title: "Password Generator",
-    category: "Utilities",
-    image: ImageEditor,
-    href: "/tools/password-generator",
-  },
-  {
-    title: "QR Code Generator",
-    category: "Utilities",
-    image: ImageEditor,
-    href: "/tools/qr-generator",
-  },
-  {
-    title: "Color Palette Generator",
-    category: "Creativity",
-    image: ImageEditor,
-    href: "/tools/color-palette",
-  },
-  {
-    title: "Text Translator",
-    category: "Productivity",
-    image: ImageEditor,
-    href: "/tools/translator",
-  },
-  {
-    title: "Video Compressor",
-    category: "Utilities",
-    image: ImageEditor,
-    href: "/tools/video-compressor",
-  },
-  {
-    title: "Audio Editor",
-    category: "Creativity",
-    image: ImageEditor,
-    href: "/tools/audio-editor",
-  },
-  {
-    title: "Website Analyzer",
-    category: "Utilities",
-    image: ImageEditor,
-    href: "/tools/website-analyzer",
-  },
+// Agregar categoría "All" al principio
+const allCategories = [
+  { id: "all", name: lang === "es" ? "Todos" : "All" },
+  ...categories,
 ];
+
+// Obtener todas las herramientas con traducciones
+const allTools = getTranslatedTools("all", lang);
+
+// Textos de paginación
+const paginationTexts = {
+  previous: lang === "es" ? "Anterior" : "Previous",
+  next: lang === "es" ? "Siguiente" : "Next",
+  of: lang === "es" ? "de" : "of",
+};
 ---
 
 <section class="select-none mb-8">
   <h2 class="text-2xl font-semibold mb-6">{title}</h2>
 
   <!-- Category Tabs -->
-  <div class="flex gap-6 mb-6 border-b border-gray-700">
+  <div class="flex gap-6 mb-6 border-b border-neutral-700 overflow-x-auto">
     {
-      categories.map((category, index) => (
+      allCategories.map((category, index) => (
         <button
           class:list={[
-            "cursor-pointer pb-2 px-1 transition-colors relative",
+            "cursor-pointer pb-2 px-1 transition-colors relative whitespace-nowrap",
             index === 0
-              ? "text-white border-b-2 border-white"
-              : "text-gray-400 hover:text-gray-200",
+              ? "text-white border-b-2 border-emerald-500"
+              : "text-neutral-400 hover:text-neutral-200",
           ]}
-          data-category={category}
+          data-category={category.id}
         >
-          {category}
+          {category.name}
         </button>
       ))
     }
@@ -89,23 +59,40 @@ const tools = [
     class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-6"
   >
     {
-      tools.map((tool) => (
-        <a
-          href={tool.href}
-          class="flex flex-col items-center cursor-pointer group"
-          title={tool.title}
-          data-tool-category={tool.category}
-        >
-          <div class="w-full aspect-square rounded-lg mb-3 overflow-hidden bg-gradient-to-br from-gray-800 to-gray-900 p-6">
-            <Picture
-              src={tool.image}
-              alt={tool.title}
-              class="w-full h-full object-contain"
-            />
-          </div>
-          <h3 class="text-sm font-light text-center">{tool.title}</h3>
-        </a>
-      ))
+      allTools.map((tool) => {
+        // Determinar la categoría de la herramienta
+        const toolCategory = categories.find((cat) =>
+          cat.tools?.some((t) => t.id === tool.id)
+        );
+
+        return (
+          <a
+            href={`/${lang}${tool.href}`}
+            class:list={[
+              "flex flex-col items-center group",
+              !tool.isAvailable &&
+                "opacity-50 cursor-not-allowed pointer-events-none",
+            ]}
+            title={tool.description}
+            data-tool-category={toolCategory?.id || ""}
+            data-available={tool.isAvailable}
+          >
+            <div class="relative w-full aspect-square rounded-lg mb-3 overflow-hidden bg-gradient-to-br from-neutral-800 to-neutral-900 p-6 group-hover:scale-101 transition-transform">
+              <Picture
+                src={ImageEditor}
+                alt={tool.name}
+                class="w-full h-full object-contain"
+              />
+              {tool.translatedBadge && (
+                <span class="absolute top-2 right-2 bg-emerald-500 text-white text-xs px-2 py-1 rounded-full">
+                  {tool.translatedBadge}
+                </span>
+              )}
+            </div>
+            <h3 class="text-sm font-light text-center">{tool.name}</h3>
+          </a>
+        );
+      })
     }
   </div>
 </section>
@@ -121,18 +108,24 @@ const tools = [
       // Update active button styling
       categoryButtons.forEach((btn) => {
         if (btn === button) {
-          btn.classList.add("text-white", "border-b-2", "border-white");
-          btn.classList.remove("text-gray-400");
+          btn.classList.remove("text-neutral-400", "border-b-2");
+          btn.classList.add("text-white", "border-b-2", "border-emerald-500");
         } else {
-          btn.classList.remove("text-white", "border-b-2", "border-white");
-          btn.classList.add("text-gray-400");
+          btn.classList.remove(
+            "text-white",
+            "border-b-2",
+            "border-emerald-500"
+          );
+          btn.classList.add("text-neutral-400");
         }
       });
 
       // Filter tools
       toolCards.forEach((card) => {
         const cardCategory = card.getAttribute("data-tool-category");
-        if (selectedCategory === "All" || cardCategory === selectedCategory) {
+        const isAvailable = card.getAttribute("data-available") === "true";
+
+        if (selectedCategory === "all" || cardCategory === selectedCategory) {
           (card as HTMLElement).style.display = "flex";
         } else {
           (card as HTMLElement).style.display = "none";

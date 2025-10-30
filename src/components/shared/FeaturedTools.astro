@@ -1,0 +1,79 @@
+---
+import { Picture } from "astro:assets";
+import type { Language } from "@/types/language.type";
+import { getTranslatedTools } from "@/utils/tools";
+import ImageEditor from "@/assets/images/ImageEditor.png";
+
+interface Props {
+  title?: string;
+  description?: string;
+  featuredToolIds?: string[]; // IDs de las herramientas destacadas
+}
+
+const {
+  title,
+  description,
+  featuredToolIds = ["json-formatter", "image-compress", "qr-generator"],
+} = Astro.props;
+
+const lang = (Astro.params.lang as Language) || "es";
+
+// Obtener todas las herramientas traducidas
+const allTools = getTranslatedTools("all", lang);
+
+// Filtrar solo las herramientas destacadas
+const featuredTools = allTools.filter((tool) =>
+  featuredToolIds.includes(tool.id)
+);
+
+// Asegurar que siempre haya exactamente 3 herramientas
+const displayTools = featuredTools.slice(0, 3);
+---
+
+<section id="tools" class="select-none mb-4">
+  {
+    title || description ? (
+      <div class="mb-4">
+        {title && <h2 class="text-2xl font-semibold mb-2">{title}</h2>}
+        {description && <p class="mb-6 text-neutral-400">{description}</p>}
+      </div>
+    ) : null
+  }
+
+  <div
+    class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 pb-4 mx-auto md:mx-0"
+  >
+    {
+      displayTools.map((tool) => (
+        <a
+          href={`/${lang}${tool.href}`}
+          class:list={[
+            "flex flex-col group",
+            !tool.isAvailable &&
+              "opacity-50 cursor-not-allowed pointer-events-none",
+          ]}
+          title={tool.description}
+        >
+          <div class="relative w-full rounded-lg mb-3 overflow-hidden bg-gradient-to-br from-neutral-800 to-neutral-900 p-6 group-hover:scale-101 transition-transform">
+            <Picture
+              src={ImageEditor}
+              alt={tool.name}
+              class="w-full h-auto object-cover rounded-lg"
+            />
+            {tool.translatedBadge && (
+              <span class="absolute top-2 right-2 bg-emerald-500 text-white text-xs px-2 py-1 rounded-full">
+                {tool.translatedBadge}
+              </span>
+            )}
+          </div>
+          <h3 class="text-md font-light mb-1">{tool.name}</h3>
+          <p class="text-sm font-extralight text-balance text-neutral-400">
+            {tool.description.length > 80
+              ? tool.description.slice(0, 80) + "..."
+              : tool.description}
+          </p>
+        </a>
+      ))
+    }
+  </div>
+</section>

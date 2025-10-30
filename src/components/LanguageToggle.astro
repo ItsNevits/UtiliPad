@@ -8,7 +8,7 @@ const lang = Astro.params.lang as Language;
 <div class="relative">
   <button
     id="language-toggle"
-    class="cursor-pointer flex items-center gap-2 px-3 py-2 rounded-lg bg-neutral-800/50 border border-neutral-700 hover:bg-neutral-700/50 transition-colors"
+    class="cursor-pointer flex items-center gap-2 px-3 py-2 rounded-lg bg-white/80 border border-neutral-300 hover:bg-white hover:border-neutral-400 transition-all shadow-sm"
     aria-label={getTranslation(lang, "components.language.changeLanguage")}
   >
     <svg
@@ -20,13 +20,13 @@ const lang = Astro.params.lang as Language;
       stroke-width="2"
       stroke-linecap="round"
       stroke-linejoin="round"
-      class="text-neutral-400"
+      class="text-neutral-600"
     >
       <circle cx="12" cy="12" r="10"></circle>
       <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path>
       <path d="M2 12h20"></path>
     </svg>
-    <span class="text-sm font-medium text-neutral-300 uppercase">{lang}</span>
+    <span class="text-sm font-semibold text-neutral-700 uppercase">{lang}</span>
     <svg
       width="12"
       height="12"
@@ -36,7 +36,7 @@ const lang = Astro.params.lang as Language;
       stroke-width="2"
       stroke-linecap="round"
       stroke-linejoin="round"
-      class="text-neutral-400"
+      class="text-neutral-600"
     >
       <polyline points="6,9 12,15 18,9"></polyline>
     </svg>
@@ -45,15 +45,15 @@ const lang = Astro.params.lang as Language;
   <!-- Dropdown menu -->
   <div
     id="language-menu"
-    class="absolute top-full right-0 mt-2 w-32 bg-neutral-900/95 backdrop-blur-sm border border-neutral-700 rounded-lg shadow-xl z-50 hidden"
+    class="absolute top-full right-0 mt-2 w-36 bg-white border border-neutral-200 rounded-lg shadow-lg z-50 hidden"
   >
     <div class="p-1">
       <button
         data-lang="es"
-        class="cursor-pointer w-full flex items-center gap-2 px-3 py-2 text-sm text-neutral-300 hover:bg-neutral-700/50 rounded-md transition-colors"
+        class="cursor-pointer w-full flex items-center gap-2 px-3 py-2 text-sm text-neutral-700 hover:bg-neutral-100 rounded-md transition-colors"
       >
         <span
-          class="text-xs font-mono bg-neutral-700 px-1.5 py-0.5 rounded uppercase"
+          class="text-xs font-semibold bg-emerald-100 text-emerald-700 px-1.5 py-0.5 rounded uppercase"
         >
           es
         </span>
@@ -61,10 +61,10 @@ const lang = Astro.params.lang as Language;
       </button>
       <button
         data-lang="en"
-        class="cursor-pointer w-full flex items-center gap-2 px-3 py-2 text-sm text-neutral-300 hover:bg-neutral-700/50 rounded-md transition-colors"
+        class="cursor-pointer w-full flex items-center gap-2 px-3 py-2 text-sm text-neutral-700 hover:bg-neutral-100 rounded-md transition-colors"
       >
         <span
-          class="text-xs font-mono bg-neutral-700 px-1.5 py-0.5 rounded uppercase"
+          class="text-xs font-semibold bg-emerald-100 text-emerald-700 px-1.5 py-0.5 rounded uppercase"
         >
           en
         </span>
