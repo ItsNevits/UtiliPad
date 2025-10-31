@@ -4,6 +4,11 @@ export default {
     description:
       "Eleva tu productividad con nuestra completa colección de herramientas en línea diseñadas para simplificar tus tareas.",
   },
+  tools: {
+    title: "Todas las herramientas",
+    description: "Explora nuestra colección completa de herramientas organizadas por categorías.",
+    allCategories: "Todas las categorías",
+  },
   news: {
     title: "Novedades",
     description: "Mantente al día con las últimas actualizaciones y mejoras.",

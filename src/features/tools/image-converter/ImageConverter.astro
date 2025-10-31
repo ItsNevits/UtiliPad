@@ -8,98 +8,81 @@ import { getTranslation } from "@/i18n/index";
 const lang = Astro.params.lang as Language;
 ---
 
-<div class="bg-neutral-800/50 rounded-xl p-6 select-none mb-5">
-  <div
-    id="drop-zone"
-    class="border border-neutral-700 p-5 rounded flex flex-col items-center justify-center cursor-pointer"
-  >
-    <Image
-      class="text-neutral-400 mb-2 svg-color-neutral-400 opacity-40"
-      src={BoxIcon}
-      alt={"Box icon"}
-      quality={"mid"}
-      width={35}
-      height={35}
-      loading={"lazy"}
-    />
-    <span class="text-neutral-400"
-      >{getTranslation(lang, "components.imageConverter.dropFiles")}</span
+<div class="space-y-6 mt-6">
+  <div class="bg-white rounded-xl border border-neutral-200 shadow-sm p-6">
+    <div
+      id="drop-zone"
+      class="border-2 border-dashed border-neutral-300 p-8 rounded-lg flex flex-col items-center justify-center cursor-pointer hover:border-emerald-400 hover:bg-emerald-50/30 transition-all"
     >
-    <input
-      type="file"
-      class="hidden"
-      id="images-file-input"
-      multiple
-      accept="image/*"
-    />
-  </div>
-</div>
-
-<div
-  id="files-uploaded"
-  class="bg-neutral-800/50 rounded-xl p-6 select-none mb-5 hidden relative"
->
-  <div
-    id="overlay-image-files"
-    class="absolute top-0 left-0 w-full h-full bg-gray-900/50 items-center justify-center z-10 hidden"
-  >
-    <p class="text-lg md:text-xl font-bold leading-tight animate-bounce">
-      {
-        getTranslation(lang, "components.imageConverter.processInfo") ||
-          "Processing..."
-      }
-    </p>
-  </div>
-  <div class="flex items-end justify-between mb-4">
-    <h2 class="text-xl md:text-2xl font-bold leading-tight">
-      {
-        getTranslation(lang, "components.imageConverter.uploadedFiles") ||
-          "Uploaded Files"
-      }
-    </h2>
-    <span class="text-neutral-400 text-sm">
-      {getTranslation(lang, "components.imageConverter.totalFiles")}: <span
-        id="total-files-uploaded">0</span
+      <Image
+        class="text-neutral-600 mb-2 svg-color-neutral-400 opacity-40"
+        src={BoxIcon}
+        alt={"Box icon"}
+        quality={"mid"}
+        width={35}
+        height={35}
+        loading={"lazy"}
+      />
+      <span class="text-neutral-700 font-medium"
+        >{getTranslation(lang, "components.imageConverter.dropFiles")}</span
       >
-    </span>
-  </div>
-  <div
-    id="content-files-uploaded"
-    class="relative flex flex-col gap-4 max-h-100 overflow-y-auto mb-4"
-  >
-  </div>
-  <div class="flex flex-wrap items-center justify-between gap-2">
-    <button
-      id="compress-and-download"
-      class="cursor-pointer mt-5 px-4 py-2 bg-neutral-700 hover:bg-neutral-600 text-neutral-200 rounded transition-colors text-sm active:scale-95"
-    >
-      {getTranslation(lang, "common.downloadZip") || "Download all as ZIP"}
-    </button>
-
-    <div class="flex items-center gap-2">
-      <label for="all-images">{getTranslation(lang, "common.all")}:</label>
-      <select
-        name="all-images"
-        id="all-images"
-        class="cursor-pointer px-3 py-1 bg-neutral-900/60 border border-neutral-700 rounded text-neutral-200 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50"
-        onchange="window.changeAllImageFormats(this.value)"
-      >
-        <option value="" selected disabled
-          >{getTranslation(lang, "common.select")}</option
-        >
-        <option value="jpeg">JPEG</option>
-        <option value="png">PNG</option>
-        <option value="webp">WEBP</option>
-        <option value="tiff">TIFF</option>
-        <option value="avif">AVIF</option>
-      </select>
+      <input
+        type="file"
+        class="hidden"
+        id="images-file-input"
+        multiple
+        accept="image/*"
+      />
     </div>
   </div>
-</div>
 
-<astro-image-converter-translations
-  data-translations={JSON.stringify(getTranslation(lang, "common"))}
-></astro-image-converter-translations>
+  <div
+    id="files-uploaded"
+    class="bg-white rounded-xl border border-neutral-200 shadow-sm p-6 hidden relative"
+  >
+    <div
+      id="overlay-image-files"
+      class="absolute top-0 left-0 w-full h-full bg-gray-900/50 items-center justify-center z-10 hidden"
+    >
+      <p class="text-lg md:text-xl font-bold leading-tight animate-bounce">
+        {
+          getTranslation(lang, "components.imageConverter.processInfo") ||
+            "Processing..."
+        }
+      </p>
+    </div>
+    <div class="flex items-end justify-between mb-4">
+      <h2 class="text-xl md:text-2xl font-bold leading-tight">
+        {
+          getTranslation(lang, "components.imageConverter.uploadedFiles") ||
+            "Uploaded Files"
+        }
+      </h2>
+      <span class="text-neutral-600 text-sm">
+        {getTranslation(lang, "components.imageConverter.totalFiles")}: <span
+          id="total-files-uploaded">0</span
+        >
+      </span>
+    </div>
+    <div
+      id="content-files-uploaded"
+      class="relative flex flex-col gap-4 max-h-100 overflow-y-auto mb-4"
+    >
+    </div>
+    <div class="flex flex-wrap items-center justify-between gap-2">
+      <button
+        id="compress-and-download"
+        class="cursor-pointer mt-5 px-4 py-2 bg-white border border-neutral-300 hover:border-neutral-400 text-neutral-700 rounded transition-colors text-sm active:scale-95"
+      >
+        {getTranslation(lang, "common.downloadZip") || "Download all as ZIP"}
+      </button>
+    </div>
+  </div>
+
+  <astro-image-converter-translations
+    data-translations={JSON.stringify(getTranslation(lang, "common"))}
+  ></astro-image-converter-translations>
+</div>
 
 <script>
   import { actions } from "astro:actions";
@@ -265,20 +248,20 @@ const lang = Astro.params.lang as Language;
       index: number
     ): string {
       return `
-      <div class="bg-neutral-900/40 rounded-2xl border border-neutral-800 p-4 flex flex-col gap-4 justify-between">
+      <div class="bg-white rounded-xl border border-neutral-200 p-4 flex flex-col gap-4 justify-between">
         <div class="flex flex-col md:flex-row md:items-center gap-4 justify-between flex-wrap">
           <div class="flex items-center gap-4 flex-1 min-w-0">
-            <div class="w-10 min-w-10 h-10 min-h-10 bg-neutral-700/50 rounded flex items-center justify-center">
-              <span class="text-sm text-neutral-400">${type.toUpperCase()}</span>
+            <div class="w-10 min-w-10 h-10 min-h-10 bg-emerald-100 rounded-lg flex items-center justify-center">
+              <span class="text-xs font-semibold text-emerald-700">${type.toUpperCase()}</span>
             </div>
             <div class="min-w-0">
-              <p class="font-medium truncate max-w-[180px] md:max-w-[300px] lg:max-w-[400px] xl:max-w-[600px]" title="${name}">${name}</p>
-              <p class="text-sm text-neutral-400">${size}</p>
+              <p class="font-semibold text-neutral-800 truncate max-w-[180px] md:max-w-[300px] lg:max-w-[400px] xl:max-w-[600px]" title="${name}">${name}</p>
+              <p class="text-sm text-neutral-600">${size}</p>
             </div>
           </div>
           <div class="flex items-center gap-2">
-            <label for="format-select-${index}">${jsonMessages.format}:</label>
-            <select class="cursor-pointer px-3 py-1 bg-neutral-900/60 border border-neutral-700 rounded text-neutral-200 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50 w-full md:w-auto" id="format-select-${index}">
+            <label for="format-select-${index}" class="text-sm font-medium text-neutral-700">${jsonMessages.format}:</label>
+            <select class="cursor-pointer px-3 py-2 bg-white border border-neutral-300 rounded-lg text-neutral-700 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500 transition-all shadow-sm w-full md:w-auto" id="format-select-${index}">
               <option value="" disabled selected>${jsonMessages.select}</option>
               ${outputFormats
                 .filter((f) => f !== "jpg")
@@ -288,10 +271,10 @@ const lang = Astro.params.lang as Language;
           </div>
         </div>
         <div class="flex items-center gap-3 flex-wrap w-full md:w-auto">
-          <button class="cursor-pointer min-w-25 px-3 py-1 bg-neutral-700 hover:bg-neutral-600 text-neutral-200 rounded transition-colors text-sm w-full md:w-auto active:scale-95" onclick="window.downloadImage(${index})">
+          <button class="cursor-pointer px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg transition-colors text-sm font-semibold shadow-sm w-full md:w-auto" onclick="window.downloadImage(${index})">
             ${jsonMessages.download}
           </button>
-          <button title="${jsonMessages.delete}" class="cursor-pointer min-w-25 px-3 py-1 bg-red-600/20 hover:bg-red-600/30 text-red-400 rounded transition-colors text-sm w-full md:w-auto active:scale-95" onclick="window.removeFileUploaded(${index})">
+          <button title="${jsonMessages.delete}" class="cursor-pointer px-4 py-2 bg-white border border-red-300 hover:bg-red-50 hover:border-red-400 text-red-600 rounded-lg transition-all text-sm font-medium shadow-sm w-full md:w-auto" onclick="window.removeFileUploaded(${index})">
             ${jsonMessages.delete}
           </button>
         </div>
@@ -451,7 +434,9 @@ const lang = Astro.params.lang as Language;
           overlay.classList.add("hidden");
           overlay.classList.remove("flex");
 
-          actions.createUpdateProcessCount({ process_name: "image-converter" });
+          actions.createUpdateProcessCount({
+            process_name: "image-converter",
+          });
         }
       }
     }

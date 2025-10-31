@@ -8,13 +8,14 @@ import { getTranslation } from "@/i18n/index";
 const lang = Astro.params.lang as Language;
 ---
 
-<div class="bg-neutral-800/50 rounded-xl p-6 select-none mb-5">
-  <div
-    id="drop-zone"
-    class="border-2 border-dashed border-neutral-700 p-8 rounded-lg flex flex-col items-center justify-center cursor-pointer hover:border-emerald-600/50 transition-colors"
-  >
+<div class="space-y-6 mt-6">
+  <div class="bg-white rounded-xl border border-neutral-200 shadow-sm p-6">
+    <div
+      id="drop-zone"
+      class="border-2 border-dashed border-neutral-300 p-8 rounded-lg flex flex-col items-center justify-center cursor-pointer hover:border-emerald-400 hover:bg-emerald-50/30 transition-all"
+    >
     <Image
-      class="text-neutral-400 mb-3 svg-color-neutral-400 opacity-40"
+      class="text-neutral-600 mb-3 svg-color-neutral-400 opacity-40"
       src={BoxIcon}
       alt={"Upload icon"}
       quality={"mid"}
@@ -22,28 +23,28 @@ const lang = Astro.params.lang as Language;
       height={40}
       loading={"lazy"}
     />
-    <span class="text-neutral-300 font-medium mb-1">
+    <span class="text-neutral-700 font-medium mb-1">
       {getTranslation(lang, "common.dropFilesOrSelect")}
     </span>
-    <span class="text-neutral-400 text-sm">
+    <span class="text-neutral-600 text-sm">
       {getTranslation(lang, "components.imageCompressor.dropZoneSubtitle")}
     </span>
-    <input
-      type="file"
-      class="hidden"
-      id="image-file-input"
-      multiple
-      accept="image/*"
-    />
+      <input
+        type="file"
+        class="hidden"
+        id="image-file-input"
+        multiple
+        accept="image/*"
+      />
+    </div>
   </div>
-</div>
 
-<!-- Compression Settings -->
-<div
-  id="settings-panel"
-  class="bg-neutral-800/50 rounded-xl p-6 select-none mb-5 hidden"
->
-  <h3 class="text-lg font-semibold mb-4 text-neutral-200">
+  <!-- Compression Settings -->
+  <div
+    id="settings-panel"
+    class="bg-white rounded-xl border border-neutral-200 shadow-sm p-6 hidden"
+  >
+  <h3 class="text-lg font-semibold mb-4 text-neutral-700">
     {getTranslation(lang, "components.imageCompressor.settingsTitle")}
   </h3>
 
@@ -52,7 +53,7 @@ const lang = Astro.params.lang as Language;
     <div>
       <label
         for="max-size"
-        class="block text-sm font-medium text-neutral-300 mb-2"
+        class="block text-sm font-medium text-neutral-700 mb-2"
       >
         {getTranslation(lang, "components.imageCompressor.maxSize")}
       </label>
@@ -63,9 +64,9 @@ const lang = Astro.params.lang as Language;
         max="10"
         step="0.1"
         value="1"
-        class="w-full px-4 py-2 bg-neutral-900/60 border border-neutral-700 rounded-lg text-neutral-200 focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
+        class="w-full px-4 py-2 bg-white border border-neutral-300 rounded-lg text-neutral-700 focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
       />
-      <p class="text-xs text-neutral-400 mt-1">
+      <p class="text-xs text-neutral-600 mt-1">
         {getTranslation(lang, "components.imageCompressor.maxSizeHelp")}
       </p>
     </div>
@@ -74,7 +75,7 @@ const lang = Astro.params.lang as Language;
     <div>
       <label
         for="max-dimension"
-        class="block text-sm font-medium text-neutral-300 mb-2"
+        class="block text-sm font-medium text-neutral-700 mb-2"
       >
         {getTranslation(lang, "components.imageCompressor.maxDimension")}
       </label>
@@ -85,9 +86,9 @@ const lang = Astro.params.lang as Language;
         max="4096"
         step="100"
         value="1920"
-        class="w-full px-4 py-2 bg-neutral-900/60 border border-neutral-700 rounded-lg text-neutral-200 focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
+        class="w-full px-4 py-2 bg-white border border-neutral-300 rounded-lg text-neutral-700 focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
       />
-      <p class="text-xs text-neutral-400 mt-1">
+      <p class="text-xs text-neutral-600 mt-1">
         {getTranslation(lang, "components.imageCompressor.maxDimensionHelp")}
       </p>
     </div>
@@ -96,7 +97,7 @@ const lang = Astro.params.lang as Language;
     <div>
       <label
         for="quality"
-        class="block text-sm font-medium text-neutral-300 mb-2"
+        class="block text-sm font-medium text-neutral-700 mb-2"
       >
         {getTranslation(lang, "components.imageCompressor.quality")}: <span
           id="quality-value"
@@ -110,9 +111,9 @@ const lang = Astro.params.lang as Language;
         max="1"
         step="0.05"
         value="0.8"
-        class="w-full h-2 bg-neutral-700 rounded-lg appearance-none cursor-pointer accent-emerald-500"
+        class="w-full h-2 bg-white border border-neutral-300 rounded-lg appearance-none cursor-pointer accent-emerald-500"
       />
-      <div class="flex justify-between text-xs text-neutral-400 mt-1">
+      <div class="flex justify-between text-xs text-neutral-600 mt-1">
         <span
           >{
             getTranslation(lang, "components.imageCompressor.qualityLower")
@@ -130,13 +131,13 @@ const lang = Astro.params.lang as Language;
     <div>
       <label
         for="output-format"
-        class="block text-sm font-medium text-neutral-300 mb-2"
+        class="block text-sm font-medium text-neutral-700 mb-2"
       >
         {getTranslation(lang, "components.imageCompressor.outputFormat")}
       </label>
       <select
         id="output-format"
-        class="w-full px-4 py-2 bg-neutral-900/60 border border-neutral-700 rounded-lg text-neutral-200 cursor-pointer focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
+        class="w-full px-4 py-2 bg-white border border-neutral-300 rounded-lg text-neutral-700 cursor-pointer focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
       >
         <option value="original"
           >{
@@ -165,13 +166,13 @@ const lang = Astro.params.lang as Language;
   <div class="mt-6 flex gap-3">
     <button
       id="compress-btn"
-      class="cursor-pointer mt-5 px-4 py-2 bg-neutral-700 hover:bg-neutral-600 text-neutral-200 rounded transition-colors text-sm active:scale-95"
+      class="cursor-pointer mt-5 px-4 py-2 bg-white border border-neutral-300 hover:border-neutral-400 text-neutral-700 rounded transition-colors text-sm active:scale-95"
     >
       {getTranslation(lang, "components.imageCompressor.compress")}
     </button>
     <button
       id="reset-btn"
-      class="cursor-pointer mt-5 px-4 py-2 bg-neutral-700 hover:bg-neutral-600 text-neutral-200 rounded transition-colors text-sm active:scale-95"
+      class="cursor-pointer mt-5 px-4 py-2 bg-white border border-neutral-300 hover:border-neutral-400 text-neutral-700 rounded transition-colors text-sm active:scale-95"
     >
       {getTranslation(lang, "components.imageCompressor.reset")}
     </button>
@@ -181,15 +182,15 @@ const lang = Astro.params.lang as Language;
 <!-- Results Panel -->
 <div
   id="results-panel"
-  class="bg-neutral-800/50 rounded-xl p-6 select-none mb-5 hidden"
+  class="bg-white rounded-xl p-6 select-none mb-5 hidden"
 >
   <div class="flex items-center justify-between mb-4">
-    <h3 class="text-lg font-semibold text-neutral-200">
+    <h3 class="text-lg font-semibold text-neutral-700">
       {getTranslation(lang, "components.imageCompressor.resultsTitle")}
     </h3>
     <button
       id="download-all-btn"
-      class="cursor-pointer px-4 py-2 bg-neutral-700 hover:bg-neutral-600 text-neutral-200 rounded transition-colors text-sm active:scale-95"
+      class="cursor-pointer px-4 py-2 bg-white border border-neutral-300 hover:border-neutral-400 text-neutral-700 rounded transition-colors text-sm active:scale-95"
     >
       {getTranslation(lang, "components.imageCompressor.downloadAll")}
     </button>
@@ -201,22 +202,22 @@ const lang = Astro.params.lang as Language;
 
   <!-- Summary Stats -->
   <div class="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-4">
-    <div class="bg-neutral-900/60 rounded-lg p-4">
-      <div class="text-xs text-neutral-400 mb-1">
+    <div class="bg-white rounded-lg p-4">
+      <div class="text-xs text-neutral-600 mb-1">
         {getTranslation(lang, "components.imageCompressor.statTotal")}
       </div>
-      <div id="stat-total" class="text-2xl font-bold text-neutral-200">0</div>
+      <div id="stat-total" class="text-2xl font-bold text-neutral-700">0</div>
     </div>
-    <div class="bg-neutral-900/60 rounded-lg p-4">
-      <div class="text-xs text-neutral-400 mb-1">
+    <div class="bg-white rounded-lg p-4">
+      <div class="text-xs text-neutral-600 mb-1">
         {getTranslation(lang, "components.imageCompressor.statOriginal")}
       </div>
-      <div id="stat-original" class="text-2xl font-bold text-neutral-200">
+      <div id="stat-original" class="text-2xl font-bold text-neutral-700">
         0 MB
       </div>
     </div>
-    <div class="bg-neutral-900/60 rounded-lg p-4">
-      <div class="text-xs text-neutral-400 mb-1">
+    <div class="bg-white rounded-lg p-4">
+      <div class="text-xs text-neutral-600 mb-1">
         {getTranslation(lang, "components.imageCompressor.statCompressed")}
       </div>
       <div id="stat-compressed" class="text-2xl font-bold text-emerald-400">
@@ -458,12 +459,12 @@ const lang = Astro.params.lang as Language;
       index: number
     ): string {
       return `
-        <div class="bg-neutral-900/40 rounded-lg border border-neutral-800 p-4">
+        <div class="bg-neutral-50 rounded-lg border border-neutral-800 p-4">
           <div class="flex items-start justify-between gap-4">
             <div class="flex-1 min-w-0">
-              <p class="font-medium text-neutral-200 truncate" title="${name}">${name}</p>
+              <p class="font-medium text-neutral-700 truncate" title="${name}">${name}</p>
               <div class="flex gap-4 mt-2 text-sm">
-                <span class="text-neutral-400">${formatBytes(original)}</span>
+                <span class="text-neutral-600">${formatBytes(original)}</span>
                 <span class="text-neutral-500">→</span>
                 <span class="text-emerald-400">${formatBytes(compressed)}</span>
                 <span class="text-emerald-400 font-medium">(-${reduction}%)</span>
@@ -471,7 +472,7 @@ const lang = Astro.params.lang as Language;
             </div>
             <button
               onclick="window.downloadSingleImage(${index})"
-              class="cursor-pointer px-3 py-1.5 bg-neutral-700 hover:bg-neutral-600 text-neutral-200 rounded transition-colors text-sm whitespace-nowrap"
+              class="cursor-pointer px-3 py-1.5 bg-white border border-neutral-300 hover:border-neutral-400 text-neutral-700 rounded transition-colors text-sm whitespace-nowrap"
               data-text="${messages.download}"
             >
               ${messages.download}
@@ -552,3 +553,4 @@ const lang = Astro.params.lang as Language;
     });
   }
 </script>
+</div>

@@ -23,6 +23,11 @@ export default {
       description:
         "Stay updated with the latest news, updates, and improvements from UtiliPad.",
     },
+    tools: {
+      title: "All Tools — UtiliPad",
+      description:
+        "Explore our complete collection of free online tools. Organized by categories for easy browsing.",
+    },
     category: {
       title: "Category {category} — UtiliPad",
       description:

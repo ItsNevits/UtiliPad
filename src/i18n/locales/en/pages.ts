@@ -4,6 +4,11 @@ export default {
     description:
       "Elevate your productivity with our comprehensive collection of online tools designed to simplify your tasks.",
   },
+  tools: {
+    title: "All Tools",
+    description: "Explore our complete collection of tools organized by categories.",
+    allCategories: "All Categories",
+  },
   news: {
     title: "News",
     description: "Stay up to date with the latest updates and improvements.",

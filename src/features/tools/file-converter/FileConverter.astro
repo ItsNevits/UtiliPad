@@ -17,76 +17,54 @@ if (data) {
 }
 ---
 
-<div class="bg-neutral-800/50 rounded-xl p-6 select-none mb-5">
-  <div
-    id="drop-zone"
-    class="border min-h-48 border-neutral-700 p-5 rounded flex flex-col items-center justify-center cursor-pointer"
-  >
-    <Image
-      class="text-neutral-400 mb-2 svg-color-neutral-400 opacity-40"
-      src={BoxIcon}
-      alt={"Box icon"}
-      quality={"mid"}
-      width={35}
-      height={35}
-      loading={"lazy"}
-    />
-    <span class="text-neutral-400">
-      {
-        getTranslation(lang, "common.dropFilesOrSelect") ||
-          "Arrastra o selecciona archivos para convertir"
-      }
-    </span>
-    <input
-      type="file"
-      class="hidden"
-      id="files-file-input"
-      multiple
-      accept={Object.keys(filesSupported)
-        .map((ext) => "." + ext)
-        .join(",")}
-    />
-  </div>
+<div class="space-y-6 mt-6">
+  <div class="bg-white rounded-xl border border-neutral-200 shadow-sm p-6">
+    <div
+      id="drop-zone"
+      class="border-2 border-dashed min-h-48 border-neutral-300 p-8 rounded-lg flex flex-col items-center justify-center cursor-pointer hover:border-emerald-400 hover:bg-emerald-50/30 transition-all"
+    >
+      <Image
+        class="text-neutral-600 mb-2 svg-color-neutral-400 opacity-40"
+        src={BoxIcon}
+        alt={"Box icon"}
+        quality={"mid"}
+        width={35}
+        height={35}
+        loading={"lazy"}
+      />
+      <span class="text-neutral-700 font-medium">
+        {
+          getTranslation(lang, "common.dropFilesOrSelect") ||
+            "Arrastra o selecciona archivos para convertir"
+        }
+      </span>
+      <input
+        type="file"
+        class="hidden"
+        id="files-file-input"
+        multiple
+        accept={Object.keys(filesSupported)
+          .map((ext) => "." + ext)
+          .join(",")}
+      />
+    </div>
 
-  <!-- Conversiones Soportadas -->
-  <div class="mt-6">
-    <h3 class="text-lg font-semibold text-neutral-200 mb-4">
-      {
-        getTranslation(lang, "common.supportedConversions") ||
-          "Conversiones Soportadas"
-      }
-    </h3>
+    <!-- Conversiones Soportadas -->
+    <div class="mt-6">
+      <h3 class="text-lg font-semibold text-neutral-700 mb-4">
+        {
+          getTranslation(lang, "common.supportedConversions") ||
+            "Conversiones Soportadas"
+        }
+      </h3>
 
-    <!-- Categorías de conversión -->
-    <div class="space-y-4">
-      <!-- Documents -->
-      <div class="bg-neutral-900/40 rounded-lg p-4 border border-neutral-800">
-        <div class="flex items-center gap-2 mb-3">
-          <svg
-            class="w-5 h-5 text-blue-400"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-            ></path>
-          </svg>
-          <h4 class="text-sm font-semibold text-neutral-300">
-            {getTranslation(lang, "common.documents") || "Documentos"}
-          </h4>
-        </div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-          <div class="flex items-center gap-2 text-sm">
-            <span
-              class="px-2 py-1 bg-emerald-700/80 text-white rounded text-xs font-semibold"
-              >DOCX</span
-            >
+      <!-- Categorías de conversión -->
+      <div class="space-y-4">
+        <!-- Documents -->
+        <div class="bg-neutral-50 rounded-lg p-4 border border-neutral-800">
+          <div class="flex items-center gap-2 mb-3">
             <svg
-              class="w-4 h-4 text-neutral-500"
+              class="w-5 h-5 text-blue-400"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -95,126 +73,126 @@ if (data) {
                 stroke-linecap="round"
                 stroke-linejoin="round"
                 stroke-width="2"
-                d="M9 5l7 7-7 7"></path>
+                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+              ></path>
             </svg>
-            <div class="flex flex-wrap gap-1">
+            <h4 class="text-sm font-semibold text-neutral-700">
+              {getTranslation(lang, "common.documents") || "Documentos"}
+            </h4>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+            <div class="flex items-center gap-2 text-sm">
               <span
-                class="px-2 py-0.5 bg-neutral-700/70 text-emerald-300 rounded text-xs"
-                >HTML</span
+                class="px-2 py-1 bg-emerald-700/80 text-white rounded text-xs font-semibold"
+                >DOCX</span
               >
+              <svg
+                class="w-4 h-4 text-neutral-500"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 5l7 7-7 7"></path>
+              </svg>
+              <div class="flex flex-wrap gap-1">
+                <span
+                  class="px-2 py-1 bg-emerald-700/80 text-white rounded text-xs font-semibold"
+                  >HTML</span
+                >
+                <span
+                  class="px-2 py-1 bg-emerald-700/80 text-white rounded text-xs font-semibold"
+                  >TXT</span
+                >
+                <span
+                  class="px-2 py-1 bg-emerald-700/80 text-white rounded text-xs font-semibold"
+                  >PDF</span
+                >
+              </div>
+            </div>
+            <div class="flex items-center gap-2 text-sm">
               <span
-                class="px-2 py-0.5 bg-neutral-700/70 text-emerald-300 rounded text-xs"
+                class="px-2 py-1 bg-emerald-700/80 text-white rounded text-xs font-semibold"
                 >TXT</span
               >
+              <svg
+                class="w-4 h-4 text-neutral-500"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 5l7 7-7 7"></path>
+              </svg>
               <span
-                class="px-2 py-0.5 bg-neutral-700/70 text-emerald-300 rounded text-xs"
+                class="px-2 py-1 bg-emerald-700/80 text-white rounded text-xs font-semibold"
+                >DOCX</span
+              >
+            </div>
+            <div class="flex items-center gap-2 text-sm">
+              <span
+                class="px-2 py-1 bg-emerald-700/80 text-white rounded text-xs font-semibold"
+                >MD</span
+              >
+              <svg
+                class="w-4 h-4 text-neutral-500"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 5l7 7-7 7"></path>
+              </svg>
+              <div class="flex flex-wrap gap-1">
+                <span
+                  class="px-2 py-1 bg-emerald-700/80 text-white rounded text-xs font-semibold"
+                  >DOCX</span
+                >
+                <span
+                  class="px-2 py-1 bg-emerald-700/80 text-white rounded text-xs font-semibold"
+                  >HTML</span
+                >
+              </div>
+            </div>
+            <div class="flex items-center gap-2 text-sm">
+              <span
+                class="px-2 py-1 bg-emerald-700/80 text-white rounded text-xs font-semibold"
+                >HTML</span
+              >
+              <svg
+                class="w-4 h-4 text-neutral-500"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 5l7 7-7 7"></path>
+              </svg>
+              <span
+                class="px-2 py-1 bg-emerald-700/80 text-white rounded text-xs font-semibold"
                 >PDF</span
               >
             </div>
           </div>
-          <div class="flex items-center gap-2 text-sm">
-            <span
-              class="px-2 py-1 bg-emerald-700/80 text-white rounded text-xs font-semibold"
-              >TXT</span
-            >
-            <svg
-              class="w-4 h-4 text-neutral-500"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M9 5l7 7-7 7"></path>
-            </svg>
-            <span
-              class="px-2 py-0.5 bg-neutral-700/70 text-emerald-300 rounded text-xs"
-              >DOCX</span
-            >
-          </div>
-          <div class="flex items-center gap-2 text-sm">
-            <span
-              class="px-2 py-1 bg-emerald-700/80 text-white rounded text-xs font-semibold"
-              >MD</span
-            >
-            <svg
-              class="w-4 h-4 text-neutral-500"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M9 5l7 7-7 7"></path>
-            </svg>
-            <div class="flex flex-wrap gap-1">
-              <span
-                class="px-2 py-0.5 bg-neutral-700/70 text-emerald-300 rounded text-xs"
-                >DOCX</span
-              >
-              <span
-                class="px-2 py-0.5 bg-neutral-700/70 text-emerald-300 rounded text-xs"
-                >HTML</span
-              >
-            </div>
-          </div>
-          <div class="flex items-center gap-2 text-sm">
-            <span
-              class="px-2 py-1 bg-emerald-700/80 text-white rounded text-xs font-semibold"
-              >HTML</span
-            >
-            <svg
-              class="w-4 h-4 text-neutral-500"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M9 5l7 7-7 7"></path>
-            </svg>
-            <span
-              class="px-2 py-0.5 bg-neutral-700/70 text-emerald-300 rounded text-xs"
-              >PDF</span
-            >
-          </div>
         </div>
-      </div>
 
-      <!-- Spreadsheets -->
-      <div class="bg-neutral-900/40 rounded-lg p-4 border border-neutral-800">
-        <div class="flex items-center gap-2 mb-3">
-          <svg
-            class="w-5 h-5 text-green-400"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"
-            ></path>
-          </svg>
-          <h4 class="text-sm font-semibold text-neutral-300">
-            {getTranslation(lang, "common.spreadsheets") || "Hojas de Cálculo"}
-          </h4>
-        </div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-          <div class="flex items-center gap-2 text-sm">
-            <span
-              class="px-2 py-1 bg-emerald-700/80 text-white rounded text-xs font-semibold"
-              >XLSX</span
-            >
+        <!-- Spreadsheets -->
+        <div class="bg-neutral-50 rounded-lg p-4 border border-neutral-800">
+          <div class="flex items-center gap-2 mb-3">
             <svg
-              class="w-4 h-4 text-neutral-500"
+              class="w-5 h-5 text-green-400"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -223,146 +201,121 @@ if (data) {
                 stroke-linecap="round"
                 stroke-linejoin="round"
                 stroke-width="2"
-                d="M9 5l7 7-7 7"></path>
+                d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"
+              ></path>
             </svg>
-            <div class="flex flex-wrap gap-1">
-              <span
-                class="px-2 py-0.5 bg-neutral-700/70 text-emerald-300 rounded text-xs"
-                >CSV</span
-              >
-              <span
-                class="px-2 py-0.5 bg-neutral-700/70 text-emerald-300 rounded text-xs"
-                >JSON</span
-              >
-              <span
-                class="px-2 py-0.5 bg-neutral-700/70 text-emerald-300 rounded text-xs"
-                >HTML</span
-              >
-            </div>
+            <h4 class="text-sm font-semibold text-neutral-700">
+              {
+                getTranslation(lang, "common.spreadsheets") ||
+                  "Hojas de Cálculo"
+              }
+            </h4>
           </div>
-          <div class="flex items-center gap-2 text-sm">
-            <span
-              class="px-2 py-1 bg-emerald-700/80 text-white rounded text-xs font-semibold"
-              >XLS</span
-            >
-            <svg
-              class="w-4 h-4 text-neutral-500"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M9 5l7 7-7 7"></path>
-            </svg>
-            <div class="flex flex-wrap gap-1">
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+            <div class="flex items-center gap-2 text-sm">
               <span
-                class="px-2 py-0.5 bg-neutral-700/70 text-emerald-300 rounded text-xs"
-                >CSV</span
-              >
-              <span
-                class="px-2 py-0.5 bg-neutral-700/70 text-emerald-300 rounded text-xs"
-                >JSON</span
-              >
-              <span
-                class="px-2 py-0.5 bg-neutral-700/70 text-emerald-300 rounded text-xs"
-                >HTML</span
-              >
-            </div>
-          </div>
-          <div class="flex items-center gap-2 text-sm">
-            <span
-              class="px-2 py-1 bg-emerald-700/80 text-white rounded text-xs font-semibold"
-              >ODS</span
-            >
-            <svg
-              class="w-4 h-4 text-neutral-500"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M9 5l7 7-7 7"></path>
-            </svg>
-            <div class="flex flex-wrap gap-1">
-              <span
-                class="px-2 py-0.5 bg-neutral-700/70 text-emerald-300 rounded text-xs"
-                >CSV</span
-              >
-              <span
-                class="px-2 py-0.5 bg-neutral-700/70 text-emerald-300 rounded text-xs"
-                >JSON</span
-              >
-              <span
-                class="px-2 py-0.5 bg-neutral-700/70 text-emerald-300 rounded text-xs"
-                >HTML</span
-              >
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Data Formats -->
-      <div class="bg-neutral-900/40 rounded-lg p-4 border border-neutral-800">
-        <div class="flex items-center gap-2 mb-3">
-          <svg
-            class="w-5 h-5 text-yellow-400"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"
-            ></path>
-          </svg>
-          <h4 class="text-sm font-semibold text-neutral-300">
-            {getTranslation(lang, "common.dataFormats") || "Formatos de Datos"}
-          </h4>
-        </div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-          <div class="flex items-center gap-2 text-sm">
-            <span
-              class="px-2 py-1 bg-emerald-700/80 text-white rounded text-xs font-semibold"
-              >CSV</span
-            >
-            <svg
-              class="w-4 h-4 text-neutral-500"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M9 5l7 7-7 7"></path>
-            </svg>
-            <div class="flex flex-wrap gap-1">
-              <span
-                class="px-2 py-0.5 bg-neutral-700/70 text-emerald-300 rounded text-xs"
+                class="px-2 py-1 bg-emerald-700/80 text-white rounded text-xs font-semibold"
                 >XLSX</span
               >
-              <span
-                class="px-2 py-0.5 bg-neutral-700/70 text-emerald-300 rounded text-xs"
-                >JSON</span
+              <svg
+                class="w-4 h-4 text-neutral-500"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
               >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 5l7 7-7 7"></path>
+              </svg>
+              <div class="flex flex-wrap gap-1">
+                <span
+                  class="px-2 py-1 bg-emerald-700/80 text-white rounded text-xs font-semibold"
+                  >CSV</span
+                >
+                <span
+                  class="px-2 py-1 bg-emerald-700/80 text-white rounded text-xs font-semibold"
+                  >JSON</span
+                >
+                <span
+                  class="px-2 py-1 bg-emerald-700/80 text-white rounded text-xs font-semibold"
+                  >HTML</span
+                >
+              </div>
+            </div>
+            <div class="flex items-center gap-2 text-sm">
+              <span
+                class="px-2 py-1 bg-emerald-700/80 text-white rounded text-xs font-semibold"
+                >XLS</span
+              >
+              <svg
+                class="w-4 h-4 text-neutral-500"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 5l7 7-7 7"></path>
+              </svg>
+              <div class="flex flex-wrap gap-1">
+                <span
+                  class="px-2 py-1 bg-emerald-700/80 text-white rounded text-xs font-semibold"
+                  >CSV</span
+                >
+                <span
+                  class="px-2 py-1 bg-emerald-700/80 text-white rounded text-xs font-semibold"
+                  >JSON</span
+                >
+                <span
+                  class="px-2 py-1 bg-emerald-700/80 text-white rounded text-xs font-semibold"
+                  >HTML</span
+                >
+              </div>
+            </div>
+            <div class="flex items-center gap-2 text-sm">
+              <span
+                class="px-2 py-1 bg-emerald-700/80 text-white rounded text-xs font-semibold"
+                >ODS</span
+              >
+              <svg
+                class="w-4 h-4 text-neutral-500"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 5l7 7-7 7"></path>
+              </svg>
+              <div class="flex flex-wrap gap-1">
+                <span
+                  class="px-2 py-1 bg-emerald-700/80 text-white rounded text-xs font-semibold"
+                  >CSV</span
+                >
+                <span
+                  class="px-2 py-1 bg-emerald-700/80 text-white rounded text-xs font-semibold"
+                  >JSON</span
+                >
+                <span
+                  class="px-2 py-1 bg-emerald-700/80 text-white rounded text-xs font-semibold"
+                  >HTML</span
+                >
+              </div>
             </div>
           </div>
-          <div class="flex items-center gap-2 text-sm">
-            <span
-              class="px-2 py-1 bg-emerald-700/80 text-white rounded text-xs font-semibold"
-              >JSON</span
-            >
+        </div>
+
+        <!-- Data Formats -->
+        <div class="bg-neutral-50 rounded-lg p-4 border border-neutral-800">
+          <div class="flex items-center gap-2 mb-3">
             <svg
-              class="w-4 h-4 text-neutral-500"
+              class="w-5 h-5 text-yellow-400"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -371,479 +324,532 @@ if (data) {
                 stroke-linecap="round"
                 stroke-linejoin="round"
                 stroke-width="2"
-                d="M9 5l7 7-7 7"></path>
+                d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"
+              ></path>
             </svg>
-            <div class="flex flex-wrap gap-1">
+            <h4 class="text-sm font-semibold text-neutral-700">
+              {
+                getTranslation(lang, "common.dataFormats") ||
+                  "Formatos de Datos"
+              }
+            </h4>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+            <div class="flex items-center gap-2 text-sm">
               <span
-                class="px-2 py-0.5 bg-neutral-700/70 text-emerald-300 rounded text-xs"
-                >XLSX</span
-              >
-              <span
-                class="px-2 py-0.5 bg-neutral-700/70 text-emerald-300 rounded text-xs"
+                class="px-2 py-1 bg-emerald-700/80 text-white rounded text-xs font-semibold"
                 >CSV</span
               >
+              <svg
+                class="w-4 h-4 text-neutral-500"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 5l7 7-7 7"></path>
+              </svg>
+              <div class="flex flex-wrap gap-1">
+                <span
+                  class="px-2 py-1 bg-emerald-700/80 text-white rounded text-xs font-semibold"
+                  >XLSX</span
+                >
+                <span
+                  class="px-2 py-1 bg-emerald-700/80 text-white rounded text-xs font-semibold"
+                  >JSON</span
+                >
+              </div>
+            </div>
+            <div class="flex items-center gap-2 text-sm">
+              <span
+                class="px-2 py-1 bg-emerald-700/80 text-white rounded text-xs font-semibold"
+                >JSON</span
+              >
+              <svg
+                class="w-4 h-4 text-neutral-500"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 5l7 7-7 7"></path>
+              </svg>
+              <div class="flex flex-wrap gap-1">
+                <span
+                  class="px-2 py-1 bg-emerald-700/80 text-white rounded text-xs font-semibold"
+                  >XLSX</span
+                >
+                <span
+                  class="px-2 py-1 bg-emerald-700/80 text-white rounded text-xs font-semibold"
+                  >CSV</span
+                >
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-</div>
 
-<div
-  id="files-uploaded"
-  class="bg-neutral-800/50 rounded-xl p-6 select-none mb-5 hidden relative"
->
   <div
-    id="overlay-image-files"
-    class="absolute top-0 left-0 w-full h-full bg-gray-900/50 items-center justify-center z-10 hidden"
+    id="files-uploaded"
+    class="bg-white rounded-xl p-6 select-none mb-5 hidden relative"
   >
-    <p class="text-lg md:text-xl font-bold leading-tight animate-bounce">
-      {getTranslation(lang, "common.processInfo") || "Processing..."}
-    </p>
-  </div>
-  <div class="flex items-end justify-between mb-4">
-    <h2 class="text-xl md:text-2xl font-bold leading-tight">
-      {getTranslation(lang, "common.uploadedFiles") || "Uploaded Files"}
-    </h2>
-    <span class="text-neutral-400 text-sm">
-      {getTranslation(lang, "common.totalFiles") || "Total archivos"}: <span
-        id="total-files-uploaded">0</span
-      >
-    </span>
-  </div>
-  <div
-    id="content-files-uploaded"
-    class="relative flex flex-col gap-4 max-h-100 overflow-y-auto mb-4"
-  >
-  </div>
-  <div class="flex flex-wrap items-center justify-between gap-2">
-    <button
-      id="compress-and-download"
-      class="cursor-pointer mt-5 px-4 py-2 bg-neutral-700 hover:bg-neutral-600 text-neutral-200 rounded transition-colors text-sm active:scale-95"
+    <div
+      id="overlay-image-files"
+      class="absolute top-0 left-0 w-full h-full bg-gray-900/50 items-center justify-center z-10 hidden"
     >
-      {getTranslation(lang, "common.downloadZip") || "Descargar todo en ZIP"}
-    </button>
-
-    <div class="flex items-center gap-2">
-      <label for="all-files">{getTranslation(lang, "common.all")}:</label>
-      <select
-        name="all-files"
-        id="all-files"
-        class="cursor-pointer px-3 py-1 bg-neutral-900/60 border border-neutral-700 rounded text-neutral-200 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50"
-      >
-        <option value="" selected disabled
-          >{getTranslation(lang, "common.select")}</option
+      <p class="text-lg md:text-xl font-bold leading-tight animate-bounce">
+        {getTranslation(lang, "common.processInfo") || "Processing..."}
+      </p>
+    </div>
+    <div class="flex items-end justify-between mb-4">
+      <h2 class="text-xl md:text-2xl font-bold leading-tight">
+        {getTranslation(lang, "common.uploadedFiles") || "Uploaded Files"}
+      </h2>
+      <span class="text-neutral-600 text-sm">
+        {getTranslation(lang, "common.totalFiles") || "Total archivos"}: <span
+          id="total-files-uploaded">0</span
         >
-      </select>
+      </span>
+    </div>
+    <div
+      id="content-files-uploaded"
+      class="relative flex flex-col gap-4 max-h-100 overflow-y-auto mb-4"
+    >
+    </div>
+    <div class="flex flex-wrap items-center justify-between gap-2">
+      <button
+        id="compress-and-download"
+        class="cursor-pointer mt-5 px-4 py-2 bg-white border border-neutral-300 hover:border-neutral-400 text-neutral-700 rounded transition-colors text-sm active:scale-95"
+      >
+        {getTranslation(lang, "common.downloadZip") || "Descargar todo en ZIP"}
+      </button>
     </div>
   </div>
-</div>
 
-<astro-file-converter-translations
-  data-translations={JSON.stringify(getTranslation(lang, "common"))}
-></astro-file-converter-translations>
+  <astro-file-converter-translations
+    data-translations={JSON.stringify(getTranslation(lang, "common"))}
+  ></astro-file-converter-translations>
 
-<script>
-  import { actions } from "astro:actions";
+  <script>
+    import { actions } from "astro:actions";
 
-  // Define custom element globally (outside event listener)
-  let jsonMessages = {} as any;
-  let supportedConversions: Record<string, string[]> = {};
-  let outputFormats: string[] = [];
+    // Define custom element globally (outside event listener)
+    let jsonMessages = {} as any;
+    let supportedConversions: Record<string, string[]> = {};
+    let outputFormats: string[] = [];
 
-  class AstroFileConverterTranslations extends HTMLElement {
-    connectedCallback() {
-      const t = JSON.parse(this.getAttribute("data-translations") || "{}");
-      jsonMessages = t || {};
-      // Dispatch event to signal translations are ready
-      this.dispatchEvent(
-        new CustomEvent("translations-ready", {
-          bubbles: true,
-          detail: t,
-        })
+    class AstroFileConverterTranslations extends HTMLElement {
+      connectedCallback() {
+        const t = JSON.parse(this.getAttribute("data-translations") || "{}");
+        jsonMessages = t || {};
+        // Dispatch event to signal translations are ready
+        this.dispatchEvent(
+          new CustomEvent("translations-ready", {
+            bubbles: true,
+            detail: t,
+          })
+        );
+      }
+    }
+
+    if (!customElements.get("astro-file-converter-translations")) {
+      customElements.define(
+        "astro-file-converter-translations",
+        AstroFileConverterTranslations
       );
     }
-  }
 
-  if (!customElements.get("astro-file-converter-translations")) {
-    customElements.define(
-      "astro-file-converter-translations",
-      AstroFileConverterTranslations
-    );
-  }
+    document.addEventListener("DOMContentLoaded", async () => {
+      // Wait for translations to be loaded
+      const astroFileConverterElement = document.querySelector(
+        "astro-file-converter-translations"
+      );
+      if (astroFileConverterElement && Object.keys(jsonMessages).length === 0) {
+        await new Promise((resolve) => {
+          astroFileConverterElement.addEventListener(
+            "translations-ready",
+            resolve,
+            { once: true }
+          );
+        });
+      }
 
-  document.addEventListener("DOMContentLoaded", async () => {
-    // Wait for translations to be loaded
-    const astroFileConverterElement = document.querySelector(
-      "astro-file-converter-translations"
-    );
-    if (astroFileConverterElement && Object.keys(jsonMessages).length === 0) {
-      await new Promise((resolve) => {
-        astroFileConverterElement.addEventListener(
-          "translations-ready",
-          resolve,
-          { once: true }
-        );
-      });
-    }
+      const { data, error } = await actions.getSupportedConversions({});
 
-    const { data, error } = await actions.getSupportedConversions({});
+      if (error) {
+        console.error("Error fetching supported conversions:", error);
+        return;
+      }
 
-    if (error) {
-      console.error("Error fetching supported conversions:", error);
-      return;
-    }
+      // Asignar las conversiones soportadas
+      supportedConversions = data;
 
-    // Asignar las conversiones soportadas
-    supportedConversions = data;
+      // Llenar select global con todos los formatos posibles
+      const allFormats = new Set<string>();
+      Object.values(data).forEach((arr) =>
+        (arr as string[]).forEach((f: string) => allFormats.add(f))
+      );
+      outputFormats = Array.from(allFormats);
+      const allSelect = document.getElementById("all-files");
+      if (allSelect) {
+        allSelect.innerHTML =
+          `<option value="" selected disabled>${jsonMessages.select}</option>` +
+          outputFormats
+            .map(
+              (f: string) => `<option value="${f}">${f.toUpperCase()}</option>`
+            )
+            .join("");
 
-    // Llenar select global con todos los formatos posibles
-    const allFormats = new Set<string>();
-    Object.values(data).forEach((arr) =>
-      (arr as string[]).forEach((f: string) => allFormats.add(f))
-    );
-    outputFormats = Array.from(allFormats);
-    const allSelect = document.getElementById("all-files");
-    if (allSelect) {
-      allSelect.innerHTML =
-        `<option value="" selected disabled>${jsonMessages.select}</option>` +
-        outputFormats
+        allSelect.addEventListener("change", function () {
+          const format = (this as HTMLSelectElement).value;
+          currentFiles.forEach((file: File, idx: number) => {
+            const ext = file.name.split(".").pop()?.toLowerCase() || "";
+            const select = document.getElementById(
+              `format-select-${idx}`
+            ) as HTMLSelectElement | null;
+            if (
+              select &&
+              ext &&
+              supportedConversions[ext] &&
+              supportedConversions[ext].includes(format)
+            ) {
+              select.value = format;
+            }
+          });
+        });
+      }
+
+      const dropZone = document.getElementById(
+        "drop-zone"
+      ) as HTMLDivElement | null;
+      const fileInput = document.getElementById(
+        "files-file-input"
+      ) as HTMLInputElement | null;
+      const filesUploaded = document.getElementById(
+        "files-uploaded"
+      ) as HTMLDivElement | null;
+      const contentFilesUploaded = document.getElementById(
+        "content-files-uploaded"
+      ) as HTMLDivElement | null;
+      const compressButton = document.getElementById(
+        "compress-and-download"
+      ) as HTMLButtonElement | null;
+      const overlay = document.getElementById(
+        "overlay-image-files"
+      ) as HTMLDivElement | null;
+
+      // Si algun elemento no existe, salir
+      if (!dropZone || !fileInput || !filesUploaded || !contentFilesUploaded)
+        return;
+
+      let currentFiles: File[] = [];
+
+      if (dropZone && fileInput) {
+        dropZone.addEventListener("click", () => {
+          fileInput.click();
+        });
+
+        dropZone.addEventListener("dragover", (event) => {
+          event.preventDefault();
+          dropZone.classList.add("border-blue-500");
+        });
+
+        dropZone.addEventListener("dragleave", () => {
+          dropZone.classList.remove("border-blue-500");
+        });
+
+        dropZone.addEventListener("drop", (event: DragEvent) => {
+          event.preventDefault();
+          dropZone.classList.remove("border-blue-500");
+          if (!event.dataTransfer) return;
+          const files = event.dataTransfer.files;
+          handleFiles(files);
+        });
+      }
+
+      if (fileInput) {
+        fileInput.addEventListener("change", () => {
+          const files = fileInput.files;
+          handleFiles(files);
+        });
+      }
+
+      function handleFiles(files: FileList | null) {
+        if (!files || files.length === 0) return;
+        const newFiles = Array.from(files);
+        currentFiles = [...currentFiles, ...newFiles];
+        updateUI();
+      }
+
+      function updateUI() {
+        if (!filesUploaded || !contentFilesUploaded) return;
+        if (currentFiles.length === 0) {
+          filesUploaded.classList.add("hidden");
+          return;
+        }
+        filesUploaded.classList.remove("hidden");
+        contentFilesUploaded.innerHTML = "";
+        let supportedCount = 0;
+        currentFiles.forEach((file: File, index: number) => {
+          const fileType = file.name.split(".").pop() || "file";
+          // Solo permitir archivos soportados
+          if (!supportedConversions[fileType.toLowerCase()]) return;
+          supportedCount++;
+          const fileName = file.name;
+          const fileSize = (file.size / 1024).toFixed(2) + " KB";
+          const newElement = generateElement(
+            fileType,
+            fileName,
+            fileSize,
+            index
+          );
+          contentFilesUploaded.appendChild(
+            document.createRange().createContextualFragment(newElement)
+          );
+        });
+        // Ocultar/mostrar elementos según si hay archivos soportados
+        const totalFilesSpan = document.getElementById(
+          "total-files-uploaded"
+        ) as HTMLSpanElement | null;
+        const totalFilesContainer = totalFilesSpan
+          ? totalFilesSpan.parentElement
+          : null;
+        const compressButtonDiv = compressButton?.parentElement;
+        const allFilesSelect = document.getElementById(
+          "all-files"
+        ) as HTMLSelectElement | null;
+        const allFilesDiv = allFilesSelect
+          ? allFilesSelect.parentElement
+          : null;
+        if (supportedCount === 0) {
+          contentFilesUploaded.innerHTML = `<div class=\"text-center text-red-400 py-8\">${jsonMessages.unsupportedFiles || "Ningún archivo es soportado para conversión."}</div>`;
+          if (totalFilesContainer) totalFilesContainer.style.display = "none";
+          if (compressButtonDiv) compressButtonDiv.style.display = "none";
+          if (allFilesDiv) allFilesDiv.style.display = "none";
+        } else {
+          if (totalFilesContainer) totalFilesContainer.style.display = "";
+          if (compressButtonDiv) compressButtonDiv.style.display = "";
+          if (allFilesDiv) allFilesDiv.style.display = "";
+          if (totalFilesSpan)
+            totalFilesSpan.textContent = currentFiles.length.toString();
+        }
+        updateFileInput();
+      }
+
+      function updateFileInput() {
+        if (!fileInput) return;
+        const dt = new DataTransfer();
+        currentFiles.forEach((file) => dt.items.add(file));
+        fileInput.files = dt.files;
+      }
+
+      function generateElement(
+        type: string,
+        name: string,
+        size: string,
+        index: number
+      ): string {
+        const ext = type.toLowerCase();
+        const options = (supportedConversions[ext] || [])
           .map(
             (f: string) => `<option value="${f}">${f.toUpperCase()}</option>`
           )
           .join("");
-
-      allSelect.addEventListener("change", function () {
-        const format = (this as HTMLSelectElement).value;
-        currentFiles.forEach((file: File, idx: number) => {
-          const ext = file.name.split(".").pop()?.toLowerCase() || "";
-          const select = document.getElementById(
-            `format-select-${idx}`
-          ) as HTMLSelectElement | null;
-          if (
-            select &&
-            ext &&
-            supportedConversions[ext] &&
-            supportedConversions[ext].includes(format)
-          ) {
-            select.value = format;
-          }
-        });
-      });
-    }
-
-    const dropZone = document.getElementById(
-      "drop-zone"
-    ) as HTMLDivElement | null;
-    const fileInput = document.getElementById(
-      "files-file-input"
-    ) as HTMLInputElement | null;
-    const filesUploaded = document.getElementById(
-      "files-uploaded"
-    ) as HTMLDivElement | null;
-    const contentFilesUploaded = document.getElementById(
-      "content-files-uploaded"
-    ) as HTMLDivElement | null;
-    const compressButton = document.getElementById(
-      "compress-and-download"
-    ) as HTMLButtonElement | null;
-    const overlay = document.getElementById(
-      "overlay-image-files"
-    ) as HTMLDivElement | null;
-
-    // Si algun elemento no existe, salir
-    if (!dropZone || !fileInput || !filesUploaded || !contentFilesUploaded)
-      return;
-
-    let currentFiles: File[] = [];
-
-    if (dropZone && fileInput) {
-      dropZone.addEventListener("click", () => {
-        fileInput.click();
-      });
-
-      dropZone.addEventListener("dragover", (event) => {
-        event.preventDefault();
-        dropZone.classList.add("border-blue-500");
-      });
-
-      dropZone.addEventListener("dragleave", () => {
-        dropZone.classList.remove("border-blue-500");
-      });
-
-      dropZone.addEventListener("drop", (event: DragEvent) => {
-        event.preventDefault();
-        dropZone.classList.remove("border-blue-500");
-        if (!event.dataTransfer) return;
-        const files = event.dataTransfer.files;
-        handleFiles(files);
-      });
-    }
-
-    if (fileInput) {
-      fileInput.addEventListener("change", () => {
-        const files = fileInput.files;
-        handleFiles(files);
-      });
-    }
-
-    function handleFiles(files: FileList | null) {
-      if (!files || files.length === 0) return;
-      const newFiles = Array.from(files);
-      currentFiles = [...currentFiles, ...newFiles];
-      updateUI();
-    }
-
-    function updateUI() {
-      if (!filesUploaded || !contentFilesUploaded) return;
-      if (currentFiles.length === 0) {
-        filesUploaded.classList.add("hidden");
-        return;
-      }
-      filesUploaded.classList.remove("hidden");
-      contentFilesUploaded.innerHTML = "";
-      let supportedCount = 0;
-      currentFiles.forEach((file: File, index: number) => {
-        const fileType = file.name.split(".").pop() || "file";
-        // Solo permitir archivos soportados
-        if (!supportedConversions[fileType.toLowerCase()]) return;
-        supportedCount++;
-        const fileName = file.name;
-        const fileSize = (file.size / 1024).toFixed(2) + " KB";
-        const newElement = generateElement(fileType, fileName, fileSize, index);
-        contentFilesUploaded.appendChild(
-          document.createRange().createContextualFragment(newElement)
-        );
-      });
-      // Ocultar/mostrar elementos según si hay archivos soportados
-      const totalFilesSpan = document.getElementById(
-        "total-files-uploaded"
-      ) as HTMLSpanElement | null;
-      const totalFilesContainer = totalFilesSpan
-        ? totalFilesSpan.parentElement
-        : null;
-      const compressButtonDiv = compressButton?.parentElement;
-      const allFilesSelect = document.getElementById(
-        "all-files"
-      ) as HTMLSelectElement | null;
-      const allFilesDiv = allFilesSelect ? allFilesSelect.parentElement : null;
-      if (supportedCount === 0) {
-        contentFilesUploaded.innerHTML = `<div class=\"text-center text-red-400 py-8\">${jsonMessages.unsupportedFiles || "Ningún archivo es soportado para conversión."}</div>`;
-        if (totalFilesContainer) totalFilesContainer.style.display = "none";
-        if (compressButtonDiv) compressButtonDiv.style.display = "none";
-        if (allFilesDiv) allFilesDiv.style.display = "none";
-      } else {
-        if (totalFilesContainer) totalFilesContainer.style.display = "";
-        if (compressButtonDiv) compressButtonDiv.style.display = "";
-        if (allFilesDiv) allFilesDiv.style.display = "";
-        if (totalFilesSpan)
-          totalFilesSpan.textContent = currentFiles.length.toString();
-      }
-      updateFileInput();
-    }
-
-    function updateFileInput() {
-      if (!fileInput) return;
-      const dt = new DataTransfer();
-      currentFiles.forEach((file) => dt.items.add(file));
-      fileInput.files = dt.files;
-    }
-
-    function generateElement(
-      type: string,
-      name: string,
-      size: string,
-      index: number
-    ): string {
-      const ext = type.toLowerCase();
-      const options = (supportedConversions[ext] || [])
-        .map((f: string) => `<option value="${f}">${f.toUpperCase()}</option>`)
-        .join("");
-      return `
-      <div class="bg-neutral-900/40 rounded-2xl border border-neutral-800 p-4 flex flex-col gap-4 justify-between">
+        return `
+      <div class="bg-white rounded-xl border border-neutral-200 p-4 flex flex-col gap-4 justify-between">
         <div class="flex flex-col md:flex-row md:items-center gap-4 justify-between flex-wrap">
           <div class="flex items-center gap-4 flex-1 min-w-0">
-            <div class="w-10 min-w-10 h-10 min-h-10 bg-neutral-700/50 rounded flex items-center justify-center">
-              <span class="text-sm text-neutral-400">${type.toUpperCase()}</span>
+            <div class="w-10 min-w-10 h-10 min-h-10 bg-emerald-100 rounded-lg flex items-center justify-center">
+              <span class="text-xs font-semibold text-emerald-700">${type.toUpperCase()}</span>
             </div>
             <div class="min-w-0">
-              <p class="font-medium truncate max-w-[180px] md:max-w-[300px] lg:max-w-[400px] xl:max-w-[600px]" title="${name}">${name}</p>
-              <p class="text-sm text-neutral-400">${size}</p>
+              <p class="font-semibold text-neutral-800 truncate max-w-[180px] md:max-w-[300px] lg:max-w-[400px] xl:max-w-[600px]" title="${name}">${name}</p>
+              <p class="text-sm text-neutral-600">${size}</p>
             </div>
           </div>
           <div class="flex items-center gap-2">
-            <label for="format-select-${index}">${jsonMessages.format}:</label>
-            <select class="cursor-pointer px-3 py-1 bg-neutral-900/60 border border-neutral-700 rounded text-neutral-200 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50 w-full md:w-auto" id="format-select-${index}">
+            <label for="format-select-${index}" class="text-sm font-medium text-neutral-700">${jsonMessages.format}:</label>
+            <select class="cursor-pointer px-3 py-2 bg-white border border-neutral-300 rounded-lg text-neutral-700 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500 transition-all shadow-sm w-full md:w-auto" id="format-select-${index}">
               <option value="" disabled selected>${jsonMessages.select}</option>
               ${options}
             </select>
           </div>
         </div>
         <div class="flex items-center gap-3 flex-wrap w-full md:w-auto">
-          <button class="cursor-pointer active:scale-95 min-w-25 px-3 py-1 bg-neutral-700 hover:bg-neutral-600 text-neutral-200 rounded transition-colors text-sm w-full md:w-auto" onclick="window.downloadFile(${index})">
+          <button class="cursor-pointer px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg transition-colors text-sm font-semibold shadow-sm w-full md:w-auto" onclick="window.downloadFile(${index})">
             ${jsonMessages.download}
           </button>
-          <button title="${jsonMessages.delete}" class="cursor-pointer active:scale-95 min-w-25 px-3 py-1 bg-red-600/20 hover:bg-red-600/30 text-red-400 rounded transition-colors text-sm w-full md:w-auto" onclick="window.removeFileUploaded(${index})">
+          <button title="${jsonMessages.delete}" class="cursor-pointer px-4 py-2 bg-white border border-red-300 hover:bg-red-50 hover:border-red-400 text-red-600 rounded-lg transition-all text-sm font-medium shadow-sm w-full md:w-auto" onclick="window.removeFileUploaded(${index})">
             ${jsonMessages.delete}
           </button>
         </div>
       </div>
     `;
-    }
-
-    function removeFileUploaded(index: number) {
-      currentFiles.splice(index, 1);
-      updateUI();
-    }
-
-    (window as any).removeFileUploaded = removeFileUploaded;
-
-    // Descargar archivo convertido
-    (window as any).downloadFile = async function (index: number) {
-      const file = currentFiles[index];
-      if (!file) return;
-      const formatSelect = document.getElementById(
-        `format-select-${index}`
-      ) as HTMLSelectElement | null;
-      const format = formatSelect?.value;
-      if (!format) {
-        alert(jsonMessages.selectFormat || "Selecciona un formato");
-        return;
       }
-      try {
+
+      function removeFileUploaded(index: number) {
+        currentFiles.splice(index, 1);
+        updateUI();
+      }
+
+      (window as any).removeFileUploaded = removeFileUploaded;
+
+      // Descargar archivo convertido
+      (window as any).downloadFile = async function (index: number) {
+        const file = currentFiles[index];
+        if (!file) return;
+        const formatSelect = document.getElementById(
+          `format-select-${index}`
+        ) as HTMLSelectElement | null;
+        const format = formatSelect?.value;
+        if (!format) {
+          alert(jsonMessages.selectFormat || "Selecciona un formato");
+          return;
+        }
+        try {
+          if (overlay) {
+            overlay.classList.remove("hidden");
+            overlay.classList.add("flex");
+          }
+          const formData = new FormData();
+          formData.append("file", file);
+          formData.append("format", format);
+
+          const { data: result, error } = await actions.convertFiles(formData);
+
+          if (error) {
+            throw new Error(error.message);
+          }
+
+          if (!result) {
+            throw new Error("No result received");
+          }
+
+          // Convertir array de números de vuelta a Uint8Array
+          const buffer = new Uint8Array(result.buffer);
+          const blob = new Blob([buffer], {
+            type: result.contentType || `application/${format}`,
+          });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download =
+            result.filename || `${file.name.split(".")[0]}.${format}`;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+        } catch (err) {
+          let msg = "";
+          if (typeof err === "object" && err && "message" in err) {
+            msg = (err as any).message;
+          } else {
+            msg = String(err);
+          }
+          alert(
+            jsonMessages.processedError ||
+              "Error al convertir el archivo: " + msg
+          );
+        } finally {
+          if (overlay) {
+            overlay.classList.add("hidden");
+            overlay.classList.remove("flex");
+
+            actions.createUpdateProcessCount({
+              process_name: "file-converter",
+            });
+          }
+        }
+      };
+
+      if (compressButton) {
+        compressButton.addEventListener("click", compressAndDownload);
+      }
+
+      async function compressAndDownload() {
+        if (currentFiles.length === 0) return;
         if (overlay) {
           overlay.classList.remove("hidden");
           overlay.classList.add("flex");
         }
-        const formData = new FormData();
-        formData.append("file", file);
-        formData.append("format", format);
-
-        const { data: result, error } = await actions.convertFiles(formData);
-
-        if (error) {
-          throw new Error(error.message);
-        }
-
-        if (!result) {
-          throw new Error("No result received");
-        }
-
-        // Convertir array de números de vuelta a Uint8Array
-        const buffer = new Uint8Array(result.buffer);
-        const blob = new Blob([buffer], {
-          type: result.contentType || `application/${format}`,
-        });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = result.filename || `${file.name.split(".")[0]}.${format}`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-      } catch (err) {
-        let msg = "";
-        if (typeof err === "object" && err && "message" in err) {
-          msg = (err as any).message;
-        } else {
-          msg = String(err);
-        }
-        alert(
-          jsonMessages.processedError || "Error al convertir el archivo: " + msg
-        );
-      } finally {
-        if (overlay) {
-          overlay.classList.add("hidden");
-          overlay.classList.remove("flex");
-
-          actions.createUpdateProcessCount({
-            process_name: "file-converter",
+        try {
+          let filesWhitoutFormat: string[] = [];
+          const formats = currentFiles.map((_, idx) => {
+            const select = document.getElementById(
+              `format-select-${idx}`
+            ) as HTMLSelectElement | null;
+            if (select && !select.value) {
+              filesWhitoutFormat.push(currentFiles[idx].name);
+            }
+            return select && select.value ? select.value : "";
           });
-        }
-      }
-    };
-
-    if (compressButton) {
-      compressButton.addEventListener("click", compressAndDownload);
-    }
-
-    async function compressAndDownload() {
-      if (currentFiles.length === 0) return;
-      if (overlay) {
-        overlay.classList.remove("hidden");
-        overlay.classList.add("flex");
-      }
-      try {
-        let filesWhitoutFormat: string[] = [];
-        const formats = currentFiles.map((_, idx) => {
-          const select = document.getElementById(
-            `format-select-${idx}`
-          ) as HTMLSelectElement | null;
-          if (select && !select.value) {
-            filesWhitoutFormat.push(currentFiles[idx].name);
+          if (filesWhitoutFormat.length > 0) {
+            alert(
+              (jsonMessages.selectFormatForAll ||
+                "Selecciona un formato para los siguientes archivos:") +
+                "\n- " +
+                filesWhitoutFormat.join("\n- ")
+            );
+            return;
           }
-          return select && select.value ? select.value : "";
-        });
-        if (filesWhitoutFormat.length > 0) {
-          alert(
-            (jsonMessages.selectFormatForAll ||
-              "Selecciona un formato para los siguientes archivos:") +
-              "\n- " +
-              filesWhitoutFormat.join("\n- ")
-          );
-          return;
-        }
-        const formData = new FormData();
-        currentFiles.forEach((file, idx) => {
-          formData.append("files[]", file, file.name);
-          formData.append("formats[]", formats[idx]);
-        });
-        formData.append("asZip", "true");
-
-        const { data: result, error } = await actions.convertFiles(formData);
-
-        if (error) {
-          throw new Error(error.message);
-        }
-
-        if (!result) {
-          throw new Error("No result received");
-        }
-
-        // Convertir array de números de vuelta a Uint8Array
-        const zipBuffer = new Uint8Array(result.buffer);
-        const blob = new Blob([zipBuffer], { type: "application/zip" });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = result.filename || "files.zip";
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-      } catch (err) {
-        let msg = "";
-        if (typeof err === "object" && err && "message" in err) {
-          msg = (err as any).message;
-        } else {
-          msg = String(err);
-        }
-        alert(
-          jsonMessages.processedError ||
-            "Error al comprimir y descargar: " + msg
-        );
-      } finally {
-        if (overlay) {
-          overlay.classList.add("hidden");
-          overlay.classList.remove("flex");
-
-          actions.createUpdateProcessCount({
-            process_name: "file-converter",
+          const formData = new FormData();
+          currentFiles.forEach((file, idx) => {
+            formData.append("files[]", file, file.name);
+            formData.append("formats[]", formats[idx]);
           });
+          formData.append("asZip", "true");
+
+          const { data: result, error } = await actions.convertFiles(formData);
+
+          if (error) {
+            throw new Error(error.message);
+          }
+
+          if (!result) {
+            throw new Error("No result received");
+          }
+
+          // Convertir array de números de vuelta a Uint8Array
+          const zipBuffer = new Uint8Array(result.buffer);
+          const blob = new Blob([zipBuffer], { type: "application/zip" });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = result.filename || "files.zip";
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+        } catch (err) {
+          let msg = "";
+          if (typeof err === "object" && err && "message" in err) {
+            msg = (err as any).message;
+          } else {
+            msg = String(err);
+          }
+          alert(
+            jsonMessages.processedError ||
+              "Error al comprimir y descargar: " + msg
+          );
+        } finally {
+          if (overlay) {
+            overlay.classList.add("hidden");
+            overlay.classList.remove("flex");
+
+            actions.createUpdateProcessCount({
+              process_name: "file-converter",
+            });
+          }
         }
       }
-    }
-  });
-</script>
+    });
+  </script>
+</div>

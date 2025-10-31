@@ -17,21 +17,33 @@ interface Props {
 const { links } = Astro.props;
 ---
 
-<nav class="mb-6 select-none" aria-label="Breadcrumb">
-  <ol class="flex items-center space-x-2 text-sm text-neutral-400">
+<nav class="mb-4 select-none" aria-label="Breadcrumb">
+  <ol class="flex flex-wrap items-center gap-2 text-sm">
     <li>
-      <a href="/" class="hover:text-emerald-400"
+      <a href={`/${lang}`} class="text-neutral-600 hover:text-emerald-600 font-medium transition-colors"
         >{getTranslation(lang, "common.breadCrumbsOptions.home")}</a
       >
     </li>
     {
       links.map(({ href, name, isActive }, index) => (
-        <li class="flex items-center">
-          <span class="mx-2">/</span>
+        <li class="flex items-center gap-2">
+          <svg
+            class="w-4 h-4 text-neutral-400"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9 5l7 7-7 7"
+            />
+          </svg>
           {isActive || index === links.length - 1 ? (
-            <span class="text-neutral-200">{name}</span>
+            <span class="text-neutral-800 font-semibold">{name}</span>
           ) : (
-            <a href={href} class="hover:text-emerald-400">
+            <a href={href} class="text-neutral-600 hover:text-emerald-600 font-medium transition-colors">
               {name}
             </a>
           )}

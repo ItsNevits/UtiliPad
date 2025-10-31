@@ -7,30 +7,30 @@ const lang = Astro.params.lang as Language;
 
 <div
   id="global-modal"
-  class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden opacity-0 transition-all duration-300"
+  class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden opacity-0 transition-all duration-300"
 >
   <div class="flex items-center justify-center min-h-screen p-4">
     <div
-      class="bg-neutral-900 rounded-2xl border border-neutral-700 w-full max-w-6xl max-h-[85vh] flex flex-col shadow-2xl overflow-hidden"
+      class="bg-white rounded-xl border border-neutral-200 w-full max-w-6xl max-h-[85vh] flex flex-col shadow-2xl overflow-hidden"
     >
       <!-- Header del modal -->
       <div
-        class="flex items-center justify-between p-6 border-b border-neutral-700 relative"
+        class="flex items-center justify-between p-6 border-b border-neutral-200 relative"
       >
         <div class="flex items-center gap-3">
           <div>
-            <h3 id="modal-title" class="text-xl font-semibold text-white"></h3>
-            <p id="modal-description" class="text-sm text-neutral-400"></p>
+            <h3 id="modal-title" class="text-xl font-semibold text-neutral-800"></h3>
+            <p id="modal-description" class="text-sm text-neutral-600"></p>
           </div>
         </div>
         <div class="flex items-center gap-2">
           <button
             id="close-modal-btn"
             title="Cerrar"
-            class="absolute top-2 right-2 p-2 hover:bg-neutral-800 rounded-lg transition-colors cursor-pointer"
+            class="absolute top-2 right-2 p-2 hover:bg-neutral-100 rounded-lg transition-colors cursor-pointer"
           >
             <svg
-              class="w-5 h-5 text-neutral-400"
+              class="w-5 h-5 text-neutral-600 hover:text-neutral-800"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -49,21 +49,21 @@ const lang = Astro.params.lang as Language;
       <div class="flex-1 min-h-0">
         <div
           id="modal-content"
-          class="bg-neutral-800/50 rounded-xl mx-6 my-4 p-6 overflow-y-auto border border-neutral-700 code-area max-h-[60vh]"
+          class="bg-neutral-50 rounded-lg mx-6 my-4 p-6 overflow-y-auto border border-neutral-200 code-area max-h-[60vh]"
         >
           <!-- El contenido se insertará dinámicamente -->
         </div>
       </div>
 
       <!-- Footer del modal -->
-      <div class="p-6 border-t border-neutral-700 bg-neutral-900/50">
-        <div class="flex items-center justify-between text-sm text-neutral-400">
+      <div class="p-6 border-t border-neutral-200 bg-neutral-50">
+        <div class="flex items-center justify-between text-sm text-neutral-600">
           <div id="modal-info" class="flex items-center gap-4">
             <!-- Información adicional se insertará aquí -->
           </div>
           <div class="text-xs">
             {getTranslation(lang, "components.modal.press")}{" "}
-            <kbd class="px-2 py-1 bg-neutral-700 rounded">Esc</kbd> para
+            <kbd class="px-2 py-1 bg-white border border-neutral-300 rounded text-neutral-700 font-medium shadow-sm">Esc</kbd> para
             {getTranslation(lang, "components.modal.close")}
           </div>
         </div>
@@ -146,7 +146,7 @@ const lang = Astro.params.lang as Language;
           } else {
             // Para contenido JSON u otros objetos
             const pre = document.createElement("pre");
-            pre.className = "text-sm text-neutral-300 whitespace-pre-wrap";
+            pre.className = "text-sm text-neutral-700 whitespace-pre-wrap font-mono";
             pre.textContent = JSON.stringify(state.content, null, 2);
             modalContent.appendChild(pre);
           }

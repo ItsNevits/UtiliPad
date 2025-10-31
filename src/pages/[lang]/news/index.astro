@@ -1,11 +1,13 @@
 ---
 export const prerender = false;
 import Hero from "@/components/shared/Hero.astro";
+import Header from "@/components/Header.astro";
+import Footer from "@/components/Footer.astro";
 import MainLayout from "@/Layouts/MainLayout.astro";
 
 import { getCollection } from "astro:content";
-import type { Language } from "@/types/language.type";
 import { getTranslation } from "@/i18n/index";
+import type { Language } from "@/types/language.type";
 
 const lang = Astro.params.lang as Language;
 
@@ -36,69 +38,73 @@ const paginatedNews = sortedNews.slice(startIndex, endIndex);
   title={getTranslation(lang, "seo.pages.news.title")}
   description={getTranslation(lang, "seo.pages.news.description")}
 >
-  <Hero
-    title={getTranslation(lang, "pages.news.title")}
-    description={getTranslation(lang, "pages.news.description")}
-  />
+  <section class="bg-[#dddfe0] m-4 rounded-2xl pb-10 md:pb-15">
+    <Header />
+    <section class="w-full max-w-7xl mx-auto flex flex-col">
+      <Hero
+        title={getTranslation(lang, "pages.news.title")}
+        description={getTranslation(lang, "pages.news.description")}
+      />
+    </section>
+  </section>
 
-  <section class="mt-8">
+  <main class="max-w-7xl mx-auto px-4 py-3 mb-8 md:mb-12">
     {
       paginatedNews.length > 0 ? (
-        <div class="grid gap-6 md:gap-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
           {paginatedNews.map((article) => (
-            <article class="opacity-0 sequence-item-tool bg-neutral-800/50 rounded-2xl border border-neutral-800 p-6 hover:border-neutral-700 transition-colors group">
-              <div class="flex flex-col space-y-4">
-                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                  <div class="flex-1">
-                    <h2 class="text-xl font-semibold text-white  transition-colors">
-                      <a
-                        href={`/${lang}/news/${article.id.replace(/\\/g, "/").replace(`${lang}/`, "")}`}
-                        class="block"
-                      >
-                        {article.data.title}
-                      </a>
-                    </h2>
-                    <div class="flex items-center gap-4 mt-2 text-sm text-neutral-400">
-                      <span>Por {article.data.author}</span>
-                      <span>•</span>
-                      <time datetime={article.data.date.toISOString()}>
-                        {article.data.date.toLocaleDateString("es-ES", {
-                          year: "numeric",
-                          month: "long",
-                          day: "numeric",
-                        })}
-                      </time>
+            <article class="opacity-0 sequence-item-tool bg-white rounded-xl border border-neutral-200 overflow-hidden hover:shadow-lg hover:border-neutral-300 transition-all group">
+              <a
+                href={`/${lang}/news/${article.id.replace(/\\/g, "/").replace(`${lang}/`, "")}`}
+                class="flex flex-col justify-between h-full"
+              >
+                <div class="p-5">
+                  <div class="flex items-start justify-between gap-3 mb-3">
+                    <h3 class="text-lg font-bold text-neutral-800 group-hover:text-emerald-600 transition-colors line-clamp-2 flex-1">
+                      {article.data.title}
+                    </h3>
+                    <div class="flex flex-wrap gap-1.5 flex-shrink-0">
+                      {article.data.tags?.slice(0, 2).map((tag) => (
+                        <span class="px-2 py-0.5 bg-emerald-100 text-emerald-700 rounded-full text-xs font-medium">
+                          {tag}
+                        </span>
+                      ))}
+                      {article.data.tags && article.data.tags.length > 2 && (
+                        <span class="px-2 py-0.5 bg-neutral-100 text-neutral-600 rounded-full text-xs font-medium">
+                          +{article.data.tags.length - 2}
+                        </span>
+                      )}
                     </div>
                   </div>
 
-                  <div class="flex flex-wrap gap-2">
-                    {article.data.tags?.slice(0, 3).map((tag) => (
-                      <span class="px-3 py-1 bg-green-500/20 text-green-400 rounded-full text-sm">
-                        {tag}
-                      </span>
-                    ))}
-                    {article.data.tags && article.data.tags.length > 3 && (
-                      <span class="px-3 py-1 bg-neutral-700/50 text-neutral-400 rounded-full text-sm">
-                        +{article.data.tags.length - 3}
-                      </span>
-                    )}
+                  <div class="flex items-center gap-3 text-xs text-neutral-500 mb-3">
+                    <span class="font-medium">{article.data.author}</span>
+                    <span>•</span>
+                    <time datetime={article.data.date.toISOString()}>
+                      {article.data.date.toLocaleDateString(
+                        lang === "es" ? "es-ES" : "en-US",
+                        {
+                          year: "numeric",
+                          month: "short",
+                          day: "numeric",
+                        }
+                      )}
+                    </time>
                   </div>
-                </div>
 
-                <div class="text-neutral-300 leading-relaxed">
-                  <p class="line-clamp-3">
+                  <p class="text-sm text-neutral-600 leading-relaxed line-clamp-3">
                     {article.body
-                      .slice(0, 200)
+                      .slice(0, 150)
                       .replace(/^#.*\n\n?/, "")
                       .trim()}
                     ...
                   </p>
                 </div>
 
-                <div class="flex items-center justify-between pt-4 border-t border-neutral-800">
-                  <div class="flex items-center gap-2 text-sm text-neutral-400">
+                <div class="px-5 py-3 bg-neutral-50 border-t border-neutral-100 flex items-center justify-between">
+                  <div class="flex items-center gap-2 text-xs text-neutral-500">
                     <svg
-                      class="w-4 h-4"
+                      class="w-3.5 h-3.5"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -115,10 +121,7 @@ const paginatedNews = sortedNews.slice(startIndex, endIndex);
                     </span>
                   </div>
 
-                  <a
-                    href={`/${lang}/news/${article.id.replace(/\\/g, "/").replace(`${lang}/`, "")}`}
-                    class="cursor-pointer px-4 py-2 bg-neutral-700 hover:bg-neutral-600 text-neutral-200 rounded transition-colors inline-flex items-center gap-2 text-sm font-medium"
-                  >
+                  <span class="text-emerald-600 text-sm font-semibold group-hover:gap-2 inline-flex items-center gap-1 transition-all">
                     {getTranslation(lang, "pages.news.readMore")}
                     <svg
                       class="w-4 h-4"
@@ -133,17 +136,17 @@ const paginatedNews = sortedNews.slice(startIndex, endIndex);
                         d="M9 5l7 7-7 7"
                       />
                     </svg>
-                  </a>
+                  </span>
                 </div>
-              </div>
+              </a>
             </article>
           ))}
         </div>
       ) : (
-        <div class="text-center py-12">
-          <div class="w-16 h-16 bg-neutral-800 rounded-full flex items-center justify-center mx-auto mb-4">
+        <div class="text-center py-16">
+          <div class="w-16 h-16 bg-neutral-100 rounded-full flex items-center justify-center mx-auto mb-4">
             <svg
-              class="w-8 h-8 text-neutral-600"
+              class="w-8 h-8 text-neutral-400"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -156,10 +159,10 @@ const paginatedNews = sortedNews.slice(startIndex, endIndex);
               />
             </svg>
           </div>
-          <h3 class="text-lg font-medium text-neutral-400 mb-2">
+          <h3 class="text-lg font-semibold text-neutral-700 mb-2">
             {getTranslation(lang, "pages.news.noPosts")}
           </h3>
-          <p class="text-neutral-500">
+          <p class="text-neutral-500 text-sm">
             {getTranslation(lang, "pages.news.noPostsDesc")}
           </p>
         </div>
@@ -169,8 +172,8 @@ const paginatedNews = sortedNews.slice(startIndex, endIndex);
     <!-- Paginación -->
     {
       totalPages > 1 && (
-        <div class="mt-12 flex flex-col sm:flex-row items-center justify-between gap-4 p-6 bg-neutral-900/20 rounded-2xl border border-neutral-800">
-          <div class="text-sm text-neutral-400">
+        <div class="mt-8 flex flex-col sm:flex-row items-center justify-between gap-4 p-5 bg-white rounded-xl border border-neutral-200 shadow-sm">
+          <div class="text-sm text-neutral-600 font-medium">
             {getTranslation(lang, "pages.news.pagination.page")} {currentPage}{" "}
             {getTranslation(lang, "pages.news.pagination.of")} {totalPages}
           </div>
@@ -179,7 +182,7 @@ const paginatedNews = sortedNews.slice(startIndex, endIndex);
             {currentPage > 1 && (
               <a
                 href={`/${lang}/news?page=${currentPage - 1}`}
-                class="cursor-pointer px-4 py-2 bg-neutral-700 hover:bg-neutral-600 text-neutral-200 rounded-lg transition-colors text-sm font-medium inline-flex items-center gap-2"
+                class="cursor-pointer px-4 py-2 bg-white border border-neutral-300 hover:border-neutral-400 text-neutral-700 rounded-lg transition-all text-sm font-medium inline-flex items-center gap-2 shadow-sm hover:shadow"
               >
                 <svg
                   class="w-4 h-4"
@@ -198,15 +201,15 @@ const paginatedNews = sortedNews.slice(startIndex, endIndex);
               </a>
             )}
 
-            <div class="flex gap-1">
+            <div class="flex gap-1.5">
               {Array.from({ length: totalPages }, (_, i) => i + 1).map(
                 (page) => (
                   <a
                     href={`/${lang}/news?page=${page}`}
-                    class={`cursor-pointer px-4 py-2 rounded-lg transition-colors text-sm font-medium ${
+                    class={`cursor-pointer px-4 py-2 rounded-lg transition-all text-sm font-semibold ${
                       page === currentPage
-                        ? "bg-emerald-600 text-white"
-                        : "bg-neutral-700 hover:bg-neutral-600 text-neutral-200"
+                        ? "bg-emerald-500 text-white shadow-sm"
+                        : "bg-white border border-neutral-300 hover:border-neutral-400 text-neutral-700 hover:shadow-sm"
                     }`}
                   >
                     {page}
@@ -218,7 +221,7 @@ const paginatedNews = sortedNews.slice(startIndex, endIndex);
             {currentPage < totalPages && (
               <a
                 href={`/${lang}/news?page=${currentPage + 1}`}
-                class="cursor-pointer px-4 py-2 bg-neutral-700 hover:bg-neutral-600 text-neutral-200 rounded-lg transition-colors text-sm font-medium inline-flex items-center gap-2"
+                class="cursor-pointer px-4 py-2 bg-white border border-neutral-300 hover:border-neutral-400 text-neutral-700 rounded-lg transition-all text-sm font-medium inline-flex items-center gap-2 shadow-sm hover:shadow"
               >
                 {getTranslation(lang, "pages.news.pagination.next")}
                 <svg
@@ -244,23 +247,23 @@ const paginatedNews = sortedNews.slice(startIndex, endIndex);
     <!-- Estadísticas de noticias -->
     {
       sortedNews.length > 0 && (
-        <div class="mt-12 p-6 bg-neutral-900/20 rounded-2xl border border-neutral-800">
+        <div class="mt-6 p-5 bg-white rounded-xl border border-neutral-200 shadow-sm">
           <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
             <div class="text-center sm:text-left">
-              <h3 class="text-lg font-semibold text-white">
+              <h3 class="text-base font-bold text-neutral-800">
                 {getTranslation(lang, "pages.news.statisticsTitle")}
               </h3>
-              <p class="text-neutral-400">
+              <p class="text-sm text-neutral-600">
                 {getTranslation(lang, "pages.news.statisticsDescription")}
               </p>
             </div>
 
             <div class="flex gap-6">
               <div class="text-center">
-                <div class="text-2xl font-bold text-neutral-400">
+                <div class="text-3xl font-bold text-emerald-600 tabular-nums">
                   {sortedNews.length}
                 </div>
-                <div class="text-sm text-neutral-400">
+                <div class="text-xs font-medium text-neutral-600 mt-1">
                   {getTranslation(lang, "pages.news.articles")}
                 </div>
               </div>
@@ -269,7 +272,9 @@ const paginatedNews = sortedNews.slice(startIndex, endIndex);
         </div>
       )
     }
-  </section>
+  </main>
+
+  <Footer />
 </MainLayout>
 
 <script>

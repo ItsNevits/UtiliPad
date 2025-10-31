@@ -23,6 +23,11 @@ export default {
       description:
         "Mantente al día con las últimas novedades, actualizaciones y mejoras de UtiliPad.",
     },
+    tools: {
+      title: "Todas las Herramientas — UtiliPad",
+      description:
+        "Explora nuestra colección completa de herramientas online gratuitas. Organizadas por categorías para facilitar tu búsqueda.",
+    },
     category: {
       title: "Categoría {category} — UtiliPad",
       description:

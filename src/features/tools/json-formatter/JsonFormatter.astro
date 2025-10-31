@@ -5,142 +5,165 @@ import "@/styles/tools/JsonFormatter.css";
 
 import type { Language } from "@/types/language.type";
 import { getTranslation } from "@/i18n/index";
+import Modal from "@/components/shared/Modal.astro";
 
 const lang = Astro.params.lang as Language;
 ---
 
-<div class="bg-neutral-800/50 rounded-xl p-6 select-none">
+<div class="space-y-6 mt-6">
   <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
     <!-- Panel de entrada -->
     <div class="space-y-4">
-      <div class="flex items-center justify-between">
-        <label class="block text-sm font-medium text-neutral-300">
-          {getTranslation(lang, "components.jsonFormatter.inputTitle")}
-        </label>
-        <div class="flex gap-2">
-          <button
-            id="paste-btn"
-            title={getTranslation(lang, "components.jsonFormatter.paste")}
-            class="cursor-pointer text-xs px-3 py-1 bg-neutral-700 hover:bg-neutral-600 text-neutral-200 rounded transition-colors active:scale-95"
-          >
-            {getTranslation(lang, "components.jsonFormatter.paste")}
-          </button>
-          <button
-            id="clear-btn"
-            title={getTranslation(lang, "components.jsonFormatter.clear")}
-            class="cursor-pointer text-xs px-3 py-1 bg-neutral-700 hover:bg-neutral-600 text-neutral-200 rounded transition-colors active:scale-95"
-          >
-            {getTranslation(lang, "components.jsonFormatter.clear")}
-          </button>
+      <div
+        class="bg-white rounded-xl border border-neutral-200 shadow-sm p-6 h-full"
+      >
+        <div class="flex items-center justify-between mb-4">
+          <label class="block text-sm font-semibold text-neutral-800">
+            {getTranslation(lang, "components.jsonFormatter.inputTitle")}
+          </label>
+          <div class="flex gap-2">
+            <button
+              id="paste-btn"
+              title={getTranslation(lang, "components.jsonFormatter.paste")}
+              class="cursor-pointer text-xs px-3 py-1.5 bg-white border border-neutral-300 hover:border-neutral-400 text-neutral-700 rounded-lg transition-all font-medium shadow-sm hover:shadow"
+            >
+              {getTranslation(lang, "components.jsonFormatter.paste")}
+            </button>
+            <button
+              id="clear-btn"
+              title={getTranslation(lang, "components.jsonFormatter.clear")}
+              class="cursor-pointer text-xs px-3 py-1.5 bg-white border border-neutral-300 hover:border-neutral-400 text-neutral-700 rounded-lg transition-all font-medium shadow-sm hover:shadow"
+            >
+              {getTranslation(lang, "components.jsonFormatter.clear")}
+            </button>
+          </div>
         </div>
-      </div>
 
-      <textarea
-        id="json-input"
-        placeholder='{"nombre": "Juan", "edad": 30, "activo": true}'
-        class="w-full h-96 p-4 bg-neutral-900/60 border border-neutral-700 rounded-lg text-sm font-mono resize-none focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
-      ></textarea>
+        <textarea
+          id="json-input"
+          placeholder='{"nombre": "Juan", "edad": 30, "activo": true}'
+          class="w-full h-96 p-4 bg-white border border-neutral-300 rounded-lg text-sm font-mono resize-none focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500 transition-all shadow-sm text-neutral-700 placeholder:text-neutral-500"
+        ></textarea>
 
-      <!-- Controles de formateo -->
-      <div class="flex flex-wrap gap-4">
-        <label class="flex items-center gap-2 text-sm text-neutral-300">
-          <input
-            type="number"
-            id="indent-size"
-            min="1"
-            max="8"
-            value="2"
-            class="w-16 px-2 py-1 bg-neutral-700 border border-neutral-600 rounded text-xs"
-          />
-          {getTranslation(lang, "components.jsonFormatter.indentSpaces")}
-        </label>
-
-        <div class="flex flex-wrap gap-2">
-          <button
-            id="format-btn"
-            title={getTranslation(lang, "components.jsonFormatter.format")}
-            class="cursor-pointer px-4 py-2 bg-neutral-700 hover:bg-neutral-600 text-neutral-200 rounded transition-colors text-sm active:scale-95"
+        <!-- Controles de formateo -->
+        <div class="flex flex-wrap items-center gap-4 mt-4">
+          <label
+            class="flex items-center gap-2 text-sm text-neutral-700 font-medium"
           >
-            {getTranslation(lang, "components.jsonFormatter.format")}
-          </button>
-          <button
-            id="minify-btn"
-            title={getTranslation(lang, "components.jsonFormatter.minify")}
-            class="cursor-pointer px-4 py-2 bg-neutral-700 hover:bg-neutral-600 text-neutral-200 rounded transition-colors text-sm active:scale-95"
-          >
-            {getTranslation(lang, "components.jsonFormatter.minify")}
-          </button>
+            <input
+              type="number"
+              id="indent-size"
+              min="1"
+              max="8"
+              value="2"
+              class="w-16 px-2 py-1.5 bg-white border border-neutral-300 rounded-lg text-xs text-neutral-700 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500"
+            />
+            {getTranslation(lang, "components.jsonFormatter.indentSpaces")}
+          </label>
+
+          <div class="flex flex-wrap gap-2">
+            <button
+              id="format-btn"
+              title={getTranslation(lang, "components.jsonFormatter.format")}
+              class="cursor-pointer px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg transition-colors text-sm font-semibold shadow-sm"
+            >
+              {getTranslation(lang, "components.jsonFormatter.format")}
+            </button>
+            <button
+              id="minify-btn"
+              title={getTranslation(lang, "components.jsonFormatter.minify")}
+              class="cursor-pointer px-4 py-2 bg-white border border-neutral-300 hover:border-neutral-400 text-neutral-700 rounded-lg transition-all text-sm font-medium shadow-sm hover:shadow"
+            >
+              {getTranslation(lang, "components.jsonFormatter.minify")}
+            </button>
+          </div>
         </div>
-      </div>
 
-      <!-- Estado de validación -->
-      <div id="validation-status" class="text-sm"></div>
+        <!-- Estado de validación -->
+        <div id="validation-status" class="text-sm mt-3 font-medium"></div>
+      </div>
     </div>
 
     <!-- Panel de salida -->
     <div class="space-y-4">
-      <div class="flex items-center justify-between">
-        <label class="block text-sm font-medium text-neutral-300">
-          {getTranslation(lang, "components.jsonFormatter.outputTitle")}
-        </label>
-        <div class="flex gap-2">
-          <button
-            id="copy-btn"
-            title={getTranslation(lang, "components.jsonFormatter.copy")}
-            class="cursor-pointer text-xs px-3 py-1 bg-neutral-700 hover:bg-neutral-600 text-neutral-200 rounded transition-colors active:scale-95"
+      <div class="bg-white rounded-xl border border-neutral-200 shadow-sm p-6">
+        <div class="flex items-center justify-between mb-4">
+          <label class="block text-sm font-semibold text-neutral-800">
+            {getTranslation(lang, "components.jsonFormatter.outputTitle")}
+          </label>
+          <div class="flex gap-2">
+            <button
+              id="copy-btn"
+              title={getTranslation(lang, "components.jsonFormatter.copy")}
+              class="cursor-pointer text-xs px-3 py-1.5 bg-white border border-neutral-300 hover:border-neutral-400 text-neutral-700 rounded-lg transition-all font-medium shadow-sm hover:shadow"
+            >
+              {getTranslation(lang, "components.jsonFormatter.copy")}
+            </button>
+            <button
+              id="download-btn"
+              title={getTranslation(lang, "common.download")}
+              class="cursor-pointer text-xs px-3 py-1.5 bg-white border border-neutral-300 hover:border-neutral-400 text-neutral-700 rounded-lg transition-all font-medium shadow-sm hover:shadow"
+            >
+              {getTranslation(lang, "common.download")}
+            </button>
+          </div>
+        </div>
+
+        <!-- Salida con json-formatter-js -->
+        <div class="relative">
+          <div
+            id="json-output"
+            class="w-full h-96 p-4 bg-white border border-neutral-300 rounded-lg text-sm font-mono overflow-auto shadow-sm"
           >
-            {getTranslation(lang, "components.jsonFormatter.copy")}
-          </button>
+          </div>
+          <textarea
+            id="json-output-text"
+            class="w-full h-96 p-4 bg-white border border-neutral-300 rounded-lg text-sm font-mono resize-none focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500 hidden text-neutral-700"
+            readonly></textarea>
+
           <button
-            id="download-btn"
-            title={getTranslation(lang, "common.download")}
-            class="cursor-pointer text-xs px-3 py-1 bg-neutral-700 hover:bg-neutral-600 text-neutral-200 rounded transition-colors active:scale-95"
+            id="expand-btn"
+            title="Expandir JSON"
+            class="cursor-pointer absolute top-2 right-2 p-2 bg-white/90 backdrop-blur-sm rounded-lg hover:bg-neutral-50 transition-all duration-200 shadow-md border border-neutral-200 hover:border-neutral-300"
           >
-            {getTranslation(lang, "common.download")}
+            <Picture
+              src={ExpandIcon}
+              alt="Expandir"
+              class="w-4 h-4 opacity-60 hover:opacity-100 transition-opacity duration-200"
+            />
           </button>
         </div>
-      </div>
-
-      <!-- Salida con json-formatter-js -->
-      <div class="relative">
-        <div
-          id="json-output"
-          class="w-full h-96 p-4 bg-neutral-900/60 border border-neutral-700 rounded-lg text-sm font-mono overflow-auto"
-        >
-        </div>
-        <textarea
-          id="json-output-text"
-          class="w-full h-96 p-4 bg-neutral-900/60 border border-neutral-700 rounded-lg text-sm font-mono resize-none focus:outline-none focus:ring-2 focus:ring-emerald-500/50 hidden"
-          readonly></textarea>
-
-        <button
-          id="expand-btn"
-          title="Expandir JSON"
-          class="cursor-pointer absolute top-2 right-2 p-2 bg-neutral-800/80 backdrop-blur-sm rounded-lg hover:bg-neutral-700/80 transition-all duration-200 shadow-lg border border-neutral-700/50 hover:border-neutral-600/70 active:scale-95"
-        >
-          <Picture
-            src={ExpandIcon}
-            alt="Expandir"
-            class="w-4 h-4 filter brightness-0 invert opacity-70 hover:opacity-100 transition-opacity duration-200"
-          />
-        </button>
       </div>
 
       <!-- Información del JSON -->
-      <div class="grid grid-cols-2 gap-4 text-sm">
-        <div class="bg-neutral-900/60 rounded-lg p-3">
-          <div class="text-neutral-400">
+      <div class="grid grid-cols-2 gap-4">
+        <div
+          class="bg-white rounded-xl border border-neutral-200 shadow-sm p-4"
+        >
+          <div
+            class="text-xs font-medium text-neutral-600 uppercase tracking-wide mb-1"
+          >
             {getTranslation(lang, "components.jsonFormatter.originalSize")}
           </div>
-          <div id="original-size" class="font-mono text-neutral-300">
+          <div
+            id="original-size"
+            class="font-mono text-lg font-bold text-emerald-600 tabular-nums"
+          >
             0 bytes
           </div>
         </div>
-        <div class="bg-neutral-900/60 rounded-lg p-3">
-          <div class="text-neutral-400">
+        <div
+          class="bg-white rounded-xl border border-neutral-200 shadow-sm p-4"
+        >
+          <div
+            class="text-xs font-medium text-neutral-600 uppercase tracking-wide mb-1"
+          >
             {getTranslation(lang, "components.jsonFormatter.formattedSize")}
           </div>
-          <div id="formatted-size" class="font-mono text-neutral-300">
+          <div
+            id="formatted-size"
+            class="font-mono text-lg font-bold text-emerald-600 tabular-nums"
+          >
             0 bytes
           </div>
         </div>
@@ -153,6 +176,8 @@ const lang = Astro.params.lang as Language;
   data-translations={JSON.stringify(
     getTranslation(lang, "components.jsonFormatter")
   )}></astro-json-formatter-translations>
+
+<Modal />
 
 <script>
   import JSONFormatter from "json-formatter-js";
@@ -259,8 +284,8 @@ const lang = Astro.params.lang as Language;
 
     const showValidationStatus = (isValid: boolean, message: string = "") => {
       const status = isValid
-        ? `<span class="text-emerald-400">✓ ${jsonMessages.validJson}</span>`
-        : `<span class="text-red-400">✗ ${jsonMessages.invalidJson}: ${message}</span>`;
+        ? `<span class="text-emerald-600">✓ ${jsonMessages.validJson}</span>`
+        : `<span class="text-red-600">✗ ${jsonMessages.invalidJson}: ${message}</span>`;
       elements.validationStatus.innerHTML = status;
     };
 

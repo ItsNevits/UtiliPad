@@ -3,10 +3,12 @@ export const prerender = false;
 import Hero from "@/components/shared/Hero.astro";
 import MainLayout from "@/Layouts/MainLayout.astro";
 import BreadCrumbs from "@/components/shared/BreadCrumbs.astro";
+import Footer from "@/components/Footer.astro";
 
 import { getCollection } from "astro:content";
 import type { Language } from "@/types/language.type";
 import { getTranslation } from "@/i18n/index";
+import Header from "@/components/Header.astro";
 
 const lang = Astro.params.lang as Language;
 const slug = Astro.params.slug;
@@ -30,56 +32,76 @@ const { Content } = await entry.render();
   title={getTranslation(lang, "seo.pages.news.title")}
   description={getTranslation(lang, "seo.pages.news.description")}
 >
-  <BreadCrumbs
-    links={[
-      {
-        href: `/${lang}/news`,
-        name: getTranslation(lang, "common.breadCrumbsOptions.news"),
-      },
-      {
-        href: `/${lang}/news/${entry.id.replace(/\\/g, "/").replace(`${lang}/`, "")}`,
-        name: entry.data.title,
-        isActive: true,
-      },
-    ]}
-  />
-  <Hero
-    title={entry.data.title}
-    description={`Publicado el ${entry.data.date.toLocaleDateString("es-ES", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    })}`}
-  />
-
-  <article class="prose prose-invert prose-lg max-w-none mt-8">
-    <!-- Metadatos del artículo -->
-    <div class="border-b border-neutral-700 pb-6 mb-8">
-      <div class="flex flex-wrap gap-2 mb-4">
-        {
-          entry.data.tags?.map((tag) => (
-            <span class="px-3 py-1 bg-green-500/20 text-green-400 rounded-full text-sm">
-              {tag}
-            </span>
-          ))
-        }
-      </div>
-      <div class="flex items-center gap-4 text-sm text-neutral-400">
-        <span>Por {entry.data.author}</span>
-        <span>•</span>
-        <time datetime={entry.data.date.toISOString()}>
+  <div class="bg-[#dddfe0] m-4 rounded-2xl pb-10 md:pb-15">
+    <Header />
+    <section class="w-full max-w-7xl mx-auto flex flex-col">
+      <Hero
+        title={entry.data.title}
+        description={`Publicado el ${entry.data.date.toLocaleDateString(
+          "es-ES",
           {
-            entry.data.date.toLocaleDateString("es-ES", {
-              year: "numeric",
-              month: "long",
-              day: "numeric",
-            })
+            year: "numeric",
+            month: "long",
+            day: "numeric",
           }
-        </time>
-      </div>
-    </div>
+        )}`}
+      />
+    </section>
+  </div>
 
-    <!-- Contenido del artículo -->
-    <Content />
-  </article>
+  <main class="max-w-7xl w-full mx-auto px-4 py-4 mb-8 md:mb-12">
+    <BreadCrumbs
+      links={[
+        {
+          href: `/${lang}/news`,
+          name: getTranslation(lang, "common.breadCrumbsOptions.news"),
+        },
+        {
+          href: `/${lang}/news/${entry.id.replace(/\\/g, "/").replace(`${lang}/`, "")}`,
+          name: entry.data.title,
+          isActive: true,
+        },
+      ]}
+    />
+
+    <article
+      class="bg-white rounded-xl border border-neutral-200 shadow-sm p-6 md:p-8 mt-6"
+    >
+      <!-- Metadatos del artículo -->
+      <div class="border-b border-neutral-200 pb-6 mb-8">
+        <div class="flex flex-wrap gap-2 mb-4">
+          {
+            entry.data.tags?.map((tag) => (
+              <span class="px-3 py-1.5 bg-emerald-100 text-emerald-700 rounded-full text-sm font-medium">
+                {tag}
+              </span>
+            ))
+          }
+        </div>
+        <div class="flex items-center gap-4 text-sm text-neutral-600">
+          <span class="font-medium">Por {entry.data.author}</span>
+          <span>•</span>
+          <time
+            datetime={entry.data.date.toISOString()}
+            class="text-neutral-600"
+          >
+            {
+              entry.data.date.toLocaleDateString("es-ES", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })
+            }
+          </time>
+        </div>
+      </div>
+
+      <!-- Contenido del artículo -->
+      <div class="prose prose-lg max-w-none">
+        <Content />
+      </div>
+    </article>
+  </main>
+
+  <Footer />
 </MainLayout>

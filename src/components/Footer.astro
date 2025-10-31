@@ -6,29 +6,30 @@ import { getTranslation } from "@/i18n/index";
 const lang = Astro.params.lang as Language;
 ---
 
-<footer class="border-t border-neutral-800 py-8 select-none">
+<footer class="border-t border-neutral-200 bg-white py-5 select-none mt-auto">
   <div
-    class="mx-auto max-w-7xl px-4 text-sm text-neutral-400 flex flex-col md:flex-row items-center justify-between gap-4"
+    class="mx-auto max-w-7xl px-4 text-sm flex flex-col md:flex-row items-center justify-between gap-4"
   >
-    <p>
+    <p class="text-neutral-600 font-medium">
       {getTranslation(lang, "components.footer.madeWith")}
       <span class="text-red-500">❤︎</span>
-      {getTranslation(lang, "components.footer.and")} Astro.js
+      {getTranslation(lang, "components.footer.and")}
+      <span class="text-neutral-800 font-semibold">Astro.js</span>
     </p>
-    <div class="flex items-center gap-4">
+    <div class="flex items-center gap-6">
       <a
         href={getRelativeLocaleUrl(lang, "privacy")}
-        class="hover:text-neutral-200"
+        class="text-neutral-600 hover:text-emerald-600 font-medium transition-colors"
         >{getTranslation(lang, "components.footer.privacy")}</a
       >
       <a
         href={getRelativeLocaleUrl(lang, "terms")}
-        class="hover:text-neutral-200"
+        class="text-neutral-600 hover:text-emerald-600 font-medium transition-colors"
         >{getTranslation(lang, "components.footer.terms")}</a
       >
       <a
         href={getRelativeLocaleUrl(lang, "contact")}
-        class="hover:text-neutral-200"
+        class="text-neutral-600 hover:text-emerald-600 font-medium transition-colors"
         >{getTranslation(lang, "components.footer.contact")}</a
       >
     </div>

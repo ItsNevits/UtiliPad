@@ -36,27 +36,32 @@ if (data) {
 
 <div
   id="process-summary"
-  class="rounded-2xl border border-neutral-800 bg-neutral-800/50"
+  class="select-none rounded-2xl border border-neutral-200 bg-white shadow-sm h-full overflow-hidden"
 >
-  <div class="p-4 border-b border-neutral-700">
-    <h3 class="font-semibold">
+  <div class="px-5 pt-5 pb-4">
+    <h3 class="font-medium text-xl text-neutral-800">
       {getTranslation(lang, "components.processSummary.title")}
     </h3>
   </div>
-  <ul class="p-4 space-y-4">
+  <ul class="divide-y divide-neutral-100">
     {
       process.length === 0 && (
-        <li class="text-sm text-neutral-400">
+        <li class="text-sm text-neutral-500 py-12 text-center px-5">
           {getTranslation(lang, "common.noData")}
         </li>
       )
     }
     {
       process.map((p, index) => (
-        <li id={`process-${index}`} class="flex justify-between items-center">
-          <p class="text-sm text-neutral-300">{p.name}</p>
+        <li
+          id={`process-${index}`}
+          class="flex items-center justify-between gap-4 px-5 py-4"
+        >
+          <p class="text-sm font-medium text-neutral-700 flex-1 leading-snug">
+            {p.name}
+          </p>
           <p
-            class="process-count-up text-sm text-neutral-400 mt-1 count-up-number"
+            class="process-count-up text-md font-semibold text-neutral-700 count-up-number tabular-nums"
             data-target={p.progress}
           >
             0

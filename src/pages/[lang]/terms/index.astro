@@ -4,6 +4,8 @@ import Hero from "@/components/shared/Hero.astro";
 
 import type { Language } from "@/types/language.type";
 import { getTranslation } from "@/i18n/index";
+import Header from "@/components/Header.astro";
+import Footer from "@/components/Footer.astro";
 
 const lang = Astro.params.lang as Language;
 const termsContent = getTranslation(lang, "pages.terms.content");
@@ -13,32 +15,40 @@ const termsContent = getTranslation(lang, "pages.terms.content");
   title={getTranslation(lang, "seo.pages.terms.title")}
   description={getTranslation(lang, "seo.pages.terms.description")}
 >
-  <Hero
-    title={getTranslation(lang, "pages.terms.title")}
-    description={getTranslation(lang, "pages.terms.description")}
-  />
+  <div class="bg-[#dddfe0] m-4 rounded-2xl pb-10 md:pb-15">
+    <Header />
+    <section class="w-full max-w-7xl mx-auto flex flex-col">
+      <Hero
+        title={getTranslation(lang, "pages.terms.title")}
+        description={getTranslation(lang, "pages.terms.description")}
+      />
+    </section>
+  </div>
 
-  <div
-    class="bg-neutral-800/50 overflow-hidden rounded-2xl border border-neutral-800 mt-5 p-6 select-none"
+  <main
+    class="max-w-7xl w-full mx-auto p-6 mb-8 md:mb-12 border border-neutral-200 rounded-2xl bg-white"
   >
     <div>
       {
         Array.isArray(termsContent) &&
           termsContent.map((section) => (
-            <div class="mb-6 last:mb-0">
-              <h2 class="text-xl md:text-2xl font-bold leading-tight mb-4">
+            <div class="mb-8 last:mb-0">
+              <h2 class="text-xl md:text-2xl font-bold leading-tight mb-4 text-neutral-800">
                 {section.title}
               </h2>
               {Array.isArray(section.paragraphs) &&
               section.paragraphs.length > 1 ? (
-                <ul class="list-disc list-inside mb-4">
+                <ul class="list-disc list-inside mb-4 space-y-2">
                   {section.paragraphs.map((paragraph: string) => (
-                    <li class="mb-2 text-neutral-400" set:html={paragraph} />
+                    <li
+                      class="text-neutral-700 leading-relaxed"
+                      set:html={paragraph}
+                    />
                   ))}
                 </ul>
               ) : (
                 <p
-                  class="mb-4 text-neutral-400"
+                  class="mb-4 text-neutral-700 leading-relaxed"
                   set:html={
                     Array.isArray(section.paragraphs)
                       ? section.paragraphs[0]
@@ -50,5 +60,6 @@ const termsContent = getTranslation(lang, "pages.terms.content");
           ))
       }
     </div>
-  </div>
+  </main>
+  <Footer />
 </MainLayout>

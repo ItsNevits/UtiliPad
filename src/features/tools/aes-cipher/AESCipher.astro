@@ -5,700 +5,716 @@ import { getTranslation } from "@/i18n/index";
 const lang = Astro.params.lang as Language;
 ---
 
-<div class="bg-neutral-800/50 rounded-xl px-6 py-4 select-none">
+<div class="space-y-6 mt-6">
   <!-- Mode Tabs -->
-  <div class="flex gap-2 mb-6 border-b border-neutral-700">
-    <button
-      id="tab-encrypt"
-      class="cursor-pointer px-4 py-2 text-sm font-medium border-b-2 border-emerald-500 text-emerald-400 transition-colors"
-    >
-      {getTranslation(lang, "components.aesCipher.encryptTab")}
-    </button>
-    <button
-      id="tab-decrypt"
-      class="cursor-pointer px-4 py-2 text-sm font-medium border-b-2 border-transparent text-neutral-400 hover:text-neutral-300 transition-colors"
-    >
-      {getTranslation(lang, "components.aesCipher.decryptTab")}
-    </button>
-  </div>
-
-  <!-- Encrypt Mode -->
-  <div id="encrypt-mode" class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-    <!-- Input Panel -->
-    <div class="space-y-4">
-      <div class="flex items-center justify-between">
-        <label class="block text-sm font-medium text-neutral-300">
-          {getTranslation(lang, "components.aesCipher.inputTitle")}
-        </label>
-        <div class="flex gap-2">
-          <button
-            id="paste-encrypt-btn"
-            title={getTranslation(lang, "components.aesCipher.paste")}
-            class="cursor-pointer text-xs px-3 py-1 bg-neutral-700 hover:bg-neutral-600 text-neutral-200 rounded transition-colors active:scale-95"
-          >
-            {getTranslation(lang, "components.aesCipher.paste")}
-          </button>
-          <button
-            id="clear-encrypt-btn"
-            title={getTranslation(lang, "components.aesCipher.clear")}
-            class="cursor-pointer text-xs px-3 py-1 bg-neutral-700 hover:bg-neutral-600 text-neutral-200 rounded transition-colors active:scale-95"
-          >
-            {getTranslation(lang, "components.aesCipher.clear")}
-          </button>
-        </div>
-      </div>
-
-      <textarea
-        id="encrypt-input"
-        placeholder={getTranslation(
-          lang,
-          "components.aesCipher.encryptPlaceholder"
-        )}
-        class="w-full h-48 p-4 bg-neutral-900/60 border border-neutral-700 rounded-lg text-sm font-mono resize-none focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
-      ></textarea>
-
-      <!-- Password/Key -->
-      <div>
-        <label class="block text-xs text-neutral-400 mb-1">
-          {getTranslation(lang, "components.aesCipher.password")}
-        </label>
-        <div class="flex gap-2">
-          <input
-            type="password"
-            id="encrypt-password"
-            placeholder={getTranslation(
-              lang,
-              "components.aesCipher.passwordPlaceholder"
-            )}
-            class="flex-1 px-3 py-2 bg-neutral-900/60 border border-neutral-700 rounded-lg text-sm font-mono focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
-          />
-          <button
-            id="toggle-encrypt-password"
-            class="cursor-pointer px-3 py-2 bg-neutral-700 hover:bg-neutral-600 text-neutral-200 rounded transition-colors active:scale-95"
-            title={getTranslation(lang, "components.aesCipher.showPassword")}
-          >
-            👀
-          </button>
-          <button
-            id="generate-password-btn"
-            class="cursor-pointer text-xs px-3 py-2 bg-neutral-700 hover:bg-neutral-600 text-neutral-200 rounded transition-colors active:scale-95"
-            title={getTranslation(
-              lang,
-              "components.aesCipher.generatePassword"
-            )}
-          >
-            {getTranslation(lang, "components.aesCipher.generate")}
-          </button>
-        </div>
-      </div>
-
-      <!-- Advanced Options -->
-      <div class="bg-neutral-900/60 rounded-lg pt-2 space-y-3">
-        <label class="flex items-center gap-3 cursor-pointer">
-          <input
-            type="checkbox"
-            id="advanced-options-toggle"
-            class="w-4 h-4 rounded bg-neutral-700 border-neutral-600 text-emerald-500 focus:ring-2 focus:ring-emerald-500/50"
-          />
-          <div class="flex items-center gap-2">
-            <span class="text-sm text-neutral-300">
-              {getTranslation(lang, "components.aesCipher.advancedOptions")}
-            </span>
-          </div>
-        </label>
-
-        <div id="advanced-options" class="hidden space-y-3">
-          <!-- Mode Selection -->
-          <div>
-            <label class="block text-xs text-neutral-400 mb-1">
-              {getTranslation(lang, "components.aesCipher.encryptionMode")}
-            </label>
-            <select
-              id="encryption-mode"
-              class="w-full px-3 py-2 bg-neutral-800 border border-neutral-700 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
-            >
-              <option value="password" selected>
-                {getTranslation(lang, "components.aesCipher.passwordMode")}
-              </option>
-              <option value="manual">
-                {getTranslation(lang, "components.aesCipher.manualMode")}
-              </option>
-            </select>
-            <p class="text-xs text-neutral-500 mt-1">
-              {getTranslation(lang, "components.aesCipher.encryptionModeHelp")}
-            </p>
-          </div>
-
-          <!-- Password Mode Options -->
-          <div id="password-mode-options" class="space-y-3">
-            <div>
-              <label class="block text-xs text-neutral-400 mb-1">
-                {getTranslation(lang, "components.aesCipher.iterations")}
-              </label>
-              <input
-                type="number"
-                id="iterations"
-                value="100000"
-                min="10000"
-                max="1000000"
-                step="10000"
-                class="w-full px-3 py-2 bg-neutral-800 border border-neutral-700 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
-              />
-              <p class="text-xs text-neutral-500 mt-1">
-                {getTranslation(lang, "components.aesCipher.iterationsHelp")}
-              </p>
-            </div>
-          </div>
-
-          <!-- Manual Mode Options -->
-          <div id="manual-mode-options" class="hidden space-y-3">
-            <!-- Cipher Mode Selection -->
-            <div>
-              <label class="block text-xs text-neutral-400 mb-1">
-                {getTranslation(lang, "components.aesCipher.cipherMode")}
-              </label>
-              <select
-                id="cipher-mode"
-                class="w-full px-3 py-2 bg-neutral-800 border border-neutral-700 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
-              >
-                <option value="AES-GCM" selected>AES-GCM (Authenticated)</option
-                >
-                <option value="AES-CBC">AES-CBC (Classic)</option>
-              </select>
-              <p class="text-xs text-neutral-500 mt-1">
-                {getTranslation(lang, "components.aesCipher.cipherModeHelp")}
-              </p>
-            </div>
-
-            <!-- Key/IV Encoding Type -->
-            <div>
-              <label class="block text-xs text-neutral-400 mb-1">
-                {getTranslation(lang, "components.aesCipher.keyEncoding")}
-              </label>
-              <select
-                id="key-encoding"
-                class="w-full px-3 py-2 bg-neutral-800 border border-neutral-700 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
-              >
-                <option value="hex" selected>Hexadecimal</option>
-                <option value="utf8">UTF-8</option>
-              </select>
-              <p class="text-xs text-neutral-500 mt-1">
-                {getTranslation(lang, "components.aesCipher.keyEncodingHelp")}
-              </p>
-            </div>
-
-            <!-- AES Key Size Selection -->
-            <div>
-              <label class="block text-xs text-neutral-400 mb-1">
-                {getTranslation(lang, "components.aesCipher.keySize")}
-              </label>
-              <div class="grid grid-cols-3 gap-2">
-                <button
-                  type="button"
-                  id="key-size-128"
-                  class="key-size-btn px-4 py-2 bg-neutral-800 hover:bg-neutral-700 border border-neutral-700 rounded-lg text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
-                  data-size="128"
-                >
-                  <div class="font-semibold text-emerald-400">AES-128</div>
-                  <div class="text-xs text-neutral-500">16 bytes</div>
-                </button>
-                <button
-                  type="button"
-                  id="key-size-192"
-                  class="key-size-btn px-4 py-2 bg-neutral-800 hover:bg-neutral-700 border border-neutral-700 rounded-lg text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
-                  data-size="192"
-                >
-                  <div class="font-semibold text-blue-400">AES-192</div>
-                  <div class="text-xs text-neutral-500">24 bytes</div>
-                </button>
-                <button
-                  type="button"
-                  id="key-size-256"
-                  class="key-size-btn px-4 py-2 bg-neutral-800 hover:bg-neutral-700 border border-neutral-700 rounded-lg text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500/50 ring-2 ring-emerald-500"
-                  data-size="256"
-                >
-                  <div class="font-semibold text-purple-400">AES-256</div>
-                  <div class="text-xs text-neutral-500">32 bytes</div>
-                </button>
-              </div>
-              <p class="text-xs text-neutral-500 mt-1">
-                {getTranslation(lang, "components.aesCipher.keySizeHelp")}
-              </p>
-            </div>
-
-            <div>
-              <label class="block text-xs text-neutral-400 mb-1">
-                {getTranslation(lang, "components.aesCipher.manualKey")}
-                <span class="text-red-400">*</span>
-              </label>
-              <div class="flex gap-2">
-                <input
-                  type="text"
-                  id="manual-key"
-                  placeholder="Hex key (e.g., 32 bytes = 64 chars for AES-256)"
-                  class="flex-1 px-3 py-2 bg-neutral-800 border border-neutral-700 rounded-lg text-sm font-mono focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
-                />
-                <button
-                  id="generate-key-btn"
-                  class="cursor-pointer px-3 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded transition-colors text-xs active:scale-95"
-                  title={getTranslation(
-                    lang,
-                    "components.aesCipher.generateKey"
-                  )}
-                >
-                  {getTranslation(lang, "components.aesCipher.generate")}
-                </button>
-              </div>
-              <p class="text-xs text-neutral-500 mt-1">
-                {getTranslation(lang, "components.aesCipher.keyHelp")}
-              </p>
-            </div>
-
-            <div>
-              <label class="block text-xs text-neutral-400 mb-1">
-                {getTranslation(lang, "components.aesCipher.manualIV")}
-                <span class="text-red-400">*</span>
-              </label>
-              <div class="flex gap-2">
-                <input
-                  type="text"
-                  id="manual-iv"
-                  placeholder="Hex IV (e.g., 16 bytes = 32 chars)"
-                  class="flex-1 px-3 py-2 bg-neutral-800 border border-neutral-700 rounded-lg text-sm font-mono focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
-                />
-                <button
-                  id="generate-iv-btn"
-                  class="cursor-pointer px-3 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded transition-colors text-xs active:scale-95"
-                  title={getTranslation(
-                    lang,
-                    "components.aesCipher.generateIV"
-                  )}
-                >
-                  {getTranslation(lang, "components.aesCipher.generate")}
-                </button>
-              </div>
-              <p class="text-xs text-neutral-500 mt-1">
-                {getTranslation(lang, "components.aesCipher.ivHelp")}
-              </p>
-            </div>
-          </div>
-
-          <div>
-            <label class="block text-xs text-neutral-400 mb-1">
-              {getTranslation(lang, "components.aesCipher.outputFormat")}
-            </label>
-            <select
-              id="output-format"
-              class="w-full px-3 py-2 bg-neutral-800 border border-neutral-700 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
-            >
-              <option value="base64" selected>Base64</option>
-              <option value="hex">Hexadecimal</option>
-            </select>
-          </div>
-        </div>
-      </div>
-
+  <div class="bg-white rounded-xl border border-neutral-200 shadow-sm p-6">
+    <div class="flex gap-2 mb-6 border-b border-neutral-200">
       <button
-        id="encrypt-btn"
-        title={getTranslation(lang, "components.aesCipher.encrypt")}
-        class="w-full cursor-pointer text-sm px-4 py-2 bg-neutral-700 hover:bg-neutral-600 text-neutral-200 rounded transition-colors active:scale-95"
+        id="tab-encrypt"
+        class="cursor-pointer px-4 py-2 text-sm font-semibold border-b-2 border-emerald-500 text-emerald-600 transition-colors"
       >
-        {getTranslation(lang, "components.aesCipher.encrypt")}
+        {getTranslation(lang, "components.aesCipher.encryptTab")}
       </button>
-
-      <!-- Info Box -->
-      <div class="bg-blue-500/10 border border-blue-500/20 rounded-lg p-3">
-        <p class="text-xs text-blue-300">
-          <strong
-            >{getTranslation(lang, "components.aesCipher.infoTitle")}:</strong
-          >
-          {getTranslation(lang, "components.aesCipher.infoText")}
-        </p>
-      </div>
-    </div>
-
-    <!-- Output Panel -->
-    <div class="space-y-4">
-      <div class="flex items-center justify-between">
-        <label class="block text-sm font-medium text-neutral-300">
-          {getTranslation(lang, "components.aesCipher.encryptedOutput")}
-        </label>
-        <div class="flex gap-2">
-          <button
-            id="copy-encrypted-btn"
-            title={getTranslation(lang, "components.aesCipher.copy")}
-            class="cursor-pointer text-xs px-3 py-1 bg-neutral-700 hover:bg-neutral-600 text-neutral-200 rounded transition-colors active:scale-95"
-          >
-            {getTranslation(lang, "components.aesCipher.copy")}
-          </button>
-          <button
-            id="download-encrypted-btn"
-            title={getTranslation(lang, "common.download")}
-            class="cursor-pointer text-xs px-3 py-1 bg-neutral-700 hover:bg-neutral-600 text-neutral-200 rounded transition-colors active:scale-95"
-          >
-            {getTranslation(lang, "common.download")}
-          </button>
-        </div>
-      </div>
-
-      <textarea
-        id="encrypt-output"
-        readonly
-        placeholder={getTranslation(
-          lang,
-          "components.aesCipher.outputPlaceholder"
-        )}
-        class="w-full h-48 p-4 bg-neutral-900/60 border border-neutral-700 rounded-lg text-sm font-mono resize-none focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
-      ></textarea>
-
-      <!-- Encryption Info -->
-      <div class="grid grid-cols-2 gap-3 text-xs">
-        <div class="bg-neutral-900/60 rounded-lg p-3">
-          <div class="text-neutral-400">
-            {getTranslation(lang, "components.aesCipher.algorithm")}
-          </div>
-          <div class="font-mono text-neutral-300">AES-256-GCM</div>
-        </div>
-        <div class="bg-neutral-900/60 rounded-lg p-3">
-          <div class="text-neutral-400">
-            {getTranslation(lang, "components.aesCipher.keyDerivation")}
-          </div>
-          <div class="font-mono text-neutral-300">PBKDF2</div>
-        </div>
-      </div>
-
-      <div class="bg-neutral-900/60 rounded-lg p-3">
-        <div class="text-xs text-neutral-400 mb-2">
-          {getTranslation(lang, "components.aesCipher.encryptionTime")}
-        </div>
-        <div id="encrypt-time" class="font-mono text-sm text-neutral-300">
-          -
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Decrypt Mode -->
-  <div id="decrypt-mode" class="hidden grid-cols-1 lg:grid-cols-2 gap-6">
-    <!-- Input Panel -->
-    <div class="space-y-4">
-      <div class="flex items-center justify-between">
-        <label class="block text-sm font-medium text-neutral-300">
-          {getTranslation(lang, "components.aesCipher.encryptedInput")}
-        </label>
-        <div class="flex gap-2">
-          <button
-            id="paste-decrypt-btn"
-            title={getTranslation(lang, "components.aesCipher.paste")}
-            class="cursor-pointer text-xs px-3 py-1 bg-neutral-700 hover:bg-neutral-600 text-neutral-200 rounded transition-colors active:scale-95"
-          >
-            {getTranslation(lang, "components.aesCipher.paste")}
-          </button>
-          <button
-            id="clear-decrypt-btn"
-            title={getTranslation(lang, "components.aesCipher.clear")}
-            class="cursor-pointer text-xs px-3 py-1 bg-neutral-700 hover:bg-neutral-600 text-neutral-200 rounded transition-colors active:scale-95"
-          >
-            {getTranslation(lang, "components.aesCipher.clear")}
-          </button>
-        </div>
-      </div>
-
-      <textarea
-        id="decrypt-input"
-        placeholder={getTranslation(
-          lang,
-          "components.aesCipher.decryptPlaceholder"
-        )}
-        class="w-full h-48 p-4 bg-neutral-900/60 border border-neutral-700 rounded-lg text-sm font-mono resize-none focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
-      ></textarea>
-
-      <!-- Password/Key -->
-      <div>
-        <label class="block text-xs text-neutral-400 mb-1">
-          {getTranslation(lang, "components.aesCipher.password")}
-        </label>
-        <div class="flex gap-2">
-          <input
-            type="password"
-            id="decrypt-password"
-            placeholder={getTranslation(
-              lang,
-              "components.aesCipher.passwordPlaceholder"
-            )}
-            class="flex-1 px-3 py-2 bg-neutral-900/60 border border-neutral-700 rounded-lg text-sm font-mono focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
-          />
-          <button
-            id="toggle-decrypt-password"
-            class="cursor-pointer px-3 py-2 bg-neutral-700 hover:bg-neutral-600 text-neutral-200 rounded transition-colors active:scale-95"
-            title={getTranslation(lang, "components.aesCipher.showPassword")}
-          >
-            👀
-          </button>
-        </div>
-      </div>
-
-      <!-- Advanced Options for Decrypt -->
-      <div class="bg-neutral-900/60 rounded-lg pt-4 space-y-3">
-        <label class="flex items-center gap-3 cursor-pointer">
-          <input
-            type="checkbox"
-            id="decrypt-advanced-options-toggle"
-            class="w-4 h-4 rounded bg-neutral-700 border-neutral-600 text-emerald-500 focus:ring-2 focus:ring-emerald-500/50"
-          />
-          <div class="flex items-center gap-2">
-            <span class="text-sm text-neutral-300">
-              {getTranslation(lang, "components.aesCipher.advancedOptions")}
-            </span>
-          </div>
-        </label>
-
-        <div id="decrypt-advanced-options" class="hidden space-y-3">
-          <!-- Decryption Mode Selection -->
-          <div>
-            <label class="block text-xs text-neutral-400 mb-1">
-              {getTranslation(lang, "components.aesCipher.decryptionMode")}
-            </label>
-            <select
-              id="decryption-mode"
-              class="w-full px-3 py-2 bg-neutral-800 border border-neutral-700 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
-            >
-              <option value="auto" selected>
-                {getTranslation(lang, "components.aesCipher.autoMode")}
-              </option>
-              <option value="manual">
-                {getTranslation(lang, "components.aesCipher.manualMode")}
-              </option>
-            </select>
-            <p class="text-xs text-neutral-500 mt-1">
-              {getTranslation(lang, "components.aesCipher.decryptionModeHelp")}
-            </p>
-          </div>
-
-          <!-- Manual Decrypt Mode Options -->
-          <div id="decrypt-manual-mode-options" class="hidden space-y-3">
-            <!-- Cipher Mode Selection -->
-            <div>
-              <label class="block text-xs text-neutral-400 mb-1">
-                {getTranslation(lang, "components.aesCipher.cipherMode")}
-              </label>
-              <select
-                id="decrypt-cipher-mode"
-                class="w-full px-3 py-2 bg-neutral-800 border border-neutral-700 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
-              >
-                <option value="AES-GCM" selected>AES-GCM (Authenticated)</option
-                >
-                <option value="AES-CBC">AES-CBC (Classic)</option>
-              </select>
-              <p class="text-xs text-neutral-500 mt-1">
-                {getTranslation(lang, "components.aesCipher.cipherModeHelp")}
-              </p>
-            </div>
-
-            <!-- Key/IV Encoding Type for Decrypt -->
-            <div>
-              <label class="block text-xs text-neutral-400 mb-1">
-                {getTranslation(lang, "components.aesCipher.keyEncoding")}
-              </label>
-              <select
-                id="decrypt-key-encoding"
-                class="w-full px-3 py-2 bg-neutral-800 border border-neutral-700 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
-              >
-                <option value="hex" selected>Hexadecimal</option>
-                <option value="utf8">UTF-8</option>
-              </select>
-              <p class="text-xs text-neutral-500 mt-1">
-                {getTranslation(lang, "components.aesCipher.keyEncodingHelp")}
-              </p>
-            </div>
-
-            <!-- AES Key Size Selection for Decrypt -->
-            <div>
-              <label class="block text-xs text-neutral-400 mb-1">
-                {getTranslation(lang, "components.aesCipher.keySize")}
-              </label>
-              <div class="grid grid-cols-3 gap-2">
-                <button
-                  type="button"
-                  id="decrypt-key-size-128"
-                  class="decrypt-key-size-btn px-4 py-2 bg-neutral-800 hover:bg-neutral-700 border border-neutral-700 rounded-lg text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
-                  data-size="128"
-                >
-                  <div class="font-semibold text-emerald-400">AES-128</div>
-                  <div class="text-xs text-neutral-500">16 bytes</div>
-                </button>
-                <button
-                  type="button"
-                  id="decrypt-key-size-192"
-                  class="decrypt-key-size-btn px-4 py-2 bg-neutral-800 hover:bg-neutral-700 border border-neutral-700 rounded-lg text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
-                  data-size="192"
-                >
-                  <div class="font-semibold text-blue-400">AES-192</div>
-                  <div class="text-xs text-neutral-500">24 bytes</div>
-                </button>
-                <button
-                  type="button"
-                  id="decrypt-key-size-256"
-                  class="decrypt-key-size-btn px-4 py-2 bg-neutral-800 hover:bg-neutral-700 border border-neutral-700 rounded-lg text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500/50 ring-2 ring-emerald-500"
-                  data-size="256"
-                >
-                  <div class="font-semibold text-purple-400">AES-256</div>
-                  <div class="text-xs text-neutral-500">32 bytes</div>
-                </button>
-              </div>
-              <p class="text-xs text-neutral-500 mt-1">
-                {getTranslation(lang, "components.aesCipher.keySizeHelp")}
-              </p>
-            </div>
-
-            <div>
-              <label class="block text-xs text-neutral-400 mb-1">
-                {getTranslation(lang, "components.aesCipher.manualKey")}
-                <span class="text-red-400">*</span>
-              </label>
-              <input
-                type="text"
-                id="decrypt-manual-key"
-                placeholder="Hex key (e.g., 32 bytes = 64 chars for AES-256)"
-                class="w-full px-3 py-2 bg-neutral-800 border border-neutral-700 rounded-lg text-sm font-mono focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
-              />
-              <p class="text-xs text-neutral-500 mt-1">
-                {getTranslation(lang, "components.aesCipher.keyHelp")}
-              </p>
-            </div>
-
-            <div>
-              <label class="block text-xs text-neutral-400 mb-1">
-                {getTranslation(lang, "components.aesCipher.manualIV")}
-                <span class="text-red-400">*</span>
-              </label>
-              <input
-                type="text"
-                id="decrypt-manual-iv"
-                placeholder="Hex IV (e.g., 16 bytes = 32 chars)"
-                class="w-full px-3 py-2 bg-neutral-800 border border-neutral-700 rounded-lg text-sm font-mono focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
-              />
-              <p class="text-xs text-neutral-500 mt-1">
-                {getTranslation(lang, "components.aesCipher.ivHelp")}
-              </p>
-            </div>
-          </div>
-
-          <!-- Format Detection -->
-          <div>
-            <label class="block text-xs text-neutral-400 mb-1">
-              {getTranslation(lang, "components.aesCipher.detectedFormat")}
-            </label>
-            <div
-              id="detected-format"
-              class="px-3 py-2 bg-neutral-800 border border-neutral-700 rounded-lg font-mono text-sm text-neutral-300"
-            >
-              {getTranslation(lang, "components.aesCipher.autoDetect")}
-            </div>
-          </div>
-        </div>
-      </div>
-
       <button
-        id="decrypt-btn"
-        title={getTranslation(lang, "components.aesCipher.decrypt")}
-        class="w-full cursor-pointer text-sm px-4 py-2 bg-neutral-700 hover:bg-neutral-600 text-neutral-200 rounded transition-colors active:scale-95"
+        id="tab-decrypt"
+        class="cursor-pointer px-4 py-2 text-sm font-medium border-b-2 border-transparent text-neutral-600 hover:text-neutral-800 transition-colors"
       >
-        {getTranslation(lang, "components.aesCipher.decrypt")}
+        {getTranslation(lang, "components.aesCipher.decryptTab")}
       </button>
-
-      <!-- Warning Box -->
-      <div class="bg-yellow-500/10 border border-yellow-500/20 rounded-lg p-3">
-        <p class="text-xs text-yellow-300">
-          <strong
-            >{
-              getTranslation(lang, "components.aesCipher.warningTitle")
-            }:</strong
-          >
-          {getTranslation(lang, "components.aesCipher.warningText")}
-        </p>
-      </div>
     </div>
 
-    <!-- Output Panel -->
-    <div class="space-y-4">
-      <div class="flex items-center justify-between">
-        <label class="block text-sm font-medium text-neutral-300">
-          {getTranslation(lang, "components.aesCipher.decryptedOutput")}
-        </label>
-        <div class="flex gap-2">
-          <button
-            id="copy-decrypted-btn"
-            title={getTranslation(lang, "components.aesCipher.copy")}
-            class="cursor-pointer text-xs px-3 py-1 bg-neutral-700 hover:bg-neutral-600 text-neutral-200 rounded transition-colors active:scale-95"
-          >
-            {getTranslation(lang, "components.aesCipher.copy")}
-          </button>
-          <button
-            id="download-decrypted-btn"
-            title={getTranslation(lang, "common.download")}
-            class="cursor-pointer text-xs px-3 py-1 bg-neutral-700 hover:bg-neutral-600 text-neutral-200 rounded transition-colors active:scale-95"
-          >
-            {getTranslation(lang, "common.download")}
-          </button>
+    <!-- Encrypt Mode -->
+    <div id="encrypt-mode" class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <!-- Input Panel -->
+      <div class="space-y-4">
+        <div class="flex items-center justify-between">
+          <label class="block text-sm font-semibold text-neutral-800">
+            {getTranslation(lang, "components.aesCipher.inputTitle")}
+          </label>
+          <div class="flex gap-2">
+            <button
+              id="paste-encrypt-btn"
+              title={getTranslation(lang, "components.aesCipher.paste")}
+              class="cursor-pointer text-xs px-3 py-1.5 bg-white border border-neutral-300 hover:border-neutral-400 text-neutral-700 rounded-lg transition-all shadow-sm hover:shadow font-medium"
+            >
+              {getTranslation(lang, "components.aesCipher.paste")}
+            </button>
+            <button
+              id="clear-encrypt-btn"
+              title={getTranslation(lang, "components.aesCipher.clear")}
+              class="cursor-pointer text-xs px-3 py-1.5 bg-white border border-neutral-300 hover:border-neutral-400 text-neutral-700 rounded-lg transition-all shadow-sm hover:shadow font-medium"
+            >
+              {getTranslation(lang, "components.aesCipher.clear")}
+            </button>
+          </div>
         </div>
-      </div>
 
-      <textarea
-        id="decrypt-output"
-        readonly
-        placeholder={getTranslation(
-          lang,
-          "components.aesCipher.outputPlaceholder"
-        )}
-        class="w-full h-48 p-4 bg-neutral-900/60 border border-neutral-700 rounded-lg text-sm font-mono resize-none focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
-      ></textarea>
+        <textarea
+          id="encrypt-input"
+          placeholder={getTranslation(
+            lang,
+            "components.aesCipher.encryptPlaceholder"
+          )}
+          class="w-full h-48 p-4 bg-white border border-neutral-300 rounded-lg text-sm font-mono text-neutral-700 placeholder:text-neutral-500 resize-none focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500 transition-all shadow-sm"
+        ></textarea>
 
-      <!-- Decryption Status -->
-      <div id="decrypt-status" class="hidden">
-        <div
-          class="bg-emerald-500/10 border border-emerald-500/20 rounded-lg p-3"
+        <!-- Password/Key -->
+        <div>
+          <label class="block text-xs text-neutral-600 mb-1">
+            {getTranslation(lang, "components.aesCipher.password")}
+          </label>
+          <div class="flex gap-2">
+            <input
+              type="password"
+              id="encrypt-password"
+              placeholder={getTranslation(
+                lang,
+                "components.aesCipher.passwordPlaceholder"
+              )}
+              class="flex-1 px-3 py-2 bg-white border border-neutral-300 rounded-lg text-sm font-mono focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
+            />
+            <button
+              id="toggle-encrypt-password"
+              class="cursor-pointer px-3 py-2 bg-white border border-neutral-300 hover:border-neutral-400 text-neutral-700 rounded transition-colors active:scale-95"
+              title={getTranslation(lang, "components.aesCipher.showPassword")}
+            >
+              👀
+            </button>
+            <button
+              id="generate-password-btn"
+              class="cursor-pointer text-xs px-3 py-2 bg-white border border-neutral-300 hover:border-neutral-400 text-neutral-700 rounded transition-colors active:scale-95"
+              title={getTranslation(
+                lang,
+                "components.aesCipher.generatePassword"
+              )}
+            >
+              {getTranslation(lang, "components.aesCipher.generate")}
+            </button>
+          </div>
+        </div>
+
+        <!-- Advanced Options -->
+        <div class="bg-white rounded-lg pt-2 space-y-3">
+          <label class="flex items-center gap-3 cursor-pointer">
+            <input
+              type="checkbox"
+              id="advanced-options-toggle"
+              class="w-4 h-4 rounded bg-white border border-neutral-300 text-emerald-500 focus:ring-2 focus:ring-emerald-500/50"
+            />
+            <div class="flex items-center gap-2">
+              <span class="text-sm text-neutral-700">
+                {getTranslation(lang, "components.aesCipher.advancedOptions")}
+              </span>
+            </div>
+          </label>
+
+          <div id="advanced-options" class="hidden space-y-3">
+            <!-- Mode Selection -->
+            <div>
+              <label class="block text-xs text-neutral-600 mb-1">
+                {getTranslation(lang, "components.aesCipher.encryptionMode")}
+              </label>
+              <select
+                id="encryption-mode"
+                class="w-full px-3 py-2 bg-white border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
+              >
+                <option value="password" selected>
+                  {getTranslation(lang, "components.aesCipher.passwordMode")}
+                </option>
+                <option value="manual">
+                  {getTranslation(lang, "components.aesCipher.manualMode")}
+                </option>
+              </select>
+              <p class="text-xs text-neutral-500 mt-1">
+                {
+                  getTranslation(
+                    lang,
+                    "components.aesCipher.encryptionModeHelp"
+                  )
+                }
+              </p>
+            </div>
+
+            <!-- Password Mode Options -->
+            <div id="password-mode-options" class="space-y-3">
+              <div>
+                <label class="block text-xs text-neutral-600 mb-1">
+                  {getTranslation(lang, "components.aesCipher.iterations")}
+                </label>
+                <input
+                  type="number"
+                  id="iterations"
+                  value="100000"
+                  min="10000"
+                  max="1000000"
+                  step="10000"
+                  class="w-full px-3 py-2 bg-white border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
+                />
+                <p class="text-xs text-neutral-500 mt-1">
+                  {getTranslation(lang, "components.aesCipher.iterationsHelp")}
+                </p>
+              </div>
+            </div>
+
+            <!-- Manual Mode Options -->
+            <div id="manual-mode-options" class="hidden space-y-3">
+              <!-- Cipher Mode Selection -->
+              <div>
+                <label class="block text-xs text-neutral-600 mb-1">
+                  {getTranslation(lang, "components.aesCipher.cipherMode")}
+                </label>
+                <select
+                  id="cipher-mode"
+                  class="w-full px-3 py-2 bg-white border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
+                >
+                  <option value="AES-GCM" selected
+                    >AES-GCM (Authenticated)</option
+                  >
+                  <option value="AES-CBC">AES-CBC (Classic)</option>
+                </select>
+                <p class="text-xs text-neutral-500 mt-1">
+                  {getTranslation(lang, "components.aesCipher.cipherModeHelp")}
+                </p>
+              </div>
+
+              <!-- Key/IV Encoding Type -->
+              <div>
+                <label class="block text-xs text-neutral-600 mb-1">
+                  {getTranslation(lang, "components.aesCipher.keyEncoding")}
+                </label>
+                <select
+                  id="key-encoding"
+                  class="w-full px-3 py-2 bg-white border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
+                >
+                  <option value="hex" selected>Hexadecimal</option>
+                  <option value="utf8">UTF-8</option>
+                </select>
+                <p class="text-xs text-neutral-500 mt-1">
+                  {getTranslation(lang, "components.aesCipher.keyEncodingHelp")}
+                </p>
+              </div>
+
+              <!-- AES Key Size Selection -->
+              <div>
+                <label class="block text-xs text-neutral-600 mb-1">
+                  {getTranslation(lang, "components.aesCipher.keySize")}
+                </label>
+                <div class="grid grid-cols-3 gap-2">
+                  <button
+                    type="button"
+                    id="key-size-128"
+                    class="key-size-btn px-4 py-2 bg-white hover:bg-white border border-neutral-300 rounded-lg text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
+                    data-size="128"
+                  >
+                    <div class="font-semibold text-emerald-400">AES-128</div>
+                    <div class="text-xs text-neutral-500">16 bytes</div>
+                  </button>
+                  <button
+                    type="button"
+                    id="key-size-192"
+                    class="key-size-btn px-4 py-2 bg-white hover:bg-white border border-neutral-300 rounded-lg text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
+                    data-size="192"
+                  >
+                    <div class="font-semibold text-blue-400">AES-192</div>
+                    <div class="text-xs text-neutral-500">24 bytes</div>
+                  </button>
+                  <button
+                    type="button"
+                    id="key-size-256"
+                    class="key-size-btn px-4 py-2 bg-white hover:bg-white border border-neutral-300 rounded-lg text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500/50 ring-2 ring-emerald-500"
+                    data-size="256"
+                  >
+                    <div class="font-semibold text-purple-400">AES-256</div>
+                    <div class="text-xs text-neutral-500">32 bytes</div>
+                  </button>
+                </div>
+                <p class="text-xs text-neutral-500 mt-1">
+                  {getTranslation(lang, "components.aesCipher.keySizeHelp")}
+                </p>
+              </div>
+
+              <div>
+                <label class="block text-xs text-neutral-600 mb-1">
+                  {getTranslation(lang, "components.aesCipher.manualKey")}
+                  <span class="text-red-400">*</span>
+                </label>
+                <div class="flex gap-2">
+                  <input
+                    type="text"
+                    id="manual-key"
+                    placeholder="Hex key (e.g., 32 bytes = 64 chars for AES-256)"
+                    class="flex-1 px-3 py-2 bg-white border border-neutral-300 rounded-lg text-sm font-mono focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
+                  />
+                  <button
+                    id="generate-key-btn"
+                    class="cursor-pointer px-3 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded transition-colors text-xs active:scale-95"
+                    title={getTranslation(
+                      lang,
+                      "components.aesCipher.generateKey"
+                    )}
+                  >
+                    {getTranslation(lang, "components.aesCipher.generate")}
+                  </button>
+                </div>
+                <p class="text-xs text-neutral-500 mt-1">
+                  {getTranslation(lang, "components.aesCipher.keyHelp")}
+                </p>
+              </div>
+
+              <div>
+                <label class="block text-xs text-neutral-600 mb-1">
+                  {getTranslation(lang, "components.aesCipher.manualIV")}
+                  <span class="text-red-400">*</span>
+                </label>
+                <div class="flex gap-2">
+                  <input
+                    type="text"
+                    id="manual-iv"
+                    placeholder="Hex IV (e.g., 16 bytes = 32 chars)"
+                    class="flex-1 px-3 py-2 bg-white border border-neutral-300 rounded-lg text-sm font-mono focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
+                  />
+                  <button
+                    id="generate-iv-btn"
+                    class="cursor-pointer px-3 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded transition-colors text-xs active:scale-95"
+                    title={getTranslation(
+                      lang,
+                      "components.aesCipher.generateIV"
+                    )}
+                  >
+                    {getTranslation(lang, "components.aesCipher.generate")}
+                  </button>
+                </div>
+                <p class="text-xs text-neutral-500 mt-1">
+                  {getTranslation(lang, "components.aesCipher.ivHelp")}
+                </p>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-xs text-neutral-600 mb-1">
+                {getTranslation(lang, "components.aesCipher.outputFormat")}
+              </label>
+              <select
+                id="output-format"
+                class="w-full px-3 py-2 bg-white border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
+              >
+                <option value="base64" selected>Base64</option>
+                <option value="hex">Hexadecimal</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <button
+          id="encrypt-btn"
+          title={getTranslation(lang, "components.aesCipher.encrypt")}
+          class="w-full cursor-pointer text-sm px-4 py-2 bg-white border border-neutral-300 hover:border-neutral-400 text-neutral-700 rounded transition-colors active:scale-95"
         >
-          <div class="flex items-center gap-2">
-            <span class="text-emerald-400 text-xl">✓</span>
-            <span class="text-sm text-emerald-300">
-              {getTranslation(lang, "components.aesCipher.decryptSuccess")}
-            </span>
-          </div>
+          {getTranslation(lang, "components.aesCipher.encrypt")}
+        </button>
+
+        <!-- Info Box -->
+        <div class="bg-blue-500/10 border border-blue-500/20 rounded-lg p-3">
+          <p class="text-xs">
+            <strong
+              >{getTranslation(lang, "components.aesCipher.infoTitle")}:</strong
+            >
+            {getTranslation(lang, "components.aesCipher.infoText")}
+          </p>
         </div>
       </div>
 
-      <div id="decrypt-error" class="hidden">
-        <div class="bg-red-500/10 border border-red-500/20 rounded-lg p-3">
-          <div class="flex items-center gap-2">
-            <span class="text-red-400 text-xl">✗</span>
+      <!-- Output Panel -->
+      <div class="space-y-4">
+        <div class="flex items-center justify-between">
+          <label class="block text-sm font-medium text-neutral-700">
+            {getTranslation(lang, "components.aesCipher.encryptedOutput")}
+          </label>
+          <div class="flex gap-2">
+            <button
+              id="copy-encrypted-btn"
+              title={getTranslation(lang, "components.aesCipher.copy")}
+              class="cursor-pointer text-xs px-3 py-1 bg-white border border-neutral-300 hover:border-neutral-400 text-neutral-700 rounded transition-colors active:scale-95"
+            >
+              {getTranslation(lang, "components.aesCipher.copy")}
+            </button>
+            <button
+              id="download-encrypted-btn"
+              title={getTranslation(lang, "common.download")}
+              class="cursor-pointer text-xs px-3 py-1 bg-white border border-neutral-300 hover:border-neutral-400 text-neutral-700 rounded transition-colors active:scale-95"
+            >
+              {getTranslation(lang, "common.download")}
+            </button>
+          </div>
+        </div>
+
+        <textarea
+          id="encrypt-output"
+          readonly
+          placeholder={getTranslation(
+            lang,
+            "components.aesCipher.outputPlaceholder"
+          )}
+          class="w-full h-48 p-4 bg-white border border-neutral-300 rounded-lg text-sm font-mono resize-none focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
+        ></textarea>
+
+        <!-- Encryption Info -->
+        <div class="grid grid-cols-2 gap-3 text-xs">
+          <div class="bg-white rounded-lg p-3">
+            <div class="text-neutral-600">
+              {getTranslation(lang, "components.aesCipher.algorithm")}
+            </div>
+            <div class="font-mono text-neutral-700">AES-256-GCM</div>
+          </div>
+          <div class="bg-white rounded-lg p-3">
+            <div class="text-neutral-600">
+              {getTranslation(lang, "components.aesCipher.keyDerivation")}
+            </div>
+            <div class="font-mono text-neutral-700">PBKDF2</div>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-lg p-3">
+          <div class="text-xs text-neutral-600 mb-2">
+            {getTranslation(lang, "components.aesCipher.encryptionTime")}
+          </div>
+          <div id="encrypt-time" class="font-mono text-sm text-neutral-700">
+            -
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Decrypt Mode -->
+    <div id="decrypt-mode" class="hidden grid-cols-1 lg:grid-cols-2 gap-6">
+      <!-- Input Panel -->
+      <div class="space-y-4">
+        <div class="flex items-center justify-between">
+          <label class="block text-sm font-medium text-neutral-700">
+            {getTranslation(lang, "components.aesCipher.encryptedInput")}
+          </label>
+          <div class="flex gap-2">
+            <button
+              id="paste-decrypt-btn"
+              title={getTranslation(lang, "components.aesCipher.paste")}
+              class="cursor-pointer text-xs px-3 py-1 bg-white border border-neutral-300 hover:border-neutral-400 text-neutral-700 rounded transition-colors active:scale-95"
+            >
+              {getTranslation(lang, "components.aesCipher.paste")}
+            </button>
+            <button
+              id="clear-decrypt-btn"
+              title={getTranslation(lang, "components.aesCipher.clear")}
+              class="cursor-pointer text-xs px-3 py-1 bg-white border border-neutral-300 hover:border-neutral-400 text-neutral-700 rounded transition-colors active:scale-95"
+            >
+              {getTranslation(lang, "components.aesCipher.clear")}
+            </button>
+          </div>
+        </div>
+
+        <textarea
+          id="decrypt-input"
+          placeholder={getTranslation(
+            lang,
+            "components.aesCipher.decryptPlaceholder"
+          )}
+          class="w-full h-48 p-4 bg-white border border-neutral-300 rounded-lg text-sm font-mono resize-none focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
+        ></textarea>
+
+        <!-- Password/Key -->
+        <div>
+          <label class="block text-xs text-neutral-600 mb-1">
+            {getTranslation(lang, "components.aesCipher.password")}
+          </label>
+          <div class="flex gap-2">
+            <input
+              type="password"
+              id="decrypt-password"
+              placeholder={getTranslation(
+                lang,
+                "components.aesCipher.passwordPlaceholder"
+              )}
+              class="flex-1 px-3 py-2 bg-white border border-neutral-300 rounded-lg text-sm font-mono focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
+            />
+            <button
+              id="toggle-decrypt-password"
+              class="cursor-pointer px-3 py-2 bg-white border border-neutral-300 hover:border-neutral-400 text-neutral-700 rounded transition-colors active:scale-95"
+              title={getTranslation(lang, "components.aesCipher.showPassword")}
+            >
+              👀
+            </button>
+          </div>
+        </div>
+
+        <!-- Advanced Options for Decrypt -->
+        <div class="bg-white rounded-lg pt-4 space-y-3">
+          <label class="flex items-center gap-3 cursor-pointer">
+            <input
+              type="checkbox"
+              id="decrypt-advanced-options-toggle"
+              class="w-4 h-4 rounded bg-white border border-neutral-300 text-emerald-500 focus:ring-2 focus:ring-emerald-500/50"
+            />
+            <div class="flex items-center gap-2">
+              <span class="text-sm text-neutral-700">
+                {getTranslation(lang, "components.aesCipher.advancedOptions")}
+              </span>
+            </div>
+          </label>
+
+          <div id="decrypt-advanced-options" class="hidden space-y-3">
+            <!-- Decryption Mode Selection -->
             <div>
-              <div class="text-sm text-red-300 font-medium">
-                {getTranslation(lang, "components.aesCipher.decryptError")}
+              <label class="block text-xs text-neutral-600 mb-1">
+                {getTranslation(lang, "components.aesCipher.decryptionMode")}
+              </label>
+              <select
+                id="decryption-mode"
+                class="w-full px-3 py-2 bg-white border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
+              >
+                <option value="auto" selected>
+                  {getTranslation(lang, "components.aesCipher.autoMode")}
+                </option>
+                <option value="manual">
+                  {getTranslation(lang, "components.aesCipher.manualMode")}
+                </option>
+              </select>
+              <p class="text-xs text-neutral-500 mt-1">
+                {
+                  getTranslation(
+                    lang,
+                    "components.aesCipher.decryptionModeHelp"
+                  )
+                }
+              </p>
+            </div>
+
+            <!-- Manual Decrypt Mode Options -->
+            <div id="decrypt-manual-mode-options" class="hidden space-y-3">
+              <!-- Cipher Mode Selection -->
+              <div>
+                <label class="block text-xs text-neutral-600 mb-1">
+                  {getTranslation(lang, "components.aesCipher.cipherMode")}
+                </label>
+                <select
+                  id="decrypt-cipher-mode"
+                  class="w-full px-3 py-2 bg-white border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
+                >
+                  <option value="AES-GCM" selected
+                    >AES-GCM (Authenticated)</option
+                  >
+                  <option value="AES-CBC">AES-CBC (Classic)</option>
+                </select>
+                <p class="text-xs text-neutral-500 mt-1">
+                  {getTranslation(lang, "components.aesCipher.cipherModeHelp")}
+                </p>
               </div>
-              <div id="error-message" class="text-xs text-red-400 mt-1"></div>
+
+              <!-- Key/IV Encoding Type for Decrypt -->
+              <div>
+                <label class="block text-xs text-neutral-600 mb-1">
+                  {getTranslation(lang, "components.aesCipher.keyEncoding")}
+                </label>
+                <select
+                  id="decrypt-key-encoding"
+                  class="w-full px-3 py-2 bg-white border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
+                >
+                  <option value="hex" selected>Hexadecimal</option>
+                  <option value="utf8">UTF-8</option>
+                </select>
+                <p class="text-xs text-neutral-500 mt-1">
+                  {getTranslation(lang, "components.aesCipher.keyEncodingHelp")}
+                </p>
+              </div>
+
+              <!-- AES Key Size Selection for Decrypt -->
+              <div>
+                <label class="block text-xs text-neutral-600 mb-1">
+                  {getTranslation(lang, "components.aesCipher.keySize")}
+                </label>
+                <div class="grid grid-cols-3 gap-2">
+                  <button
+                    type="button"
+                    id="decrypt-key-size-128"
+                    class="decrypt-key-size-btn px-4 py-2 bg-white hover:bg-white border border-neutral-300 rounded-lg text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
+                    data-size="128"
+                  >
+                    <div class="font-semibold text-emerald-400">AES-128</div>
+                    <div class="text-xs text-neutral-500">16 bytes</div>
+                  </button>
+                  <button
+                    type="button"
+                    id="decrypt-key-size-192"
+                    class="decrypt-key-size-btn px-4 py-2 bg-white hover:bg-white border border-neutral-300 rounded-lg text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
+                    data-size="192"
+                  >
+                    <div class="font-semibold text-blue-400">AES-192</div>
+                    <div class="text-xs text-neutral-500">24 bytes</div>
+                  </button>
+                  <button
+                    type="button"
+                    id="decrypt-key-size-256"
+                    class="decrypt-key-size-btn px-4 py-2 bg-white hover:bg-white border border-neutral-300 rounded-lg text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500/50 ring-2 ring-emerald-500"
+                    data-size="256"
+                  >
+                    <div class="font-semibold text-purple-400">AES-256</div>
+                    <div class="text-xs text-neutral-500">32 bytes</div>
+                  </button>
+                </div>
+                <p class="text-xs text-neutral-500 mt-1">
+                  {getTranslation(lang, "components.aesCipher.keySizeHelp")}
+                </p>
+              </div>
+
+              <div>
+                <label class="block text-xs text-neutral-600 mb-1">
+                  {getTranslation(lang, "components.aesCipher.manualKey")}
+                  <span class="text-red-400">*</span>
+                </label>
+                <input
+                  type="text"
+                  id="decrypt-manual-key"
+                  placeholder="Hex key (e.g., 32 bytes = 64 chars for AES-256)"
+                  class="w-full px-3 py-2 bg-white border border-neutral-300 rounded-lg text-sm font-mono focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
+                />
+                <p class="text-xs text-neutral-500 mt-1">
+                  {getTranslation(lang, "components.aesCipher.keyHelp")}
+                </p>
+              </div>
+
+              <div>
+                <label class="block text-xs text-neutral-600 mb-1">
+                  {getTranslation(lang, "components.aesCipher.manualIV")}
+                  <span class="text-red-400">*</span>
+                </label>
+                <input
+                  type="text"
+                  id="decrypt-manual-iv"
+                  placeholder="Hex IV (e.g., 16 bytes = 32 chars)"
+                  class="w-full px-3 py-2 bg-white border border-neutral-300 rounded-lg text-sm font-mono focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
+                />
+                <p class="text-xs text-neutral-500 mt-1">
+                  {getTranslation(lang, "components.aesCipher.ivHelp")}
+                </p>
+              </div>
+            </div>
+
+            <!-- Format Detection -->
+            <div>
+              <label class="block text-xs text-neutral-600 mb-1">
+                {getTranslation(lang, "components.aesCipher.detectedFormat")}
+              </label>
+              <div
+                id="detected-format"
+                class="px-3 py-2 bg-white border border-neutral-300 rounded-lg font-mono text-sm text-neutral-700"
+              >
+                {getTranslation(lang, "components.aesCipher.autoDetect")}
+              </div>
             </div>
           </div>
         </div>
+
+        <button
+          id="decrypt-btn"
+          title={getTranslation(lang, "components.aesCipher.decrypt")}
+          class="w-full cursor-pointer text-sm px-4 py-2 bg-white border border-neutral-300 hover:border-neutral-400 text-neutral-700 rounded transition-colors active:scale-95"
+        >
+          {getTranslation(lang, "components.aesCipher.decrypt")}
+        </button>
+
+        <!-- Warning Box -->
+        <div
+          class="bg-yellow-500/10 border border-yellow-500/20 rounded-lg p-3"
+        >
+          <p class="text-xs">
+            <strong
+              >{
+                getTranslation(lang, "components.aesCipher.warningTitle")
+              }:</strong
+            >
+            {getTranslation(lang, "components.aesCipher.warningText")}
+          </p>
+        </div>
       </div>
 
-      <div class="bg-neutral-900/60 rounded-lg p-3">
-        <div class="text-xs text-neutral-400 mb-2">
-          {getTranslation(lang, "components.aesCipher.decryptionTime")}
+      <!-- Output Panel -->
+      <div class="space-y-4">
+        <div class="flex items-center justify-between">
+          <label class="block text-sm font-medium text-neutral-700">
+            {getTranslation(lang, "components.aesCipher.decryptedOutput")}
+          </label>
+          <div class="flex gap-2">
+            <button
+              id="copy-decrypted-btn"
+              title={getTranslation(lang, "components.aesCipher.copy")}
+              class="cursor-pointer text-xs px-3 py-1 bg-white border border-neutral-300 hover:border-neutral-400 text-neutral-700 rounded transition-colors active:scale-95"
+            >
+              {getTranslation(lang, "components.aesCipher.copy")}
+            </button>
+            <button
+              id="download-decrypted-btn"
+              title={getTranslation(lang, "common.download")}
+              class="cursor-pointer text-xs px-3 py-1 bg-white border border-neutral-300 hover:border-neutral-400 text-neutral-700 rounded transition-colors active:scale-95"
+            >
+              {getTranslation(lang, "common.download")}
+            </button>
+          </div>
         </div>
-        <div id="decrypt-time" class="font-mono text-sm text-neutral-300">
-          -
+
+        <textarea
+          id="decrypt-output"
+          readonly
+          placeholder={getTranslation(
+            lang,
+            "components.aesCipher.outputPlaceholder"
+          )}
+          class="w-full h-48 p-4 bg-white border border-neutral-300 rounded-lg text-sm font-mono resize-none focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
+        ></textarea>
+
+        <!-- Decryption Status -->
+        <div id="decrypt-status" class="hidden">
+          <div
+            class="bg-emerald-500/10 border border-emerald-500/20 rounded-lg p-3"
+          >
+            <div class="flex items-center gap-2">
+              <span class="text-emerald-400 text-xl">✓</span>
+              <span class="text-sm text-emerald-300">
+                {getTranslation(lang, "components.aesCipher.decryptSuccess")}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div id="decrypt-error" class="hidden">
+          <div class="bg-red-500/10 border border-red-500/20 rounded-lg p-3">
+            <div class="flex items-center gap-2">
+              <span class="text-red-400 text-xl">✗</span>
+              <div>
+                <div class="text-sm text-red-300 font-medium">
+                  {getTranslation(lang, "components.aesCipher.decryptError")}
+                </div>
+                <div id="error-message" class="text-xs text-red-400 mt-1"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-lg p-3">
+          <div class="text-xs text-neutral-600 mb-2">
+            {getTranslation(lang, "components.aesCipher.decryptionTime")}
+          </div>
+          <div id="decrypt-time" class="font-mono text-sm text-neutral-700">
+            -
+          </div>
         </div>
       </div>
     </div>
   </div>
+
+  <astro-aes-cipher-translations
+    data-translations={JSON.stringify(
+      getTranslation(lang, "components.aesCipher")
+    )}></astro-aes-cipher-translations>
+
+  <script>
+    import "./AESCipher.ts";
+  </script>
 </div>
-
-<astro-aes-cipher-translations
-  data-translations={JSON.stringify(
-    getTranslation(lang, "components.aesCipher")
-  )}></astro-aes-cipher-translations>
-
-<script>
-  import "./AESCipher.ts";
-</script>

@@ -8,260 +8,274 @@ import { getTranslation } from "@/i18n/index";
 const lang = Astro.params.lang as Language;
 ---
 
-<div class="bg-neutral-800/50 rounded-xl px-6 py-4 select-none">
+<div class="space-y-6 mt-6">
   <!-- Mode Tabs -->
-  <div class="flex gap-2 mb-6 border-b border-neutral-700">
-    <button
-      id="tab-generate"
-      class="cursor-pointer px-4 py-2 text-sm font-medium border-b-2 border-emerald-500 text-emerald-400 transition-colors"
-    >
-      {getTranslation(lang, "components.hashGenerator.generateTab")}
-    </button>
-    <button
-      id="tab-verify"
-      class="cursor-pointer px-4 py-2 text-sm font-medium border-b-2 border-transparent text-neutral-400 hover:text-neutral-300 transition-colors"
-    >
-      {getTranslation(lang, "components.hashGenerator.verifyTab")}
-    </button>
-    <button
-      id="tab-crack"
-      class="cursor-pointer px-4 py-2 text-sm font-medium border-b-2 border-transparent text-neutral-400 hover:text-neutral-300 transition-colors"
-    >
-      {getTranslation(lang, "components.hashGenerator.crackTab")}
-    </button>
-  </div>
-
-  <!-- Generate Mode -->
-  <div id="generate-mode" class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-    <!-- Input Panel -->
-    <div class="space-y-4">
-      <div class="flex items-center justify-between">
-        <label class="block text-sm font-medium text-neutral-300">
-          {getTranslation(lang, "components.hashGenerator.inputTitle")}
-        </label>
-        <div class="flex gap-2">
-          <button
-            id="paste-btn"
-            title={getTranslation(lang, "components.hashGenerator.paste")}
-            class="cursor-pointer text-xs px-3 py-1 bg-neutral-700 hover:bg-neutral-600 text-neutral-200 rounded transition-colors active:scale-95"
-          >
-            {getTranslation(lang, "components.hashGenerator.paste")}
-          </button>
-          <button
-            id="clear-btn"
-            title={getTranslation(lang, "components.hashGenerator.clear")}
-            class="cursor-pointer text-xs px-3 py-1 bg-neutral-700 hover:bg-neutral-600 text-neutral-200 rounded transition-colors active:scale-95"
-          >
-            {getTranslation(lang, "components.hashGenerator.clear")}
-          </button>
-        </div>
-      </div>
-
-      <textarea
-        id="text-input"
-        placeholder={getTranslation(
-          lang,
-          "components.hashGenerator.placeholder"
-        )}
-        class="w-full h-48 p-4 bg-neutral-900/60 border border-neutral-700 rounded-lg text-sm font-mono resize-none focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
-      ></textarea>
-
-      <!-- HMAC Mode Toggle -->
-      <div class="bg-neutral-900/60 rounded-lg pt-2 space-y-3">
-        <label class="flex items-center gap-3 cursor-pointer">
-          <input
-            type="checkbox"
-            id="hmac-toggle"
-            class="w-4 h-4 rounded bg-neutral-700 border-neutral-600 text-emerald-500 focus:ring-2 focus:ring-emerald-500/50"
-          />
-          <div class="flex items-center gap-2">
-            <Picture
-              src={KeyIcon}
-              alt="Key"
-              class="w-4 h-4 opacity-70 svg-color-neutral-400"
-              width={16}
-              height={16}
-            />
-            <span class="text-sm text-neutral-300">
-              {getTranslation(lang, "components.hashGenerator.hmacMode")}
-            </span>
-          </div>
-        </label>
-
-        <div id="hmac-options" class="hidden space-y-3">
-          <div>
-            <label class="block text-xs text-neutral-400 mb-1">
-              {getTranslation(lang, "components.hashGenerator.secretKey")}
-            </label>
-            <input
-              type="text"
-              id="secret-key"
-              placeholder={getTranslation(
-                lang,
-                "components.hashGenerator.secretKeyPlaceholder"
-              )}
-              class="w-full px-3 py-2 bg-neutral-800 border border-neutral-700 rounded-lg text-sm font-mono focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
-            />
-          </div>
-
-          <div>
-            <label class="block text-xs text-neutral-400 mb-1">
-              {getTranslation(lang, "components.hashGenerator.salt")}
-              <span class="text-neutral-500">
-                ({getTranslation(lang, "components.hashGenerator.optional")})
-              </span>
-            </label>
-            <input
-              type="text"
-              id="salt"
-              placeholder={getTranslation(
-                lang,
-                "components.hashGenerator.saltPlaceholder"
-              )}
-              class="w-full px-3 py-2 bg-neutral-800 border border-neutral-700 rounded-lg text-sm font-mono focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
-            />
-          </div>
-        </div>
-      </div>
-
+  <div class="bg-white rounded-xl border border-neutral-200 shadow-sm p-6">
+    <div class="flex gap-2 mb-6 border-b border-neutral-200">
       <button
-        id="generate-btn"
-        title={getTranslation(lang, "components.hashGenerator.generate")}
-        class="w-full cursor-pointer text-sm px-4 py-2 bg-neutral-700 hover:bg-neutral-600 text-neutral-200 rounded transition-colors active:scale-95"
+        id="tab-generate"
+        class="cursor-pointer px-4 py-2 text-sm font-semibold border-b-2 border-emerald-500 text-emerald-600 transition-colors"
       >
-        {getTranslation(lang, "components.hashGenerator.generate")}
+        {getTranslation(lang, "components.hashGenerator.generateTab")}
       </button>
-
-      <!-- Info Box -->
-      <div class="bg-blue-500/10 border border-blue-500/20 rounded-lg p-3">
-        <p class="text-xs text-blue-300">
-          <strong
-            >{
-              getTranslation(lang, "components.hashGenerator.infoTitle")
-            }:</strong
-          >
-          {getTranslation(lang, "components.hashGenerator.infoText")}
-        </p>
-      </div>
+      <button
+        id="tab-verify"
+        class="cursor-pointer px-4 py-2 text-sm font-medium border-b-2 border-transparent text-neutral-600 hover:text-neutral-800 transition-colors"
+      >
+        {getTranslation(lang, "components.hashGenerator.verifyTab")}
+      </button>
+      <button
+        id="tab-crack"
+        class="cursor-pointer px-4 py-2 text-sm font-medium border-b-2 border-transparent text-neutral-600 hover:text-neutral-800 transition-colors"
+      >
+        {getTranslation(lang, "components.hashGenerator.crackTab")}
+      </button>
     </div>
 
-    <!-- Output Panel -->
-    <div class="space-y-4">
-      <div class="flex items-center justify-between">
-        <label class="block text-sm font-medium text-neutral-300">
-          {getTranslation(lang, "components.hashGenerator.outputTitle")}
-        </label>
-        <button
-          id="download-btn"
-          title={getTranslation(lang, "common.download")}
-          class="cursor-pointer text-xs px-3 py-1 bg-neutral-700 hover:bg-neutral-600 text-neutral-200 rounded transition-colors active:scale-95"
+    <!-- Generate Mode -->
+    <div id="generate-mode" class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <!-- Input Panel -->
+      <div class="space-y-4">
+        <div class="flex items-center justify-between">
+          <label class="block text-sm font-semibold text-neutral-800">
+            {getTranslation(lang, "components.hashGenerator.inputTitle")}
+          </label>
+          <div class="flex gap-2">
+            <button
+              id="paste-btn"
+              title={getTranslation(lang, "components.hashGenerator.paste")}
+              class="cursor-pointer text-xs px-3 py-1.5 bg-white border border-neutral-300 hover:border-neutral-400 text-neutral-700 rounded-lg transition-all shadow-sm hover:shadow font-medium"
+            >
+              {getTranslation(lang, "components.hashGenerator.paste")}
+            </button>
+            <button
+              id="clear-btn"
+              title={getTranslation(lang, "components.hashGenerator.clear")}
+              class="cursor-pointer text-xs px-3 py-1.5 bg-white border border-neutral-300 hover:border-neutral-400 text-neutral-700 rounded-lg transition-all shadow-sm hover:shadow font-medium"
+            >
+              {getTranslation(lang, "components.hashGenerator.clear")}
+            </button>
+          </div>
+        </div>
+
+        <textarea
+          id="text-input"
+          placeholder={getTranslation(
+            lang,
+            "components.hashGenerator.placeholder"
+          )}
+          class="w-full h-48 p-4 bg-white border border-neutral-300 rounded-lg text-sm font-mono text-neutral-700 placeholder:text-neutral-500 resize-none focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500 transition-all shadow-sm"
+        ></textarea>
+
+        <!-- HMAC Mode Toggle -->
+        <div
+          class="bg-neutral-50 rounded-lg p-4 space-y-3 border border-neutral-200"
         >
-          {getTranslation(lang, "common.download")}
+          <label class="flex items-center gap-3 cursor-pointer">
+            <input
+              type="checkbox"
+              id="hmac-toggle"
+              class="w-4 h-4 rounded bg-white border-neutral-300 text-emerald-500 accent-emerald-500 focus:ring-2 focus:ring-emerald-500/50"
+            />
+            <div class="flex items-center gap-2">
+              <Picture
+                src={KeyIcon}
+                alt="Key"
+                class="w-4 h-4 opacity-70 svg-color-neutral-600"
+                width={16}
+                height={16}
+              />
+              <span class="text-sm text-neutral-700 font-medium">
+                {getTranslation(lang, "components.hashGenerator.hmacMode")}
+              </span>
+            </div>
+          </label>
+
+          <div id="hmac-options" class="hidden space-y-3">
+            <div>
+              <label class="block text-xs text-neutral-600 font-medium mb-1">
+                {getTranslation(lang, "components.hashGenerator.secretKey")}
+              </label>
+              <input
+                type="text"
+                id="secret-key"
+                placeholder={getTranslation(
+                  lang,
+                  "components.hashGenerator.secretKeyPlaceholder"
+                )}
+                class="w-full px-3 py-2 bg-white border border-neutral-300 rounded-lg text-sm font-mono text-neutral-700 placeholder:text-neutral-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500 transition-all"
+              />
+            </div>
+
+            <div>
+              <label class="block text-xs text-neutral-600 font-medium mb-1">
+                {getTranslation(lang, "components.hashGenerator.salt")}
+                <span class="text-neutral-500">
+                  ({getTranslation(lang, "components.hashGenerator.optional")})
+                </span>
+              </label>
+              <input
+                type="text"
+                id="salt"
+                placeholder={getTranslation(
+                  lang,
+                  "components.hashGenerator.saltPlaceholder"
+                )}
+                class="w-full px-3 py-2 bg-white border border-neutral-300 rounded-lg text-sm font-mono text-neutral-700 placeholder:text-neutral-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500 transition-all"
+              />
+            </div>
+          </div>
+        </div>
+
+        <button
+          id="generate-btn"
+          title={getTranslation(lang, "components.hashGenerator.generate")}
+          class="w-full cursor-pointer text-sm px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg transition-colors shadow-sm font-semibold"
+        >
+          {getTranslation(lang, "components.hashGenerator.generate")}
         </button>
-      </div>
 
-      <!-- Hash Outputs -->
-      <div class="space-y-3">
-        <!-- MD5 -->
-        <div class="bg-neutral-900/60 rounded-lg p-4 space-y-2">
-          <div class="flex items-center justify-between">
-            <span class="text-xs font-semibold text-neutral-400 uppercase"
-              >MD5</span
+        <!-- Info Box -->
+        <div class="bg-emerald-50 border border-emerald-200 rounded-lg p-3">
+          <p class="text-xs text-emerald-700">
+            <strong class="font-semibold"
+              >{
+                getTranslation(lang, "components.hashGenerator.infoTitle")
+              }:</strong
             >
-            <button
-              data-hash="md5"
-              class="copy-hash-btn cursor-pointer text-xs px-2 py-1 bg-neutral-700 hover:bg-neutral-600 text-neutral-200 rounded transition-colors active:scale-95"
-            >
-              {getTranslation(lang, "components.hashGenerator.copy")}
-            </button>
-          </div>
-          <div
-            id="hash-md5"
-            class="font-mono text-xs break-all text-neutral-300 min-h-5"
-          >
-            -
-          </div>
-        </div>
-
-        <!-- SHA-1 -->
-        <div class="bg-neutral-900/60 rounded-lg p-4 space-y-2">
-          <div class="flex items-center justify-between">
-            <span class="text-xs font-semibold text-neutral-400 uppercase"
-              >SHA-1</span
-            >
-            <button
-              data-hash="sha1"
-              class="copy-hash-btn cursor-pointer text-xs px-2 py-1 bg-neutral-700 hover:bg-neutral-600 text-neutral-200 rounded transition-colors active:scale-95"
-            >
-              {getTranslation(lang, "components.hashGenerator.copy")}
-            </button>
-          </div>
-          <div
-            id="hash-sha1"
-            class="font-mono text-xs break-all text-neutral-300 min-h-5"
-          >
-            -
-          </div>
-        </div>
-
-        <!-- SHA-256 -->
-        <div class="bg-neutral-900/60 rounded-lg p-4 space-y-2">
-          <div class="flex items-center justify-between">
-            <span class="text-xs font-semibold text-emerald-400 uppercase"
-              >SHA-256</span
-            >
-            <button
-              data-hash="sha256"
-              class="copy-hash-btn cursor-pointer text-xs px-2 py-1 bg-neutral-700 hover:bg-neutral-600 text-neutral-200 rounded transition-colors active:scale-95"
-            >
-              {getTranslation(lang, "components.hashGenerator.copy")}
-            </button>
-          </div>
-          <div
-            id="hash-sha256"
-            class="font-mono text-xs break-all text-neutral-300 min-h-5"
-          >
-            -
-          </div>
-        </div>
-
-        <!-- SHA-512 -->
-        <div class="bg-neutral-900/60 rounded-lg p-4 space-y-2">
-          <div class="flex items-center justify-between">
-            <span class="text-xs font-semibold text-emerald-400 uppercase"
-              >SHA-512</span
-            >
-            <button
-              data-hash="sha512"
-              class="copy-hash-btn cursor-pointer text-xs px-2 py-1 bg-neutral-700 hover:bg-neutral-600 text-neutral-200 rounded transition-colors active:scale-95"
-            >
-              {getTranslation(lang, "components.hashGenerator.copy")}
-            </button>
-          </div>
-          <div
-            id="hash-sha512"
-            class="font-mono text-xs break-all text-neutral-300 min-h-5"
-          >
-            -
-          </div>
+            {getTranslation(lang, "components.hashGenerator.infoText")}
+          </p>
         </div>
       </div>
 
-      <!-- Algorithm Info -->
-      <div class="grid grid-cols-2 gap-3 text-xs">
-        <div class="bg-neutral-900/60 rounded-lg p-3">
-          <div class="text-neutral-400">
-            {getTranslation(lang, "components.hashGenerator.algorithm")}
+      <!-- Output Panel -->
+      <div class="space-y-4">
+        <div class="flex items-center justify-between">
+          <label class="block text-sm font-semibold text-neutral-800">
+            {getTranslation(lang, "components.hashGenerator.outputTitle")}
+          </label>
+          <button
+            id="download-btn"
+            title={getTranslation(lang, "common.download")}
+            class="cursor-pointer text-xs px-3 py-1.5 bg-white border border-neutral-300 hover:border-neutral-400 text-neutral-700 rounded-lg transition-all shadow-sm hover:shadow font-medium"
+          >
+            {getTranslation(lang, "common.download")}
+          </button>
+        </div>
+
+        <!-- Hash Outputs -->
+        <div class="space-y-3">
+          <!-- MD5 -->
+          <div
+            class="bg-neutral-50 rounded-lg p-4 space-y-2 border border-neutral-200"
+          >
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-semibold text-neutral-600 uppercase"
+                >MD5</span
+              >
+              <button
+                data-hash="md5"
+                class="copy-hash-btn cursor-pointer text-xs px-2 py-1 bg-white border border-neutral-300 hover:border-neutral-400 text-neutral-700 rounded-lg transition-all font-medium"
+              >
+                {getTranslation(lang, "components.hashGenerator.copy")}
+              </button>
+            </div>
+            <div
+              id="hash-md5"
+              class="font-mono text-xs break-all text-neutral-700 min-h-5"
+            >
+              -
+            </div>
           </div>
-          <div id="current-algorithm" class="font-mono text-neutral-300">
-            {getTranslation(lang, "components.hashGenerator.standardHash")}
+
+          <!-- SHA-1 -->
+          <div
+            class="bg-neutral-50 rounded-lg p-4 space-y-2 border border-neutral-200"
+          >
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-semibold text-neutral-600 uppercase"
+                >SHA-1</span
+              >
+              <button
+                data-hash="sha1"
+                class="copy-hash-btn cursor-pointer text-xs px-2 py-1 bg-white border border-neutral-300 hover:border-neutral-400 text-neutral-700 rounded-lg transition-all font-medium"
+              >
+                {getTranslation(lang, "components.hashGenerator.copy")}
+              </button>
+            </div>
+            <div
+              id="hash-sha1"
+              class="font-mono text-xs break-all text-neutral-700 min-h-5"
+            >
+              -
+            </div>
+          </div>
+
+          <!-- SHA-256 -->
+          <div
+            class="bg-neutral-50 rounded-lg p-4 space-y-2 border border-emerald-200"
+          >
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-semibold text-emerald-600 uppercase"
+                >SHA-256</span
+              >
+              <button
+                data-hash="sha256"
+                class="copy-hash-btn cursor-pointer text-xs px-2 py-1 bg-white border border-neutral-300 hover:border-neutral-400 text-neutral-700 rounded-lg transition-all font-medium"
+              >
+                {getTranslation(lang, "components.hashGenerator.copy")}
+              </button>
+            </div>
+            <div
+              id="hash-sha256"
+              class="font-mono text-xs break-all text-neutral-700 min-h-5"
+            >
+              -
+            </div>
+          </div>
+
+          <!-- SHA-512 -->
+          <div
+            class="bg-neutral-50 rounded-lg p-4 space-y-2 border border-emerald-200"
+          >
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-semibold text-emerald-600 uppercase"
+                >SHA-512</span
+              >
+              <button
+                data-hash="sha512"
+                class="copy-hash-btn cursor-pointer text-xs px-2 py-1 bg-white border border-neutral-300 hover:border-neutral-400 text-neutral-700 rounded-lg transition-all font-medium"
+              >
+                {getTranslation(lang, "components.hashGenerator.copy")}
+              </button>
+            </div>
+            <div
+              id="hash-sha512"
+              class="font-mono text-xs break-all text-neutral-700 min-h-5"
+            >
+              -
+            </div>
           </div>
         </div>
-        <div class="bg-neutral-900/60 rounded-lg p-3">
-          <div class="text-neutral-400">
-            {getTranslation(lang, "components.hashGenerator.generated")}
+
+        <!-- Algorithm Info -->
+        <div class="grid grid-cols-2 gap-3 text-xs">
+          <div class="bg-neutral-50 rounded-lg p-3 border border-neutral-200">
+            <div class="text-neutral-600 font-medium">
+              {getTranslation(lang, "components.hashGenerator.algorithm")}
+            </div>
+            <div id="current-algorithm" class="font-mono text-neutral-700 mt-1">
+              {getTranslation(lang, "components.hashGenerator.standardHash")}
+            </div>
           </div>
-          <div id="generated-time" class="font-mono text-neutral-300">-</div>
+          <div class="bg-neutral-50 rounded-lg p-3 border border-neutral-200">
+            <div class="text-neutral-600 font-medium">
+              {getTranslation(lang, "components.hashGenerator.generated")}
+            </div>
+            <div id="generated-time" class="font-mono text-neutral-700 mt-1">
+              -
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -272,13 +286,13 @@ const lang = Astro.params.lang as Language;
     <!-- Verification Input Panel -->
     <div class="space-y-4">
       <div class="flex items-center justify-between">
-        <label class="block text-sm font-medium text-neutral-300">
+        <label class="block text-sm font-medium text-neutral-700">
           {getTranslation(lang, "components.hashGenerator.verifyInputTitle")}
         </label>
         <button
           id="clear-verify-btn"
           title={getTranslation(lang, "components.hashGenerator.clear")}
-          class="cursor-pointer text-xs px-3 py-1 bg-neutral-700 hover:bg-neutral-600 text-neutral-200 rounded transition-colors active:scale-95"
+          class="cursor-pointer text-xs px-3 py-1 bg-white border border-neutral-300 hover:border-neutral-400 text-neutral-700 rounded transition-colors active:scale-95"
         >
           {getTranslation(lang, "components.hashGenerator.clear")}
         </button>
@@ -286,7 +300,7 @@ const lang = Astro.params.lang as Language;
 
       <!-- Original Text -->
       <div>
-        <label class="block text-xs text-neutral-400 mb-1">
+        <label class="block text-xs text-neutral-600 mb-1">
           {getTranslation(lang, "components.hashGenerator.originalText")}
         </label>
         <textarea
@@ -295,13 +309,13 @@ const lang = Astro.params.lang as Language;
             lang,
             "components.hashGenerator.originalTextPlaceholder"
           )}
-          class="w-full h-32 p-4 bg-neutral-900/60 border border-neutral-700 rounded-lg text-sm font-mono resize-none focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
+          class="w-full h-32 p-4 bg-white border border-neutral-300 rounded-lg text-sm font-mono resize-none focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
         ></textarea>
       </div>
 
       <!-- Hash to Verify -->
       <div>
-        <label class="block text-xs text-neutral-400 mb-1">
+        <label class="block text-xs text-neutral-600 mb-1">
           {getTranslation(lang, "components.hashGenerator.hashToVerify")}
         </label>
         <input
@@ -311,18 +325,18 @@ const lang = Astro.params.lang as Language;
             lang,
             "components.hashGenerator.hashToVerifyPlaceholder"
           )}
-          class="w-full px-3 py-2 bg-neutral-900/60 border border-neutral-700 rounded-lg text-sm font-mono focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
+          class="w-full px-3 py-2 bg-white border border-neutral-300 rounded-lg text-sm font-mono focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
         />
       </div>
 
       <!-- Algorithm Selection -->
       <div>
-        <label class="block text-xs text-neutral-400 mb-1">
+        <label class="block text-xs text-neutral-600 mb-1">
           {getTranslation(lang, "components.hashGenerator.selectAlgorithm")}
         </label>
         <select
           id="verify-algorithm"
-          class="w-full px-3 py-2 bg-neutral-900/60 border border-neutral-700 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
+          class="w-full px-3 py-2 bg-white border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
         >
           <option value="MD5">MD5</option>
           <option value="SHA-1">SHA-1</option>
@@ -332,12 +346,12 @@ const lang = Astro.params.lang as Language;
       </div>
 
       <!-- HMAC Options for Verify -->
-      <div class="bg-neutral-900/60 rounded-lg pt-2 space-y-3">
+      <div class="bg-white rounded-lg pt-2 space-y-3">
         <label class="flex items-center gap-3 cursor-pointer">
           <input
             type="checkbox"
             id="verify-hmac-toggle"
-            class="w-4 h-4 rounded bg-neutral-700 border-neutral-600 text-emerald-500 focus:ring-2 focus:ring-emerald-500/50"
+            class="w-4 h-4 rounded bg-white border border-neutral-300 text-emerald-500 focus:ring-2 focus:ring-emerald-500/50"
           />
           <div class="flex items-center gap-2">
             <Picture
@@ -347,7 +361,7 @@ const lang = Astro.params.lang as Language;
               width={16}
               height={16}
             />
-            <span class="text-sm text-neutral-300">
+            <span class="text-sm text-neutral-700">
               {getTranslation(lang, "components.hashGenerator.hmacMode")}
             </span>
           </div>
@@ -355,7 +369,7 @@ const lang = Astro.params.lang as Language;
 
         <div id="verify-hmac-options" class="hidden space-y-3">
           <div>
-            <label class="block text-xs text-neutral-400 mb-1">
+            <label class="block text-xs text-neutral-600 mb-1">
               {getTranslation(lang, "components.hashGenerator.secretKey")}
             </label>
             <input
@@ -365,12 +379,12 @@ const lang = Astro.params.lang as Language;
                 lang,
                 "components.hashGenerator.secretKeyPlaceholder"
               )}
-              class="w-full px-3 py-2 bg-neutral-800 border border-neutral-700 rounded-lg text-sm font-mono focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
+              class="w-full px-3 py-2 bg-white border border-neutral-300 rounded-lg text-sm font-mono focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
             />
           </div>
 
           <div>
-            <label class="block text-xs text-neutral-400 mb-1">
+            <label class="block text-xs text-neutral-600 mb-1">
               {getTranslation(lang, "components.hashGenerator.salt")}
               <span class="text-neutral-500">
                 ({getTranslation(lang, "components.hashGenerator.optional")})
@@ -383,7 +397,7 @@ const lang = Astro.params.lang as Language;
                 lang,
                 "components.hashGenerator.saltPlaceholder"
               )}
-              class="w-full px-3 py-2 bg-neutral-800 border border-neutral-700 rounded-lg text-sm font-mono focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
+              class="w-full px-3 py-2 bg-white border border-neutral-300 rounded-lg text-sm font-mono focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
             />
           </div>
         </div>
@@ -392,7 +406,7 @@ const lang = Astro.params.lang as Language;
       <button
         id="verify-btn"
         title={getTranslation(lang, "components.hashGenerator.verifyHash")}
-        class="w-full cursor-pointer text-sm px-4 py-2 bg-neutral-700 hover:bg-neutral-600 text-neutral-200 rounded transition-colors active:scale-95"
+        class="w-full cursor-pointer text-sm px-4 py-2 bg-white border border-neutral-300 hover:border-neutral-400 text-neutral-700 rounded transition-colors active:scale-95"
       >
         {getTranslation(lang, "components.hashGenerator.verifyHash")}
       </button>
@@ -401,7 +415,7 @@ const lang = Astro.params.lang as Language;
     <!-- Verification Result Panel -->
     <div class="space-y-4">
       <div class="flex items-center justify-between">
-        <label class="block text-sm font-medium text-neutral-300">
+        <label class="block text-sm font-medium text-neutral-700">
           {getTranslation(lang, "components.hashGenerator.verificationResult")}
         </label>
       </div>
@@ -409,54 +423,54 @@ const lang = Astro.params.lang as Language;
       <!-- Result Display -->
       <div
         id="verification-result"
-        class="bg-neutral-900/60 rounded-lg p-6 min-h-64 flex flex-col items-center justify-center text-center"
+        class="bg-white rounded-lg p-6 min-h-64 flex flex-col items-center justify-center text-center"
       >
-        <div class="text-neutral-400 text-sm">
+        <div class="text-neutral-600 text-sm">
           {getTranslation(lang, "components.hashGenerator.verificationWaiting")}
         </div>
       </div>
 
       <!-- Comparison Details -->
       <div id="comparison-details" class="hidden space-y-3">
-        <div class="bg-neutral-900/60 rounded-lg p-4">
-          <div class="text-xs text-neutral-400 mb-2">
+        <div class="bg-white rounded-lg p-4">
+          <div class="text-xs text-neutral-600 mb-2">
             {getTranslation(lang, "components.hashGenerator.providedHash")}
           </div>
           <div
             id="provided-hash-display"
-            class="font-mono text-xs break-all text-neutral-300"
+            class="font-mono text-xs break-all text-neutral-700"
           >
           </div>
         </div>
 
-        <div class="bg-neutral-900/60 rounded-lg p-4">
-          <div class="text-xs text-neutral-400 mb-2">
+        <div class="bg-white rounded-lg p-4">
+          <div class="text-xs text-neutral-600 mb-2">
             {getTranslation(lang, "components.hashGenerator.calculatedHash")}
           </div>
           <div
             id="calculated-hash-display"
-            class="font-mono text-xs break-all text-neutral-300"
+            class="font-mono text-xs break-all text-neutral-700"
           >
           </div>
         </div>
 
         <div class="grid grid-cols-2 gap-3 text-xs">
-          <div class="bg-neutral-900/60 rounded-lg p-3">
-            <div class="text-neutral-400">
+          <div class="bg-white rounded-lg p-3">
+            <div class="text-neutral-600">
               {getTranslation(lang, "components.hashGenerator.algorithm")}
             </div>
             <div
               id="verify-algorithm-display"
-              class="font-mono text-neutral-300"
+              class="font-mono text-neutral-700"
             >
               -
             </div>
           </div>
-          <div class="bg-neutral-900/60 rounded-lg p-3">
-            <div class="text-neutral-400">
+          <div class="bg-white rounded-lg p-3">
+            <div class="text-neutral-600">
               {getTranslation(lang, "components.hashGenerator.verified")}
             </div>
-            <div id="verify-time" class="font-mono text-neutral-300">-</div>
+            <div id="verify-time" class="font-mono text-neutral-700">-</div>
           </div>
         </div>
       </div>
@@ -468,14 +482,14 @@ const lang = Astro.params.lang as Language;
     <!-- Crack Input Panel -->
     <div class="space-y-4">
       <div class="flex items-center justify-between">
-        <label class="block text-sm font-medium text-neutral-300">
+        <label class="block text-sm font-medium text-neutral-700">
           {getTranslation(lang, "components.hashGenerator.crackInputTitle")}
         </label>
       </div>
 
       <!-- Hash to Crack -->
       <div>
-        <label class="block text-xs text-neutral-400 mb-1">
+        <label class="block text-xs text-neutral-600 mb-1">
           {getTranslation(lang, "components.hashGenerator.hashToCrack")}
         </label>
         <input
@@ -485,18 +499,18 @@ const lang = Astro.params.lang as Language;
             lang,
             "components.hashGenerator.hashToCrackPlaceholder"
           )}
-          class="w-full px-3 py-2 bg-neutral-900/60 border border-neutral-700 rounded-lg text-sm font-mono focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
+          class="w-full px-3 py-2 bg-white border border-neutral-300 rounded-lg text-sm font-mono focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
         />
       </div>
 
       <!-- Algorithm Selection for Crack -->
       <div>
-        <label class="block text-xs text-neutral-400 mb-1">
+        <label class="block text-xs text-neutral-600 mb-1">
           {getTranslation(lang, "components.hashGenerator.selectAlgorithm")}
         </label>
         <select
           id="crack-algorithm"
-          class="w-full px-3 py-2 bg-neutral-900/60 border border-neutral-700 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
+          class="w-full px-3 py-2 bg-white border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
         >
           <option value="MD5">MD5</option>
           <option value="SHA-1">SHA-1</option>
@@ -507,12 +521,12 @@ const lang = Astro.params.lang as Language;
 
       <!-- Attack Method Selection -->
       <div>
-        <label class="block text-xs text-neutral-400 mb-1">
+        <label class="block text-xs text-neutral-600 mb-1">
           {getTranslation(lang, "components.hashGenerator.attackMethod")}
         </label>
         <select
           id="attack-method"
-          class="w-full px-3 py-2 bg-neutral-900/60 border border-neutral-700 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
+          class="w-full px-3 py-2 bg-white border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
         >
           <option value="dictionary">
             {getTranslation(lang, "components.hashGenerator.dictionaryAttack")}
@@ -527,16 +541,13 @@ const lang = Astro.params.lang as Language;
       </div>
 
       <!-- Dictionary Options -->
-      <div
-        id="dictionary-options"
-        class="bg-neutral-900/60 rounded-lg pt-2 space-y-3"
-      >
-        <label class="block text-xs text-neutral-400 mb-1">
+      <div id="dictionary-options" class="bg-white rounded-lg pt-2 space-y-3">
+        <label class="block text-xs text-neutral-600 mb-1">
           {getTranslation(lang, "components.hashGenerator.dictionarySize")}
         </label>
         <select
           id="dictionary-size"
-          class="w-full px-3 py-2 bg-neutral-800 border border-neutral-700 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
+          class="w-full px-3 py-2 bg-white border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
         >
           <option value="common">
             {getTranslation(lang, "components.hashGenerator.commonPasswords")} (100)
@@ -550,10 +561,10 @@ const lang = Astro.params.lang as Language;
       <!-- Brute Force Options -->
       <div
         id="brute-force-options"
-        class="hidden bg-neutral-900/60 rounded-lg pt-2 space-y-3"
+        class="hidden bg-white rounded-lg pt-2 space-y-3"
       >
         <div>
-          <label class="block text-xs text-neutral-400 mb-1">
+          <label class="block text-xs text-neutral-600 mb-1">
             {getTranslation(lang, "components.hashGenerator.maxLength")}
           </label>
           <input
@@ -562,16 +573,16 @@ const lang = Astro.params.lang as Language;
             value="4"
             min="1"
             max="6"
-            class="w-full px-3 py-2 bg-neutral-800 border border-neutral-700 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
+            class="w-full px-3 py-2 bg-white border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
           />
         </div>
         <div>
-          <label class="block text-xs text-neutral-400 mb-1">
+          <label class="block text-xs text-neutral-600 mb-1">
             {getTranslation(lang, "components.hashGenerator.charset")}
           </label>
           <select
             id="brute-force-charset"
-            class="w-full px-3 py-2 bg-neutral-800 border border-neutral-700 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
+            class="w-full px-3 py-2 bg-white border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
           >
             <option value="numeric">
               {getTranslation(lang, "components.hashGenerator.numeric")} (0-9)
@@ -590,7 +601,7 @@ const lang = Astro.params.lang as Language;
       <button
         id="crack-btn"
         title={getTranslation(lang, "components.hashGenerator.startCrack")}
-        class="w-full cursor-pointer text-sm px-4 py-2 bg-neutral-700 hover:bg-neutral-600 text-neutral-200 rounded transition-colors active:scale-95"
+        class="w-full cursor-pointer text-sm px-4 py-2 bg-white border border-neutral-300 hover:border-neutral-400 text-neutral-700 rounded transition-colors active:scale-95"
       >
         {getTranslation(lang, "components.hashGenerator.startCrack")}
       </button>
@@ -605,7 +616,7 @@ const lang = Astro.params.lang as Language;
 
       <!-- Warning Box -->
       <div class="bg-yellow-500/10 border border-yellow-500/20 rounded-lg p-3">
-        <p class="text-xs text-yellow-300">
+        <p class="text-xs">
           <strong
             >{
               getTranslation(lang, "components.hashGenerator.warningTitle")
@@ -619,7 +630,7 @@ const lang = Astro.params.lang as Language;
     <!-- Crack Result Panel -->
     <div class="space-y-4">
       <div class="flex items-center justify-between">
-        <label class="block text-sm font-medium text-neutral-300">
+        <label class="block text-sm font-medium text-neutral-700">
           {getTranslation(lang, "components.hashGenerator.crackResult")}
         </label>
       </div>
@@ -627,20 +638,20 @@ const lang = Astro.params.lang as Language;
       <!-- Result Display -->
       <div
         id="crack-result"
-        class="bg-neutral-900/60 rounded-lg p-6 min-h-64 flex flex-col items-center justify-center text-center"
+        class="bg-white rounded-lg p-6 min-h-64 flex flex-col items-center justify-center text-center"
       >
-        <div class="text-neutral-400 text-sm">
+        <div class="text-neutral-600 text-sm">
           {getTranslation(lang, "components.hashGenerator.crackWaiting")}
         </div>
       </div>
 
       <!-- Progress Display -->
       <div id="crack-progress" class="hidden space-y-3">
-        <div class="bg-neutral-900/60 rounded-lg p-4">
-          <div class="text-xs text-neutral-400 mb-2">
+        <div class="bg-white rounded-lg p-4">
+          <div class="text-xs text-neutral-600 mb-2">
             {getTranslation(lang, "components.hashGenerator.progress")}
           </div>
-          <div class="w-full bg-neutral-800 rounded-full h-2 mb-2">
+          <div class="w-full bg-white rounded-full h-2 mb-2">
             <div
               id="progress-bar"
               class="bg-emerald-500 h-2 rounded-full transition-all"
@@ -649,19 +660,19 @@ const lang = Astro.params.lang as Language;
             </div>
           </div>
           <div class="flex justify-between text-xs">
-            <span class="text-neutral-400">
+            <span class="text-neutral-600">
               <span id="attempts-count">0</span>
               {getTranslation(lang, "components.hashGenerator.attempts")}
             </span>
-            <span id="progress-percent" class="text-neutral-400">0%</span>
+            <span id="progress-percent" class="text-neutral-600">0%</span>
           </div>
         </div>
 
-        <div class="bg-neutral-900/60 rounded-lg p-4">
-          <div class="text-xs text-neutral-400 mb-2">
+        <div class="bg-white rounded-lg p-4">
+          <div class="text-xs text-neutral-600 mb-2">
             {getTranslation(lang, "components.hashGenerator.currentAttempt")}
           </div>
-          <div id="current-attempt" class="font-mono text-xs text-neutral-300">
+          <div id="current-attempt" class="font-mono text-xs text-neutral-700">
             -
           </div>
         </div>
@@ -669,8 +680,8 @@ const lang = Astro.params.lang as Language;
 
       <!-- Crack Details -->
       <div id="crack-details" class="hidden space-y-3">
-        <div class="bg-neutral-900/60 rounded-lg p-4">
-          <div class="text-xs text-neutral-400 mb-2">
+        <div class="bg-white rounded-lg p-4">
+          <div class="text-xs text-neutral-600 mb-2">
             {getTranslation(lang, "components.hashGenerator.crackedText")}
           </div>
           <div
@@ -681,19 +692,19 @@ const lang = Astro.params.lang as Language;
         </div>
 
         <div class="grid grid-cols-2 gap-3 text-xs">
-          <div class="bg-neutral-900/60 rounded-lg p-3">
-            <div class="text-neutral-400">
+          <div class="bg-white rounded-lg p-3">
+            <div class="text-neutral-600">
               {getTranslation(lang, "components.hashGenerator.method")}
             </div>
-            <div id="crack-method-display" class="font-mono text-neutral-300">
+            <div id="crack-method-display" class="font-mono text-neutral-700">
               -
             </div>
           </div>
-          <div class="bg-neutral-900/60 rounded-lg p-3">
-            <div class="text-neutral-400">
+          <div class="bg-white rounded-lg p-3">
+            <div class="text-neutral-600">
               {getTranslation(lang, "components.hashGenerator.timeTaken")}
             </div>
-            <div id="crack-time" class="font-mono text-neutral-300">-</div>
+            <div id="crack-time" class="font-mono text-neutral-700">-</div>
           </div>
         </div>
       </div>

@@ -7,13 +7,33 @@ import Hero from "@/components/shared/Hero.astro";
 
 import type { Language } from "@/types/language.type";
 import { getTranslation } from "@/i18n/index";
+import Header from "@/components/Header.astro";
+import Footer from "@/components/Footer.astro";
+import ProcessSummary from "@/components/shared/ProcessSummary.astro";
 
 const lang = Astro.params.lang as Language;
 ---
 
 <MainLayout>
-  <Hero
-    title={getTranslation(lang, "pages.home.title")}
-    description={getTranslation(lang, "pages.home.description")}
-  />
+  <div class="bg-primary m-4 rounded-2xl pb-10 md:pb-15">
+    <Header />
+    <section class="w-full max-w-7xl mx-auto flex flex-col">
+      <Hero
+        title={getTranslation(lang, "pages.home.title")}
+        description={getTranslation(lang, "pages.home.description")}
+        showSearch={true}
+      />
+    </section>
+  </div>
+  <main class="w-full max-w-7xl mx-auto px-4 py-3 mb-8 md:mb-12">
+    <div class="flex flex-col lg:flex-row gap-6 lg:gap-8">
+      <div class="w-full lg:w-1/2">
+        <FeaturedTools title="Ultimas herramientas" />
+      </div>
+      <div class="w-full lg:w-1/2">
+        <ProcessSummary />
+      </div>
+    </div>
+  </main>
+  <Footer />
 </MainLayout>

@@ -4,6 +4,8 @@ import Hero from "@/components/shared/Hero.astro";
 
 import type { Language } from "@/types/language.type";
 import { getTranslation } from "@/i18n/index";
+import Header from "@/components/Header.astro";
+import Footer from "@/components/Footer.astro";
 
 const lang = Astro.params.lang as Language;
 
@@ -29,230 +31,255 @@ const FagQuestions = getTranslation(lang, "pages.contact.faq.items");
   title={getTranslation(lang, "seo.pages.contact.title")}
   description={getTranslation(lang, "seo.pages.contact.description")}
 >
-  <Hero
-    title={getTranslation(lang, "pages.contact.title")}
-    description={getTranslation(lang, "pages.contact.description")}
-  />
+  <div class="bg-[#dddfe0] m-4 rounded-2xl pb-10 md:pb-15">
+    <Header />
+    <section class="w-full max-w-7xl mx-auto flex flex-col">
+      <Hero
+        title={getTranslation(lang, "pages.contact.title")}
+        description={getTranslation(lang, "pages.contact.description")}
+      />
+    </section>
+  </div>
 
-  <div class="mt-5 flex flex-col xl:flex-row gap-5">
-    <!-- Información de contacto -->
+  <main class="max-w-7xl w-full mx-auto px-4 py-4 mb-8 md:mb-12">
+    <div class="flex flex-col xl:flex-row gap-6">
+      <!-- Información de contacto -->
+      <div
+        class="overflow-hidden rounded-xl border border-neutral-200 shadow-sm p-6 space-y-6 flex-1 bg-white"
+      >
+        <h2 class="text-xl font-semibold text-neutral-800">
+          {getTranslation(lang, "pages.contact.contactInfo.title")}
+        </h2>
+
+        <div class="space-y-4">
+          {
+            Array.isArray(ContactInfoOptions) &&
+              ContactInfoOptions.length > 0 &&
+              ContactInfoOptions.map((option) => (
+                <div class="flex items-center gap-3">
+                  <div class="w-8 h-8 bg-emerald-100 rounded-lg flex items-center justify-center">
+                    <span class="text-emerald-600">{option.icon}</span>
+                  </div>
+                  <div>
+                    <p class="text-sm text-neutral-600 font-medium">
+                      {option.title}
+                    </p>
+                    <a
+                      href={option.href}
+                      target={
+                        option.href.startsWith("http") ? "_blank" : undefined
+                      }
+                      class="text-neutral-800 hover:text-emerald-600 transition-colors font-medium"
+                    >
+                      {option.description}
+                    </a>
+                  </div>
+                </div>
+              ))
+          }
+
+          <div class="flex items-center gap-3">
+            <div
+              class="w-8 h-8 bg-emerald-100 rounded-lg flex items-center justify-center"
+            >
+              <span class="text-emerald-600">
+                {
+                  getTranslation(
+                    lang,
+                    "pages.contact.contactInfo.responseTime.icon"
+                  )
+                }
+              </span>
+            </div>
+            <div>
+              <p class="text-sm text-neutral-600 font-medium">
+                {
+                  getTranslation(
+                    lang,
+                    "pages.contact.contactInfo.responseTime.title"
+                  )
+                }
+              </p>
+              <p class="text-neutral-800 font-medium">
+                {
+                  getTranslation(
+                    lang,
+                    "pages.contact.contactInfo.responseTime.description"
+                  )
+                }
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="border-t border-neutral-200 pt-6">
+          <h3 class="text-lg font-semibold text-neutral-800 mb-3">
+            {getTranslation(lang, "pages.contact.contactInfo.helpWith.title")}
+          </h3>
+          <ul class="space-y-2 text-sm text-neutral-700">
+            {
+              Array.isArray(ContactInfoHelpWith) &&
+                ContactInfoHelpWith.length > 0 &&
+                ContactInfoHelpWith.map((item) => <li>• {item}</li>)
+            }
+          </ul>
+        </div>
+      </div>
+
+      <!-- Formulario de contacto -->
+      <div
+        class="overflow-hidden rounded-xl border border-neutral-200 shadow-sm bg-white p-6 flex-1"
+      >
+        <h2 class="text-xl font-semibold text-neutral-800 mb-6">
+          {getTranslation(lang, "pages.contact.form.title")}
+        </h2>
+
+        <form id="contact-form" class="space-y-4">
+          <div>
+            <label
+              for="name"
+              class="block text-sm font-semibold text-neutral-800 mb-2"
+            >
+              {getTranslation(lang, "pages.contact.form.fields.name.label")}
+            </label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              required
+              class="w-full px-4 py-3 bg-white border border-neutral-300 rounded-lg text-neutral-700 placeholder:text-neutral-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500 transition-all shadow-sm"
+              placeholder={getTranslation(
+                lang,
+                "pages.contact.form.fields.name.placeholder"
+              )}
+            />
+          </div>
+
+          <div>
+            <label
+              for="email"
+              class="block text-sm font-semibold text-neutral-800 mb-2"
+            >
+              {getTranslation(lang, "pages.contact.form.fields.email.label")}
+            </label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              required
+              class="w-full px-4 py-3 bg-white border border-neutral-300 rounded-lg text-neutral-700 placeholder:text-neutral-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500 transition-all shadow-sm"
+              placeholder={getTranslation(
+                lang,
+                "pages.contact.form.fields.email.placeholder"
+              )}
+            />
+          </div>
+
+          <div>
+            <label
+              for="subject"
+              class="block text-sm font-semibold text-neutral-800 mb-2"
+            >
+              {getTranslation(lang, "pages.contact.form.fields.subject.label")}
+            </label>
+            <select
+              id="subject"
+              name="subject"
+              required
+              class="w-full px-4 py-3 bg-white border border-neutral-300 rounded-lg text-neutral-700 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500 transition-all shadow-sm"
+            >
+              {
+                Array.isArray(FormSubjectOptions) &&
+                  FormSubjectOptions.length > 0 &&
+                  FormSubjectOptions.map((option) => (
+                    <option value={option.value}>{option.label}</option>
+                  ))
+              }
+            </select>
+          </div>
+
+          <div>
+            <label
+              for="message"
+              class="block text-sm font-semibold text-neutral-800 mb-2"
+            >
+              {getTranslation(lang, "pages.contact.form.fields.message.label")}
+            </label>
+            <textarea
+              id="message"
+              name="message"
+              rows="6"
+              required
+              class="w-full px-4 py-3 bg-white border border-neutral-300 rounded-lg text-neutral-700 placeholder:text-neutral-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500 transition-all shadow-sm resize-none"
+              placeholder={getTranslation(
+                lang,
+                "pages.contact.form.fields.message.placeholder"
+              )}></textarea>
+          </div>
+
+          <button
+            type="submit"
+            class="cursor-pointer w-full px-6 py-3 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg transition-colors font-semibold shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/50 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <span id="submit-text"
+              >{getTranslation(lang, "pages.contact.form.submit.default")}</span
+            >
+          </button>
+        </form>
+
+        <div id="form-status" class="mt-4 text-sm hidden"></div>
+      </div>
+    </div>
+    <!-- FAQ Section -->
     <div
-      class="overflow-hidden rounded-2xl border border-neutral-800 p-6 space-y-6 flex-1 bg-neutral-800/50 select-none"
+      class="overflow-hidden rounded-xl border border-neutral-200 shadow-sm bg-white p-6 mt-6"
     >
-      <h2 class="text-xl font-semibold text-neutral-200">
-        {getTranslation(lang, "pages.contact.contactInfo.title")}
+      <h2 class="text-xl font-semibold text-neutral-800 mb-6">
+        {getTranslation(lang, "pages.contact.faq.title")}
       </h2>
 
       <div class="space-y-4">
         {
-          Array.isArray(ContactInfoOptions) &&
-            ContactInfoOptions.length > 0 &&
-            ContactInfoOptions.map((option) => (
-              <div class="flex items-center gap-3">
-                <div class="w-8 h-8 bg-emerald-500/20 rounded-lg flex items-center justify-center">
-                  <span class="text-emerald-400">{option.icon}</span>
-                </div>
-                <div>
-                  <p class="text-sm text-neutral-400">{option.title}</p>
-                  <a
-                    href={option.href}
-                    target={
-                      option.href.startsWith("http") ? "_blank" : undefined
-                    }
-                    class="text-neutral-200 hover:text-emerald-400 transition-colors"
+          Array.isArray(FagQuestions) &&
+            FagQuestions.length > 0 &&
+            FagQuestions.map((faqItem) => (
+              <details class="group border-b border-neutral-200 pb-4 last:border-b-0 last:pb-0">
+                <summary class="cursor-pointer text-neutral-800 hover:text-emerald-600 font-semibold transition-colors list-none flex items-center justify-between">
+                  <span>{faqItem.question}</span>
+                  <svg
+                    class="w-5 h-5 text-neutral-600 group-open:rotate-180 transition-transform"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
                   >
-                    {option.description}
-                  </a>
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M19 9l-7 7-7-7"
+                    />
+                  </svg>
+                </summary>
+                <div class="mt-3 text-sm text-neutral-700 pl-4">
+                  {faqItem.answer.split("\n").map((line: string) => (
+                    <p class="mb-1">
+                      {line.startsWith("●") ? line : `● ${line}`}
+                    </p>
+                  ))}
                 </div>
-              </div>
+              </details>
             ))
         }
-
-        <div class="flex items-center gap-3">
-          <div
-            class="w-8 h-8 bg-emerald-500/20 rounded-lg flex items-center justify-center"
-          >
-            <span class="text-emerald-400">
-              {
-                getTranslation(
-                  lang,
-                  "pages.contact.contactInfo.responseTime.icon"
-                )
-              }
-            </span>
-          </div>
-          <div>
-            <p class="text-sm text-neutral-400">
-              {
-                getTranslation(
-                  lang,
-                  "pages.contact.contactInfo.responseTime.title"
-                )
-              }
-            </p>
-            <p class="text-neutral-200">
-              {
-                getTranslation(
-                  lang,
-                  "pages.contact.contactInfo.responseTime.description"
-                )
-              }
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <div class="border-t border-neutral-700 pt-6">
-        <h3 class="text-lg font-medium text-neutral-200 mb-3">
-          {getTranslation(lang, "pages.contact.contactInfo.helpWith.title")}
-        </h3>
-        <ul class="space-y-2 text-sm text-neutral-400">
-          {
-            Array.isArray(ContactInfoHelpWith) &&
-              ContactInfoHelpWith.length > 0 &&
-              ContactInfoHelpWith.map((item) => <li>• {item}</li>)
-          }
-        </ul>
       </div>
     </div>
-
-    <!-- Formulario de contacto -->
-    <div
-      class="overflow-hidden rounded-2xl border border-neutral-800 bg-neutral-800/50 p-6 flex-1"
-    >
-      <h2 class="text-xl font-semibold text-neutral-200 mb-6">
-        {getTranslation(lang, "pages.contact.form.title")}
-      </h2>
-
-      <form id="contact-form" class="space-y-4">
-        <div>
-          <label
-            for="name"
-            class="block text-sm font-medium text-neutral-300 mb-2"
-          >
-            {getTranslation(lang, "pages.contact.form.fields.name.label")}
-          </label>
-          <input
-            type="text"
-            id="name"
-            name="name"
-            required
-            class="w-full px-4 py-3 bg-neutral-900/60 border border-neutral-700 rounded-lg text-neutral-200 placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50"
-            placeholder={getTranslation(
-              lang,
-              "pages.contact.form.fields.name.placeholder"
-            )}
-          />
-        </div>
-
-        <div>
-          <label
-            for="email"
-            class="block text-sm font-medium text-neutral-300 mb-2"
-          >
-            {getTranslation(lang, "pages.contact.form.fields.email.label")}
-          </label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            required
-            class="w-full px-4 py-3 bg-neutral-900/60 border border-neutral-700 rounded-lg text-neutral-200 placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50"
-            placeholder={getTranslation(
-              lang,
-              "pages.contact.form.fields.email.placeholder"
-            )}
-          />
-        </div>
-
-        <div>
-          <label
-            for="subject"
-            class="block text-sm font-medium text-neutral-300 mb-2"
-          >
-            {getTranslation(lang, "pages.contact.form.fields.subject.label")}
-          </label>
-          <select
-            id="subject"
-            name="subject"
-            required
-            class="w-full px-4 py-3 bg-neutral-900/60 border border-neutral-700 rounded-lg text-neutral-200 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50"
-          >
-            {
-              Array.isArray(FormSubjectOptions) &&
-                FormSubjectOptions.length > 0 &&
-                FormSubjectOptions.map((option) => (
-                  <option value={option.value}>{option.label}</option>
-                ))
-            }
-          </select>
-        </div>
-
-        <div>
-          <label
-            for="message"
-            class="block text-sm font-medium text-neutral-300 mb-2"
-          >
-            {getTranslation(lang, "pages.contact.form.fields.message.label")}
-          </label>
-          <textarea
-            id="message"
-            name="message"
-            rows="6"
-            required
-            class="w-full px-4 py-3 bg-neutral-900/60 border border-neutral-700 rounded-lg text-neutral-200 placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50 resize-none"
-            placeholder={getTranslation(
-              lang,
-              "pages.contact.form.fields.message.placeholder"
-            )}></textarea>
-        </div>
-
-        <button
-          type="submit"
-          class="cursor-pointer w-full px-6 py-3 bg-neutral-700 hover:bg-neutral-600 text-neutral-200 rounded transition-colors font-medium focus:outline-none focus:ring-2 focus:ring-emerald-500/50 disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          <span id="submit-text"
-            >{getTranslation(lang, "pages.contact.form.submit.default")}</span
-          >
-        </button>
-      </form>
-
-      <div id="form-status" class="mt-4 text-sm hidden"></div>
-    </div>
-  </div>
-
-  <!-- FAQ Section -->
-  <div
-    class="overflow-hidden rounded-2xl border border-neutral-800 bg-neutral-800/50 p-6 mt-5"
-  >
-    <h2 class="text-xl font-semibold text-neutral-200 mb-6">
-      {getTranslation(lang, "pages.contact.faq.title")}
-    </h2>
-
-    <div class="space-y-4">
-      {
-        Array.isArray(FagQuestions) &&
-          FagQuestions.length > 0 &&
-          FagQuestions.map((faqItem) => (
-            <details class="group">
-              <summary class="cursor-pointer text-neutral-300 hover:text-neutral-100 font-medium">
-                {faqItem.question}
-              </summary>
-              <div class="mt-2 text-sm text-neutral-400 pl-4">
-                {faqItem.answer.split("\n").map((line: string) => (
-                  <p>{line.startsWith("●") ? line : `● ${line}`}</p>
-                ))}
-              </div>
-            </details>
-          ))
-      }
-    </div>
-  </div>
+  </main>
 
   <astro-contact-form-translations
     data-translations={JSON.stringify(
       getTranslation(lang, "pages.contact.form.submit")
     )}></astro-contact-form-translations>
+
+  <Footer />
 </MainLayout>
 
 <script>

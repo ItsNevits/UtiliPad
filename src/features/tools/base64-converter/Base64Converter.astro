@@ -6,117 +6,124 @@ import "@/styles/tools/Base64Converter.css";
 const lang = Astro.params.lang as Language;
 ---
 
-<div class="bg-neutral-800/50 rounded-xl p-6 select-none mb-5">
+<div class="space-y-6 mt-6">
   <!-- Tabs para cambiar entre Encode y Decode -->
-  <div class="flex gap-2 mb-6">
-    <button
-      id="tab-encode"
-      title={getTranslation(lang, "components.base64Converter.encode")}
-      class="cursor-pointer flex-1 px-4 py-2 bg-neutral-700 text-neutral-200 rounded-lg transition-colors text-sm font-medium tab-active active:scale-99"
-    >
-      {getTranslation(lang, "components.base64Converter.encode")}
-    </button>
-    <button
-      id="tab-decode"
-      title={getTranslation(lang, "components.base64Converter.decode")}
-      class="cursor-pointer flex-1 px-4 py-2 bg-neutral-800/50 text-neutral-400 rounded-lg transition-colors text-sm font-medium active:scale-99"
-    >
-      {getTranslation(lang, "components.base64Converter.decode")}
-    </button>
-  </div>
-
-  <!-- Input Area -->
-  <div class="mb-4">
-    <label class="block text-sm font-medium text-neutral-300 mb-2">
-      {getTranslation(lang, "components.base64Converter.inputLabel")}
-    </label>
-    <textarea
-      id="input-text"
-      rows="6"
-      class="w-full bg-neutral-900/40 border border-neutral-700 rounded-lg p-4 text-neutral-200 font-mono text-sm focus:outline-none focus:border-neutral-600 resize-none"
-      placeholder={getTranslation(
-        lang,
-        "components.base64Converter.inputPlaceholder"
-      )}></textarea>
-  </div>
-
-  <!-- File Upload Option (solo para Encode) -->
-  <div id="file-upload-section" class="mb-4">
-    <div class="flex items-center gap-2 mb-2">
-      <span class="text-sm text-neutral-400"
-        >{getTranslation(lang, "components.base64Converter.orUploadFile")}</span
-      >
-    </div>
-    <div
-      id="file-drop-zone"
-      class="border-2 border-dashed border-neutral-700 rounded-lg p-4 text-center cursor-pointer hover:border-neutral-600 transition-colors"
-    >
-      <p class="text-neutral-400 text-sm">
-        {getTranslation(lang, "components.base64Converter.dropFileHere")}
-      </p>
-      <input type="file" id="file-input" class="hidden" />
-    </div>
-    <p id="file-name" class="text-xs text-neutral-500 mt-2"></p>
-  </div>
-
-  <!-- Action Buttons -->
-  <div class="flex gap-2 mb-4">
-    <button
-      id="convert-button"
-      class="cursor-pointer flex-1 px-4 py-2 bg-neutral-700 text-neutral-200 rounded-lg transition-colors text-sm font-medium active:scale-99 hover:bg-neutral-600"
-    >
-      {getTranslation(lang, "components.base64Converter.convertButton")}
-    </button>
-    <button
-      id="clear-button"
-      class="cursor-pointer px-4 py-2 bg-neutral-700 text-neutral-200 rounded-lg transition-colors text-sm font-medium active:scale-99 hover:bg-neutral-600"
-    >
-      {getTranslation(lang, "components.base64Converter.clearButton")}
-    </button>
-  </div>
-
-  <!-- Output Area -->
-  <div id="output-text-container">
-    <div class="flex items-center justify-between mb-2">
-      <label class="block text-sm font-medium text-neutral-300">
-        {getTranslation(lang, "components.base64Converter.outputLabel")}
-      </label>
+  <div class="bg-white rounded-xl border border-neutral-200 shadow-sm p-6">
+    <div class="flex gap-2 mb-6">
       <button
-        id="copy-button"
-        class="cursor-pointer px-3 py-1 bg-neutral-700 text-neutral-200 rounded-lg transition-colors text-xs font-medium active:scale-99 hover:bg-neutral-600"
+        id="tab-encode"
+        title={getTranslation(lang, "components.base64Converter.encode")}
+        class="cursor-pointer flex-1 px-4 py-2 bg-emerald-500 text-white rounded-lg transition-colors text-sm font-semibold shadow-sm tab-active"
       >
-        {getTranslation(lang, "components.base64Converter.copyButton")}
+        {getTranslation(lang, "components.base64Converter.encode")}
+      </button>
+      <button
+        id="tab-decode"
+        title={getTranslation(lang, "components.base64Converter.decode")}
+        class="cursor-pointer flex-1 px-4 py-2 bg-white border border-neutral-300 text-neutral-700 rounded-lg transition-colors text-sm font-medium shadow-sm tab-inactive"
+      >
+        {getTranslation(lang, "components.base64Converter.decode")}
       </button>
     </div>
-    <textarea
-      id="output-text"
-      rows="6"
-      readonly
-      class="w-full bg-neutral-900/40 border border-neutral-700 rounded-lg p-4 text-neutral-200 font-mono text-sm focus:outline-none resize-none"
-      placeholder={getTranslation(
-        lang,
-        "components.base64Converter.outputPlaceholder"
-      )}></textarea>
+
+    <!-- Input Area -->
+    <div class="mb-4">
+      <label class="block text-sm font-semibold text-neutral-800 mb-3">
+        {getTranslation(lang, "components.base64Converter.inputLabel")}
+      </label>
+      <textarea
+        id="input-text"
+        rows="6"
+        class="w-full bg-white border border-neutral-300 rounded-lg p-4 text-neutral-700 font-mono text-sm placeholder:text-neutral-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500 transition-all shadow-sm resize-none"
+        placeholder={getTranslation(
+          lang,
+          "components.base64Converter.inputPlaceholder"
+        )}></textarea>
+    </div>
+
+    <!-- File Upload Option (solo para Encode) -->
+    <div id="file-upload-section" class="mb-4">
+      <div class="flex items-center gap-2 mb-2">
+        <span class="text-sm text-neutral-600 font-medium"
+          >{
+            getTranslation(lang, "components.base64Converter.orUploadFile")
+          }</span
+        >
+      </div>
+      <div
+        id="file-drop-zone"
+        class="border-2 border-dashed border-neutral-300 rounded-lg p-6 text-center cursor-pointer hover:border-emerald-400 hover:bg-emerald-50/50 transition-all"
+      >
+        <p class="text-neutral-600 text-sm">
+          {getTranslation(lang, "components.base64Converter.dropFileHere")}
+        </p>
+        <input type="file" id="file-input" class="hidden" />
+      </div>
+      <p id="file-name" class="text-xs text-neutral-600 mt-2"></p>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="flex gap-2 mb-4">
+      <button
+        id="convert-button"
+        class="cursor-pointer flex-1 px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg transition-colors text-sm font-semibold shadow-sm"
+      >
+        {getTranslation(lang, "components.base64Converter.convertButton")}
+      </button>
+      <button
+        id="clear-button"
+        class="cursor-pointer px-4 py-2 bg-white border border-neutral-300 hover:border-neutral-400 text-neutral-700 rounded-lg transition-all text-sm font-medium shadow-sm hover:shadow"
+      >
+        {getTranslation(lang, "components.base64Converter.clearButton")}
+      </button>
+    </div>
+
+    <!-- Output Area -->
+    <div id="output-text-container">
+      <div class="flex items-center justify-between mb-2">
+        <label class="block text-sm font-semibold text-neutral-800">
+          {getTranslation(lang, "components.base64Converter.outputLabel")}
+        </label>
+        <button
+          id="copy-button"
+          class="cursor-pointer px-3 py-1.5 bg-white border border-neutral-300 hover:border-neutral-400 text-neutral-700 rounded-lg transition-all text-xs font-medium shadow-sm hover:shadow"
+        >
+          {getTranslation(lang, "components.base64Converter.copyButton")}
+        </button>
+      </div>
+      <textarea
+        id="output-text"
+        rows="6"
+        readonly
+        class="w-full bg-neutral-50 border border-neutral-300 rounded-lg p-4 text-neutral-700 font-mono text-sm placeholder:text-neutral-500 focus:outline-none resize-none"
+        placeholder={getTranslation(
+          lang,
+          "components.base64Converter.outputPlaceholder"
+        )}></textarea>
+    </div>
   </div>
 
   <!-- File Preview Area (for decoded files) -->
-  <div id="file-preview" class="hidden mt-4">
-    <div class="flex items-center justify-between mb-2">
-      <label class="block text-sm font-medium text-neutral-300">
+  <div
+    id="file-preview"
+    class="hidden bg-white rounded-xl border border-neutral-200 shadow-sm p-6"
+  >
+    <div class="flex items-center justify-between mb-3">
+      <label class="block text-sm font-semibold text-neutral-800">
         {getTranslation(lang, "components.base64Converter.previewLabel")}
       </label>
       <div class="flex gap-2 items-center">
-        <span id="file-info" class="text-xs text-neutral-400"></span>
+        <span id="file-info" class="text-xs text-neutral-600"></span>
         <button
           id="download-button"
-          class="cursor-pointer px-3 py-1 bg-neutral-700 text-neutral-200 rounded-lg transition-colors text-xs font-medium active:scale-99 hover:bg-neutral-600"
+          class="cursor-pointer px-3 py-1.5 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg transition-colors text-xs font-semibold shadow-sm"
         >
           {getTranslation(lang, "components.base64Converter.downloadButton")}
         </button>
       </div>
     </div>
     <div
-      class="bg-neutral-900/40 border border-neutral-700 rounded-lg p-4 overflow-auto max-h-96"
+      class="bg-neutral-50 border border-neutral-200 rounded-lg p-4 overflow-auto max-h-96"
     >
       <!-- Image Preview -->
       <img
@@ -136,7 +143,7 @@ const lang = Astro.params.lang as Language;
       <!-- Text Preview -->
       <div
         id="text-preview"
-        class="hidden text-neutral-300 text-sm whitespace-pre-wrap"
+        class="hidden text-neutral-700 text-sm whitespace-pre-wrap"
       >
       </div>
     </div>
@@ -145,9 +152,9 @@ const lang = Astro.params.lang as Language;
   <!-- Error Message -->
   <div
     id="error-message"
-    class="hidden mt-4 p-3 bg-red-600/20 border border-red-600/50 rounded-lg"
+    class="hidden bg-white rounded-xl border border-red-200 shadow-sm p-4"
   >
-    <p class="text-red-400 text-sm"></p>
+    <p class="text-red-600 text-sm font-medium"></p>
   </div>
 </div>
 
@@ -270,20 +277,20 @@ const lang = Astro.params.lang as Language;
     // Tab switching
     tabEncode.addEventListener("click", () => {
       currentMode = "encode";
-      tabEncode.classList.add("tab-active");
-      tabEncode.classList.remove("tab-inactive");
-      tabDecode.classList.remove("tab-active");
-      tabDecode.classList.add("tab-inactive");
+      tabEncode.className =
+        "cursor-pointer flex-1 px-4 py-2 bg-emerald-500 text-white rounded-lg transition-colors text-sm font-semibold shadow-sm tab-active";
+      tabDecode.className =
+        "cursor-pointer flex-1 px-4 py-2 bg-white border border-neutral-300 text-neutral-700 rounded-lg transition-colors text-sm font-medium shadow-sm tab-inactive";
       fileUploadSection.classList.remove("hidden");
       clearAll();
     });
 
     tabDecode.addEventListener("click", () => {
       currentMode = "decode";
-      tabDecode.classList.add("tab-active");
-      tabDecode.classList.remove("tab-inactive");
-      tabEncode.classList.remove("tab-active");
-      tabEncode.classList.add("tab-inactive");
+      tabDecode.className =
+        "cursor-pointer flex-1 px-4 py-2 bg-emerald-500 text-white rounded-lg transition-colors text-sm font-semibold shadow-sm tab-active";
+      tabEncode.className =
+        "cursor-pointer flex-1 px-4 py-2 bg-white border border-neutral-300 text-neutral-700 rounded-lg transition-colors text-sm font-medium shadow-sm tab-inactive";
       fileUploadSection.classList.add("hidden");
       clearAll();
     });
@@ -295,16 +302,19 @@ const lang = Astro.params.lang as Language;
 
     fileDropZone.addEventListener("dragover", (e) => {
       e.preventDefault();
-      fileDropZone.classList.add("border-blue-500");
+      fileDropZone.classList.add("border-emerald-500");
+      fileDropZone.classList.add("bg-emerald-50");
     });
 
     fileDropZone.addEventListener("dragleave", () => {
-      fileDropZone.classList.remove("border-blue-500");
+      fileDropZone.classList.remove("border-emerald-500");
+      fileDropZone.classList.remove("bg-emerald-50");
     });
 
     fileDropZone.addEventListener("drop", (e) => {
       e.preventDefault();
-      fileDropZone.classList.remove("border-blue-500");
+      fileDropZone.classList.remove("border-emerald-500");
+      fileDropZone.classList.remove("bg-emerald-50");
       if (e.dataTransfer?.files) {
         handleFile(e.dataTransfer.files[0]);
       }
