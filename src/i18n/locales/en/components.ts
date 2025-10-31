@@ -62,6 +62,10 @@ export default {
       urlDownloads: "URL downloads",
     },
   },
+  featuredTools: {
+    title: "Featured Tools",
+    description: "The most popular and used tools by our users",
+  },
   news: {
     title: "News",
     seeMore: "see more",

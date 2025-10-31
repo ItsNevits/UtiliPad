@@ -3,6 +3,7 @@ import { sendContactEmail } from "./contact";
 import { convertImages } from "./images";
 import { convertFiles, getSupportedConversions } from "./files";
 import { convertBase64, encodeFileToBase64 } from "./text";
+import { searchTools } from "./search";
 
 export const server = {
   // Process count actions
@@ -22,4 +23,7 @@ export const server = {
   // Text actions
   convertBase64,
   encodeFileToBase64,
+
+  // Search actions
+  searchTools,
 };

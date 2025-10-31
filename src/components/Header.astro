@@ -44,19 +44,19 @@ const currentPath = Astro.url.pathname;
           <li>
             <a
               href={`/${lang}/tools`}
-              class={`text-black font-medium border-b-2 hover:border-b-emerald-600 transition-colors whitespace-nowrap ${
+              class={`text-black font-medium border-b-2 hover:border-b-emerald-600 hover:text-emerald-600 transition-colors whitespace-nowrap ${
                 currentPath.startsWith(`/${lang}/tools`)
-                  ? "border-b-emerald-600"
+                  ? "border-b-emerald-600 text-emerald-600"
                   : "border-b-transparent"
               }`}>Herramientas</a
             >
           </li>
           <li>
             <a
-              href={`/${lang}/about`}
-              class={`text-black font-medium border-b-2 hover:border-b-emerald-600 transition-colors whitespace-nowrap ${
-                currentPath.startsWith(`/${lang}/about`)
-                  ? "border-b-emerald-600"
+              href={`/${lang}/about-us`}
+              class={`text-black font-medium border-b-2 hover:border-b-emerald-600 hover:text-emerald-600 transition-colors whitespace-nowrap ${
+                currentPath.startsWith(`/${lang}/about-us`)
+                  ? "border-b-emerald-600 text-emerald-600"
                   : "border-b-transparent"
               }`}>{lang === "es" ? "Conócenos" : "About Us"}</a
             >
@@ -64,9 +64,9 @@ const currentPath = Astro.url.pathname;
           <li>
             <a
               href={`/${lang}/news`}
-              class={`text-black font-medium border-b-2 hover:border-b-emerald-600 transition-colors whitespace-nowrap ${
+              class={`text-black font-medium border-b-2 hover:border-b-emerald-600 hover:text-emerald-600 transition-colors whitespace-nowrap ${
                 currentPath.startsWith(`/${lang}/news`)
-                  ? "border-b-emerald-600"
+                  ? "border-b-emerald-600 text-emerald-600"
                   : "border-b-transparent"
               }`}>{lang === "es" ? "Novedades" : "News"}</a
             >

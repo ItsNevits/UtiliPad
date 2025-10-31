@@ -1,5 +1,4 @@
 ---
-import { getToolById } from "@/config/tools.config";
 import type { Language } from "@/types/language.type";
 import { getTranslation } from "@/i18n/index";
 import { actions } from "astro:actions";
@@ -25,9 +24,10 @@ if (data) {
   const { success, topProcesses } = data;
   if (success && topProcesses) {
     topProcesses.forEach((p) => {
-      const tool = getToolById(p.process_name);
-      if (tool) {
-        process.push({ name: tool.name, progress: p.count });
+      // Obtener el nombre traducido de la herramienta
+      const toolTranslation = getTranslation(lang, `tools.items.${p.process_name}`) as any;
+      if (toolTranslation && typeof toolTranslation === 'object' && toolTranslation.name) {
+        process.push({ name: toolTranslation.name, progress: p.count });
       }
     });
   }

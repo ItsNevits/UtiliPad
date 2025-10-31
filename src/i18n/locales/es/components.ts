@@ -61,6 +61,10 @@ export default {
       urlDownloads: "Descargas por URL",
     },
   },
+  featuredTools: {
+    title: "Herramientas destacadas",
+    description: "Las herramientas más populares y utilizadas por nuestros usuarios",
+  },
   news: {
     title: "Novedades",
     seeMore: "ver más",

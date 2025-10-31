@@ -262,19 +262,19 @@ export function initializeComponent() {
 
       elements.tabEncrypt.classList.add(
         "border-emerald-500",
-        "text-emerald-400"
+        "text-emerald-600"
       );
       elements.tabEncrypt.classList.remove(
         "border-transparent",
-        "text-neutral-400"
+        "text-neutral-600"
       );
       elements.tabDecrypt.classList.remove(
         "border-emerald-500",
-        "text-emerald-400"
+        "text-emerald-600"
       );
       elements.tabDecrypt.classList.add(
         "border-transparent",
-        "text-neutral-400"
+        "text-neutral-600"
       );
     } else {
       elements.decryptMode.classList.remove("hidden");
@@ -284,19 +284,19 @@ export function initializeComponent() {
 
       elements.tabDecrypt.classList.add(
         "border-emerald-500",
-        "text-emerald-400"
+        "text-emerald-600"
       );
       elements.tabDecrypt.classList.remove(
         "border-transparent",
-        "text-neutral-400"
+        "text-neutral-600"
       );
       elements.tabEncrypt.classList.remove(
         "border-emerald-500",
-        "text-emerald-400"
+        "text-emerald-600"
       );
       elements.tabEncrypt.classList.add(
         "border-transparent",
-        "text-neutral-400"
+        "text-neutral-600"
       );
     }
   }

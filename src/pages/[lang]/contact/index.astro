@@ -1,11 +1,11 @@
 ---
 import MainLayout from "@/Layouts/MainLayout.astro";
 import Hero from "@/components/shared/Hero.astro";
-
-import type { Language } from "@/types/language.type";
-import { getTranslation } from "@/i18n/index";
 import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
+
+import { getTranslation } from "@/i18n/index";
+import type { Language } from "@/types/language.type";
 
 const lang = Astro.params.lang as Language;
 

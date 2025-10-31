@@ -3,12 +3,6 @@ import type { Language } from "@/types/language.type";
 import { getTranslation } from "@/i18n/index";
 
 const lang = Astro.params.lang as Language;
-
-const toolsData = {
-  items: getTranslation(lang, "tools.items"),
-  categories: getTranslation(lang, "tools.categories"),
-  lang: lang,
-};
 ---
 
 <div class="relative w-full max-w-md">
@@ -20,6 +14,7 @@ const toolsData = {
       autocomplete="off"
     />
     <span
+      id="keyboard-shortcut"
       class="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-medium text-neutral-400 bg-neutral-100 px-2 py-0.5 rounded border border-neutral-300"
       >Ctrl + K</span
     >
@@ -49,41 +44,27 @@ const toolsData = {
   </div>
 </div>
 
-<script define:vars={{ toolsData }}>
-  // Función de búsqueda simple que replica la lógica de searchTools
-  function searchTools(query) {
-    // Obtener el idioma y los datos de herramientas
-    const lang = toolsData.lang;
-    const items = toolsData.items || {};
+<script>
+  import { actions } from "astro:actions";
 
-    // Simulamos la estructura de TOOLS_CATEGORIES desde las traducciones
-    const allTools = [];
+  // Función de búsqueda que llama a la action del servidor
+  async function searchTools(query: string, lang: string) {
+    try {
+      const { data, error } = await actions.searchTools({
+        query,
+        lang: lang as "es" | "en",
+      });
 
-    // Crear herramientas desde las traducciones
-    const toolIds = Object.keys(items);
-    toolIds.forEach((toolId) => {
-      const toolTranslation = items[toolId];
-      if (toolTranslation) {
-        // Usar las nuevas URLs SEO-friendly
-        let href = `/${lang}/tools/${toolId}`;
-
-        allTools.push({
-          id: toolId,
-          name: toolTranslation.name,
-          description: toolTranslation.description,
-          href: href,
-          isAvailable: true,
-        });
+      if (error) {
+        console.error("Search error:", error);
+        return [];
       }
-    });
 
-    // Filtrar por query
-    const lowerQuery = query.toLowerCase();
-    return allTools.filter(
-      (tool) =>
-        tool.name.toLowerCase().includes(lowerQuery) ||
-        tool.description.toLowerCase().includes(lowerQuery)
-    );
+      return data?.results || [];
+    } catch (err) {
+      console.error("Search failed:", err);
+      return [];
+    }
   }
 
   function initializeSearch() {
@@ -91,17 +72,33 @@ const toolsData = {
     const searchResults = document.getElementById("search-results");
     const resultsContainer = document.getElementById("results-container");
     const noResults = document.getElementById("no-results");
+    const keyboardShortcut = document.getElementById("keyboard-shortcut");
 
     // Si no se encuentran los elementos, salir
     if (!searchInput || !searchResults || !resultsContainer || !noResults) {
       return;
     }
 
+    // Obtener el idioma del path actual
+    const lang = window.location.pathname.split("/")[1] || "es";
+
+    // Detectar el sistema operativo y actualizar el shortcut
+    const isMac =
+      /Mac|iPhone|iPod|iPad/.test(navigator.platform) ||
+      /Mac|iPhone|iPod|iPad/.test(navigator.userAgent);
+
+    if (keyboardShortcut) {
+      keyboardShortcut.textContent = isMac ? "⌘ + K" : "Ctrl + K";
+    }
+
     let currentIndex = -1; // Índice del resultado seleccionado
-    let currentResults = []; // Resultados actuales
+    let currentResults: any[] = []; // Resultados actuales
+    let debounceTimer: number | null = null; // Timer para el debounce
 
     // Función para renderizar los resultados
-    function renderResults(tools) {
+    function renderResults(tools: any[]) {
+      if (!resultsContainer || !noResults) return;
+
       currentResults = tools;
       currentIndex = -1; // Reset del índice
 
@@ -131,6 +128,8 @@ const toolsData = {
 
     // Función para actualizar la selección visual
     function updateSelection() {
+      if (!resultsContainer) return;
+
       const items = resultsContainer.querySelectorAll(".result-item");
       items.forEach((item, index) => {
         if (index === currentIndex) {
@@ -151,30 +150,57 @@ const toolsData = {
       }
     }
 
-    // Función para realizar la búsqueda
-    function performSearch(query) {
+    // Función para realizar la búsqueda con debounce
+    function debouncedSearch(query: string) {
+      // Limpiar el timer anterior
+      if (debounceTimer !== null) {
+        clearTimeout(debounceTimer);
+      }
+
+      // Si el query está vacío, ocultar resultados inmediatamente
       if (query.trim().length === 0) {
-        searchResults.classList.add("hidden");
+        if (searchResults) {
+          searchResults.classList.add("hidden");
+        }
         return;
       }
 
-      const results = searchTools(query);
+      // Mostrar resultados con indicador de carga
+      if (resultsContainer && searchResults) {
+        resultsContainer.innerHTML = `
+          <div class="text-center py-4">
+            <div class="animate-pulse text-neutral-500 text-sm">Buscando...</div>
+          </div>
+        `;
+        searchResults.classList.remove("hidden");
+      }
+
+      // Establecer un nuevo timer
+      debounceTimer = window.setTimeout(() => {
+        performSearch(query);
+      }, 300); // Esperar 300ms después de que el usuario deje de escribir
+    }
+
+    // Función para realizar la búsqueda
+    async function performSearch(query: string) {
+      if (!resultsContainer || !searchResults) return;
+
+      const results = await searchTools(query, lang);
       renderResults(results);
-      searchResults.classList.remove("hidden");
     }
 
     // Event listeners
     searchInput.addEventListener("input", (e) => {
-      const query = e.target.value;
-      performSearch(query);
+      const query = (e.target as HTMLInputElement).value;
+      debouncedSearch(query);
     });
 
     // Agregar evento change para compatibilidad móvil (solo en móviles)
     searchInput.addEventListener("change", (e) => {
       // Solo procesar en dispositivos móviles para evitar conflictos
       if ("ontouchstart" in window) {
-        const query = e.target.value;
-        performSearch(query);
+        const query = (e.target as HTMLInputElement).value;
+        debouncedSearch(query);
       }
     });
 
@@ -186,28 +212,29 @@ const toolsData = {
         return;
       }
 
-      const query = e.target.value;
-      performSearch(query);
+      const query = (e.target as HTMLInputElement).value;
+      debouncedSearch(query);
     });
 
     searchInput.addEventListener("paste", (e) => {
       // Usar setTimeout para esperar que el paste se complete
       setTimeout(() => {
-        const query = searchInput.value;
-        performSearch(query);
+        const query = (searchInput as HTMLInputElement).value;
+        debouncedSearch(query);
       }, 10);
     });
 
     // Cerrar resultados al hacer clic fuera
     document.addEventListener("click", (e) => {
-      if (!searchResults.contains(e.target) && e.target !== searchInput) {
+      const target = e.target as Node;
+      if (!searchResults.contains(target) && target !== searchInput) {
         searchResults.classList.add("hidden");
       }
     });
 
     // Mostrar resultados al hacer focus si hay contenido
     searchInput.addEventListener("focus", () => {
-      if (searchInput.value.trim().length > 0) {
+      if ((searchInput as HTMLInputElement).value.trim().length > 0) {
         searchResults.classList.remove("hidden");
       }
     });
@@ -268,8 +295,19 @@ const toolsData = {
       }
     });
 
-    // Atajo de teclado (/) para enfocar la búsqueda
+    // Atajo de teclado (/ y Ctrl+K / Cmd+K) para enfocar la búsqueda
     document.addEventListener("keydown", (e) => {
+      // Ctrl+K (Windows/Linux) o Cmd+K (Mac)
+      if (
+        e.key === "k" &&
+        (e.ctrlKey || e.metaKey) &&
+        !searchInput.matches(":focus")
+      ) {
+        e.preventDefault();
+        searchInput.focus();
+        (searchInput as HTMLInputElement).select();
+      }
+
       if (e.key === "/" && !searchInput.matches(":focus")) {
         e.preventDefault();
         searchInput.focus();
@@ -285,10 +323,10 @@ const toolsData = {
 
     // Click en los resultados para seleccionar con mouse
     resultsContainer.addEventListener("mouseover", (e) => {
-      const target = e.target;
-      const resultItem = target.closest(".result-item");
+      const target = e.target as HTMLElement;
+      const resultItem = target.closest(".result-item") as HTMLElement;
 
-      if (resultItem) {
+      if (resultItem && resultItem.dataset.index) {
         const index = parseInt(resultItem.dataset.index || "-1");
         if (index >= 0) {
           currentIndex = index;

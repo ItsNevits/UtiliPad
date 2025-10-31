@@ -2,21 +2,28 @@
 import { Picture } from "astro:assets";
 import type { Language } from "@/types/language.type";
 import { getTranslatedTools } from "@/utils/tools";
+import { getTranslation } from "@/i18n/index";
+import { actions } from "astro:actions";
 import ImageEditor from "@/assets/images/ImageEditor.png";
 
-interface Props {
-  title?: string;
-  description?: string;
-  featuredToolIds?: string[]; // IDs de las herramientas destacadas
-}
-
-const {
-  title,
-  description,
-  featuredToolIds = ["json-formatter", "image-compress", "qr-generator"],
-} = Astro.props;
-
 const lang = (Astro.params.lang as Language) || "es";
+
+// Obtener título y descripción de las traducciones
+const title = getTranslation(lang, "components.featuredTools.title");
+const description = getTranslation(lang, "components.featuredTools.description");
+
+// Obtener las 3 herramientas más utilizadas
+const { data } = await Astro.callAction(actions.mostUsedTool, {});
+
+let featuredToolIds: string[] = ["json-formatter", "image-compress", "qr-generator"]; // Default
+
+if (data && data.success && data.topProcesses) {
+  // Tomar las primeras 3 herramientas más usadas
+  const topThree = data.topProcesses.slice(0, 3);
+  if (topThree.length > 0) {
+    featuredToolIds = topThree.map((p) => p.process_name);
+  }
+}
 
 // Obtener todas las herramientas traducidas
 const allTools = getTranslatedTools("all", lang);
@@ -26,21 +33,18 @@ const featuredTools = allTools.filter((tool) =>
   featuredToolIds.includes(tool.id)
 );
 
-// Asegurar que siempre haya exactamente 3 herramientas
-const displayTools = featuredTools.slice(0, 3);
+// Mantener el orden de las herramientas más usadas
+const displayTools = featuredToolIds
+  .map((id) => featuredTools.find((tool) => tool.id === id))
+  .filter((tool) => tool !== undefined)
+  .slice(0, 3);
 ---
 
 <section id="tools" class="select-none">
-  {
-    title || description ? (
-      <div class="mb-5">
-        {title && (
-          <h3 class="text-xl font-medium text-neutral-800 mb-2">{title}</h3>
-        )}
-        {description && <p class="text-base text-neutral-600">{description}</p>}
-      </div>
-    ) : null
-  }
+  <div class="mb-5">
+    <h3 class="text-xl font-medium text-neutral-800 mb-2">{title}</h3>
+    <p class="text-base text-neutral-600">{description}</p>
+  </div>
 
   <div class="space-y-3">
     {
